@@ -1,26 +1,24 @@
 import React from 'react';
 
-import {BrowserRouter as Router, Route } from 'react-router-dom';
-
-import Home from '../../screens/Home';
-import Login from '../../screens/Login';
-import Header from '../components/Header'
+import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
+import Home from '../home';
+import SignUpComponent from '../signup';
+import Login from "../login"
+import Header from '../Header'
 
 function RoutesContainer() {
   return (
   <Router>
     <Header/>
-
-    <Route exact path='/'>
-      <Home />
-    </Route>
-
-    <Route exact path='/login'>
-      <Login/>
-    </Route>
-    <Route exact path='/sign-in'>
-      <Login/>
-    </Route>
+    <div className="auth-wrapper">
+        <div className="auth-inner">
+          <Switch>
+            <Route exact path='/' component={Home} />
+            <Route path="/sign-in" component={Login} />
+            <Route path="/sign-up" component={SignUpComponent} />
+          </Switch>
+        </div>
+    </div>
   </Router>
   );
 }
