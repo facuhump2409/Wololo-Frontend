@@ -10,6 +10,7 @@ function RoutesContainer() {
   return (
   <Router>
     <div className="App">
+    <Header/>
     <div className="auth-wrapper">
         <div className="auth-inner">
           <Switch>
