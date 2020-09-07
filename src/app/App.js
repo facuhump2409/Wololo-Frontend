@@ -8,7 +8,7 @@ import '../css/index.css'
 function App() {
   return (
     <div>
-      <Routes />
+      <Routes/>
     </div>
   );
 }

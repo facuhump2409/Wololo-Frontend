@@ -9,7 +9,7 @@ import Header from '../Header'
 function RoutesContainer() {
   return (
   <Router>
-    <Header/>
+    <div className="App">
     <div className="auth-wrapper">
         <div className="auth-inner">
           <Switch>
@@ -18,6 +18,8 @@ function RoutesContainer() {
             <Route path="/sign-up" component={SignUpComponent} />
           </Switch>
         </div>
+    </div>
+
     </div>
   </Router>
   );
