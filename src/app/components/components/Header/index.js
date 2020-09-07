@@ -6,8 +6,9 @@ import '../../../../css/navbar.css'
 function Header() {
   return (
   <div className="navbar">
-  <Link to='/' >Go to Home</Link>
+  <Link to='/' >Home</Link>
   <Link to='/login'>Login</Link>
+  <Link to='/sign-in'>Sign In</Link>
   </div>
   );
 }

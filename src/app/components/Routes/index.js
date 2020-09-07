@@ -18,6 +18,9 @@ function RoutesContainer() {
     <Route exact path='/login'>
       <Login/>
     </Route>
+    <Route exact path='/sign-in'>
+      <Login/>
+    </Route>
   </Router>
   );
 }

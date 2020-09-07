@@ -1,7 +1,11 @@
 import React from 'react';
+import LoginComponent from "../../components/login"
 
 function Login() {
-  return <span>Login screen</span>
+  return (
+    <LoginComponent/> 
+  )
+
 }
 
 export default Login;

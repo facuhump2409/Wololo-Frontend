@@ -57,7 +57,7 @@ class GoogleBtn extends Component {
         >
         </GoogleLogout>: <GoogleLogin
           clientId={ CLIENT_ID }
-          buttonText='Login'
+          buttonText='Login with Google'
           onSuccess={ this.login }
           onFailure={ this.handleLoginFailure }
           cookiePolicy={ 'single_host_origin' }
