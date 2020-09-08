@@ -10,7 +10,6 @@ class LoginComponent extends Component{
             selectedDish: null //nothing is selected
         }
 
-        console.log('Menu constructor invoked')
     }
 
     render() {
