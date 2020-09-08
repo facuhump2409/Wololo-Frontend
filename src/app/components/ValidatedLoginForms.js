@@ -12,10 +12,10 @@ const ValidatedLoginForm = () => (
         }}
         validationSchema= {Yup.object().shape({
             email: Yup.string()
-            .email()
-            .required(),
+            .email("Incorrect email format")
+            .required("Please enter a valid email"),
             password: Yup.string()
-            .required()
+            .required("Enter a password")
             .min(8,"Password is too short - should be 8 characters minimum")
             .matches(/(?=.*[0-9])/,"Password must contain at least a number")
         })
