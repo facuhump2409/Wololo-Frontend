@@ -1,20 +1,20 @@
-import React, {Component} from 'react'; //esto me deja crear mi propio componente
-import { Card, CardImg, CardImgOverlay, CardText, CardBody, CardTitle } from 'reactstrap'; //sirve para nuestro login
+import React, {Component} from 'react'; 
 import GoogleBtn from './GoogleBtn';
 
 class LoginComponent extends Component{
     constructor(props) {
-        super (props); //required whenever we create component
+        super (props); 
 
         this.state = { 
-            selectedDish: null //nothing is selected
+            email: "",
+            password: ""
         }
 
     }
 
     render() {
         return (
-            <form>
+            <form onSubmit={this.handleSubmit}>
                 <h3>Sign In</h3>
 
                 <div className="form-group">
@@ -34,11 +34,11 @@ class LoginComponent extends Component{
                     </div>
                 </div>
 
-                <button type="submit" className="btn btn-primary btn-block">Submit</button>
-                <p className="forgot-password text-right">
-                    Forgot <a href="#">password?</a>
-                </p>
+                <button type="submit" className="btn btn-primary btn-block" onClick="">Submit</button>
                 <GoogleBtn/>
+                <p className="forgot-password text-right">
+                    Not a member yet? <a href="/sign-up">Sign up for free</a>
+                </p>
             </form>
         );
     }

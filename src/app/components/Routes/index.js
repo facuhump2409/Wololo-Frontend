@@ -5,6 +5,7 @@ import Home from '../home';
 import SignUpComponent from '../signup';
 import Login from "../login"
 import Header from '../Header'
+import ValidatedLoginForm from "../ValidatedLoginForms"
 
 function RoutesContainer() {
   return (
@@ -15,7 +16,7 @@ function RoutesContainer() {
         <div className="auth-inner">
           <Switch>
             <Route exact path='/' component={Home} />
-            <Route path="/sign-in" component={Login} />
+            <Route path="/sign-in" component={ValidatedLoginForm} />
             <Route path="/sign-up" component={SignUpComponent} />
           </Switch>
         </div>

@@ -1,43 +1,49 @@
-import React, {Component} from 'react'; //esto me deja crear mi propio componente
+import React, {Component} from 'react';
 import GoogleBtn from './GoogleBtn';
 
 class SignUpComponent extends Component{
     constructor(props) {
-        super (props); //required whenever we create component
+        super (props); 
 
         this.state = { 
-            selectedDish: null //nothing is selected
+            firstName: "",
+            lastName: "",
+            email: "",
+            password: ""
+
         }
 
     }
 
     render() {
         return (
-            <form>
-                <h3>Sign In</h3>
+            <form onSubmit={this.handleSubmit}>
+                <h3>Sign Up</h3>
+
+                <div className="form-group">
+                    <label>First name</label>
+                    <input type="text" className="form-control" placeholder="First name" value={this.state.name} onChange={this.handleChange}/>
+                </div>
+
+                <div className="form-group">
+                    <label>Last name</label>
+                    <input type="text" className="form-control" placeholder="Last name" value={this.state.lastName} onChange={this.handleChange}/>
+                </div>
 
                 <div className="form-group">
                     <label>Email address</label>
-                    <input type="email" className="form-control" placeholder="Enter email" />
+                    <input type="email" className="form-control" placeholder="Enter email" value={this.state.email} onChange={this.handleChange}/>
                 </div>
 
                 <div className="form-group">
                     <label>Password</label>
-                    <input type="password" className="form-control" placeholder="Enter password" />
+                    <input type="password" className="form-control" placeholder="Enter password" value={this.state.password} onChange={this.handleChange}/>
                 </div>
 
-                <div className="form-group">
-                    <div className="custom-control custom-checkbox">
-                        <input type="checkbox" className="custom-control-input" id="customCheck1" />
-                        <label className="custom-control-label" htmlFor="customCheck1">Remember me</label>
-                    </div>
-                </div>
-
-                <button type="submit" className="btn btn-primary btn-block">Submit</button>
+                <button type="submit" className="btn btn-primary btn-block">Sign Up</button>
                 <p className="forgot-password text-right">
-                    Forgot <a href="#">password?</a>
+                    Already registered <a href="/sign-in">sign in?</a>
                 </p>
-                <GoogleBtn/>
             </form>
         );
     }
