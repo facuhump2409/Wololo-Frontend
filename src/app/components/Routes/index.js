@@ -1,9 +1,10 @@
 import React from 'react';
 
 import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
+import AuthenticatedRoute from './components/AuthenticatedRoute';
 import Home from '../home';
 import SignUpComponent from '../signup';
-import Login from "../login"
+import Games from '../games'
 import Header from '../Header'
 import ValidatedLoginForm from "../ValidatedLoginForms"
 
@@ -16,12 +17,12 @@ function RoutesContainer() {
         <div className="auth-inner">
           <Switch>
             <Route exact path='/' component={Home} />
-            <Route path="/sign-in" component={ValidatedLoginForm} />
-            <Route path="/sign-up" component={SignUpComponent} />
+            <Route path="/sign_in" component={ValidatedLoginForm} />
+            <Route path="/sign_up" component={SignUpComponent} />
+            <AuthenticatedRoute path='/games' component={Games} />
           </Switch>
         </div>
-    </div>
-
+      </div>
     </div>
   </Router>
   );
