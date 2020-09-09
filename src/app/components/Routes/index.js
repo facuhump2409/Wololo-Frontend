@@ -4,7 +4,9 @@ import {BrowserRouter as Router, Route } from 'react-router-dom';
 
 import Home from '../../screens/Home';
 import Login from '../../screens/Login';
-import Header from '../components/Header'
+import Header from '../components/Header';
+import Games from '../../screens/Games';
+import AuthenticatedRoute from './components/AuthenticatedRoute'
 
 function RoutesContainer() {
   return (
@@ -18,6 +20,8 @@ function RoutesContainer() {
     <Route exact path='/login'>
       <Login/>
     </Route>
+
+    <AuthenticatedRoute exact path='/games' component={Games}/>
   </Router>
   );
 }
