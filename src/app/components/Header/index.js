@@ -15,6 +15,14 @@ function Header() {
               <li className="nav-item">
                 <Link className="nav-link" to={"/sign_up"}>Sign up</Link>
               </li>
+              <li className="nav-item">
+                <Link
+                    className="nav-link" to={"/sing_out"}
+                    // style={{display: !metodoParaAgarrarVariableDeRedux && "none"}}
+                >
+                  Sign out
+                </Link>
+              </li>
             </ul>
           </div>
         </div>
