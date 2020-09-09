@@ -5,6 +5,6 @@ export const loginUser = (loginInfo) => {
   return dispatch => {
     login(loginInfo).then(() => dispatch({
       type: LOGIN
-    }))
+    })).catch(err => console.log('hello'));
   }
 }
