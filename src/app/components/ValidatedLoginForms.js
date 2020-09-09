@@ -62,7 +62,6 @@ const ValidatedLoginForm = () => (
                             value={values.password} 
                             onChange={handleChange}
                             onBlur={handleBlur}
-                            // className={errors.password && touched.password && "error"}
                             />
                         </div>
                         {errors.password && touched.password && (
