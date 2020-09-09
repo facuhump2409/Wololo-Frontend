@@ -1,6 +1,5 @@
 import React from 'react';
 import { Formik } from "formik"
-import * as EmailValidator from "email-validator"
 import * as Yup from "yup"
 import GoogleBtn from './GoogleBtn';
 
@@ -8,6 +7,7 @@ const ValidatedLoginForm = () => (
     <Formik
         initialValues={{email: "", password:""}}
         onSubmit={(values, {setSubmitting}) => {
+
             // console.log("Submitting") TODO handle the login
         }}
         validationSchema = {Yup.object().shape({

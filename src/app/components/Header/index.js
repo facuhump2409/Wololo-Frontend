@@ -28,7 +28,7 @@ function Header() {
   return (
       <nav className="navbar navbar-expand-lg navbar-light">
         <div className="container">
-          <Link className="navbar-brand" to={"/sign_in"}>Wololo</Link>
+          <Link className="navbar-brand" to={"/"}>Wololo</Link>
           <div className="collapse navbar-collapse" id="navbarTogglerDemo02">
               {navItems}
           </div>

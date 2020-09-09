@@ -3,10 +3,10 @@ import React from 'react';
 import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
 import AuthenticatedRoute from './components/AuthenticatedRoute';
 import Home from '../home';
-import SignUpComponent from '../signup';
+import SignUpComponent from '../Login/signup';
 import Games from '../games'
 import Header from '../Header'
-import ValidatedLoginForm from "../ValidatedLoginForms"
+import ValidatedLoginForm from "../Login/validatedLoginForms"
 
 function RoutesContainer() {
   return (
