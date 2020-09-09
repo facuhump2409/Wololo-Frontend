@@ -10,7 +10,7 @@ const ValidatedLoginForm = () => (
         onSubmit={(values, {setSubmitting}) => {
             // console.log("Submitting") handle the login
         }}
-        validationSchema= {Yup.object().shape({
+        validationSchema = {Yup.object().shape({
             email: Yup.string()
             .email("Incorrect email format")
             .required("Please enter a valid email"),
