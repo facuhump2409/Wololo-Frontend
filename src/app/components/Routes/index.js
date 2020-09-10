@@ -4,7 +4,7 @@ import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
 import AuthenticatedRoute from './components/AuthenticatedRoute';
 import Home from '../home';
 import SignUpComponent from '../signup';
-import Games from '../games'
+import Games from '../GamesList'
 import Header from '../Header'
 import ValidatedLoginForm from "../ValidatedLoginForms"
 

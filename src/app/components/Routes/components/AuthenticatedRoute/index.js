@@ -3,7 +3,7 @@ import React from 'react';
 import { Redirect, Route } from 'react-router-dom';
 
 function AuthenticatedRoute({
-  isAuthenticated = false,
+  isAuthenticated = true,
   component: Component,
   ...restOfProps
   }) {
