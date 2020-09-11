@@ -1,14 +1,16 @@
 import React from 'react';
+import { connect } from 'react-redux';
+import { login } from '../../services/auth';
 import { Formik } from "formik"
 import * as Yup from "yup"
 import GoogleBtn from './GoogleBtn';
 
-const ValidatedLoginForm = () => (
+const ValidatedLoginForm = (props) => (
     <Formik
         initialValues={{email: "", password:""}}
-        onSubmit={(values, {setSubmitting}) => {
-
-            // console.log("Submitting") TODO handle the login
+        onSubmit={(values) => {
+            props.login(values);
+            // console.log("Submitting") handle the login
         }}
         validationSchema = {Yup.object().shape({
             email: Yup.string()
@@ -76,7 +78,7 @@ const ValidatedLoginForm = () => (
                         </div>
 
                         <button type="submit" className="btn btn-primary btn-block" disabled={isSubmitting}>Submit</button>
-                        <GoogleBtn/>
+                        <GoogleBtn handleSuccesfulAuth={this.handleSuccesfulAuth}/>
                         <p className="forgot-password text-right">
                             Not a member yet? <a href="/sign-up">Sign up for free</a>
                         </p>
@@ -86,4 +88,4 @@ const ValidatedLoginForm = () => (
             }
     </Formik>
 );
-export default ValidatedLoginForm;
+export default connect(null, { login })(ValidatedLoginForm);

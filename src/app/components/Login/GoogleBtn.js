@@ -28,6 +28,7 @@ class GoogleBtn extends Component {
         accessToken: response.accessToken
 
       }));
+      this.props.login(values);
     }
   }
 

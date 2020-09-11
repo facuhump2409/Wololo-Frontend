@@ -5,6 +5,4 @@ const api = create({
   timeout: 20000,
 });
 
-export const setAuthHeader = (token) => api.setHeader('Authorization', `Bearer ${token}`);
-
 export default api;
