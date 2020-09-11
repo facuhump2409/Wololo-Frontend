@@ -1,18 +1,65 @@
-export const HEADERS = ['numero', 'provincia', 'fecha', 'estado']
+export const HEADERS = [{
+  id: 1,
+  value: '#',
+  key: 'id',
+  nextOrder: true,
+}, {
+  id: 2,
+  value: 'Provincia',
+  key: 'province',
+  nextOrder: true,
+}, {
+  id: 3,
+  value: 'Fecha',
+  key: 'date',
+  nextOrder: true,
+}, {
+  id: 4,
+  value: 'Estado',
+  key: 'status',
+  nextOrder: true
+}]
 
 export const INITIAL_VALUES = [{
-  numero: 1,
-  provincia: "Buenos Aires",
-  fecha: new Date().toDateString(),
-  estado: 'NEW',
+  id: 1,
+  data: {
+    province: "Buenos Aires",
+    date: new Date().toDateString(),
+    status: 'NEW',
+  }
 }, {
-  numero: 2,
-  provincia: "Santa Fe",
-  fecha: new Date().toDateString(),
-  estado: 'FINISHED',
+  id: 2,
+  data: {
+    province: "Santa Fe",
+    date: new Date().toDateString(),
+    status: 'IN GAME',
+  }
 }, {
-  numero: 3,
-  provincia: "Tucuman",
-  fecha: new Date().toDateString(),
-  estado: 'NEW',
+  id: 3,
+  data: {
+    province: "Tucuman",
+    date: new Date().toDateString(),
+    status: 'FINISHED',
+  }
+}, {
+  id: 4,
+  data: {
+    province: "Cordoba",
+    date: new Date().toDateString(),
+    status: 'IN GAME',
+  }
+}, {
+  id: 5,
+  data: {
+    province: "Mendoza",
+    date: new Date().toDateString(),
+    status: 'FINISHED',
+  }
+}, {
+  id: 6,
+  data: {
+    province: "Rio Negro",
+    date: new Date().toDateString(),
+    status: 'FINISHED',
+  }
 }]
