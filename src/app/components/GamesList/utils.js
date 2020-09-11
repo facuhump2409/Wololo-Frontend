@@ -6,3 +6,8 @@ export const compareValues = (key, isAsc) => (anObject, anotherObject) => {
 
   return isAsc ? comparison : (-1 * comparison);
 }
+
+export const filterValues = (objects, comparingValue) => {
+  return objects.filter(aValue => aValue.id == comparingValue 
+    || Object.keys(aValue.data).some(key => aValue.data[key].toUpperCase().includes(comparingValue.toUpperCase())))
+}
