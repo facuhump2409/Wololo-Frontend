@@ -6,12 +6,15 @@ import * as EmailValidator from "email-validator"
 import * as Yup from "yup"
 import GoogleBtn from './GoogleBtn';
 
+
 const ValidatedLoginForm = (props) => (
+    <div className="auth-wrapper">
+        <div className="auth-inner">
     <Formik
-        initialValues={{email: "", password:""}}
-        onSubmit={(values) => {
-            props.login(values);
-            // console.log("Submitting") handle the login
+initialValues={{email: "", password:""}}
+onSubmit={(values) => {
+    props.login(values);
+    // console.log("Submitting") handle the login
         }}
         validationSchema = {Yup.object().shape({
             email: Yup.string()
@@ -88,6 +91,9 @@ const ValidatedLoginForm = (props) => (
                 )
                 }
             }
-    </Formik>
+            </Formik>
+        </div>
+    </div>
+
 );
 export default connect(null, { login })(ValidatedLoginForm);
