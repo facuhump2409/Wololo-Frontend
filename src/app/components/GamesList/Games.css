@@ -1,3 +1,13 @@
+.header {
+  background: none;
+  border: none;
+  outline: none;
+}
+
+.header:active {
+  border: none;
+}
+
 .games-container {
   display: flex;
   justify-content: center;

@@ -26,7 +26,7 @@ function GamesList() {
       <div className='games-inner'>
         <input 
           style={{margin: '5px 0'}} 
-          className="form-control col-6" 
+          className="form-control col-4" 
           type="text" 
           placeholder="Search" 
           aria-label="Search"
@@ -37,7 +37,9 @@ function GamesList() {
           <thead>
             <tr>
               {headers.map(
-              header => <th key={header.id} onClick={() => onHeaderClick(header)}>{header.value} <i className={`arrow ${header.arrow}`}></i></th>
+              header => <th key={header.id} onClick={() => onHeaderClick(header)}>
+                  <button className='header'>{header.value} <i className={`arrow ${header.arrow}`}></i></button>
+                </th>
               )}
             </tr>
           </thead>
