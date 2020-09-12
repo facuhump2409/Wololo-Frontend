@@ -111,7 +111,6 @@ class ValidatedLoginForm extends React.Component {
 }
 
 const auth = state => { 
-    console.log(state)
     return ({ isAuthorized: state.auth.isAuthorized })
     }
 
