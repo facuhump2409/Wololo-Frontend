@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom'
 import { Table } from 'reactstrap';
 import { HEADERS, INITIAL_VALUES, CHANGE_ARROW } from './constants';
 import { compareValues, filterValues } from './utils';
@@ -50,7 +51,9 @@ function GamesList() {
             )}
           </tbody>
         </Table>
-        
+        <Link to='/sign_in'>
+          <button className='btn btn-primary float-right'>Crear una partida</button>
+        </Link>
       </div>
     </div>
   );
