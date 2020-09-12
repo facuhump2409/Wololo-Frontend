@@ -17,6 +17,8 @@ class SignUpComponent extends Component{
 
     render() {
         return (
+            <div className="auth-wrapper">
+            <div className="auth-inner">
             <form onSubmit={this.handleSubmit}>
                 <h3>Sign Up</h3>
 
@@ -45,6 +47,8 @@ class SignUpComponent extends Component{
                     Already registered <a href="/sign-in">sign in?</a>
                 </p>
             </form>
+            </div>
+            </div>
         );
     }
 
