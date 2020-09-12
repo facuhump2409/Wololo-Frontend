@@ -5,7 +5,9 @@ import * as Yup from "yup"
 import GoogleBtn from './GoogleBtn';
 
 const ValidatedLoginForm = () => (
-    <Formik
+    <div className="auth-wrapper">
+        <div className="auth-inner">
+            <Formik
         initialValues={{email: "", password:""}}
         onSubmit={(values, {setSubmitting}) => {
             // console.log("Submitting") TODO handle the login
@@ -85,6 +87,9 @@ const ValidatedLoginForm = () => (
                 )
                 }
             }
-    </Formik>
+            </Formik>
+        </div>
+    </div>
+
 );
 export default ValidatedLoginForm;

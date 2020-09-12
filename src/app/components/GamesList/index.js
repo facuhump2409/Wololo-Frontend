@@ -21,34 +21,37 @@ function GamesList() {
   }
 
   return (
-    <div>
-      <input 
-        style={{margin: '5px 0'}} 
-        className="form-control col-6" 
-        type="text" 
-        placeholder="Search" 
-        aria-label="Search"
-        onChange={handleSearchChange}
-        />
+    <div className='games-container'>
+      <div className='games-inner'>
+        <input 
+          style={{margin: '5px 0'}} 
+          className="form-control col-6" 
+          type="text" 
+          placeholder="Search" 
+          aria-label="Search"
+          onChange={handleSearchChange}
+          />
 
-      <Table striped>
-        <thead>
-          <tr>
-            {headers.map(
-             header => <th key={header.id} onClick={() => onHeaderClick(header)}>{header.value} <i className={`arrow ${header.arrow}`}></i></th>
-            )}
-          </tr>
-        </thead>
-        <tbody>
-          {rowValues.map(
-           rowValue => 
-           <tr key={rowValue.id}>
-              <th scope='row'>{rowValue.id}</th>
-              {Object.keys(rowValue.data).map(key => <td key={rowValue.data[key]}>{rowValue.data[key]}</td>)}
+        <Table striped>
+          <thead>
+            <tr>
+              {headers.map(
+              header => <th key={header.id} onClick={() => onHeaderClick(header)}>{header.value} <i className={`arrow ${header.arrow}`}></i></th>
+              )}
             </tr>
-          )}
-        </tbody>
-      </Table>
+          </thead>
+          <tbody>
+            {rowValues.map(
+            rowValue => 
+            <tr key={rowValue.id}>
+                <th scope='row'>{rowValue.id}</th>
+                {Object.keys(rowValue.data).map(key => <td key={rowValue.data[key]}>{rowValue.data[key]}</td>)}
+              </tr>
+            )}
+          </tbody>
+        </Table>
+        
+      </div>
     </div>
   );
 }
