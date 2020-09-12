@@ -4,9 +4,10 @@ import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
 import AuthenticatedRoute from './components/AuthenticatedRoute';
 import Home from '../home';
 import SignUpComponent from '../signup';
-import Games from '../GamesList'
+import Games from '../games'
 import Header from '../Header'
 import ValidatedLoginForm from "../ValidatedLoginForms"
+import Games from "../games";
 
 function RoutesContainer() {
   return (
@@ -17,7 +18,8 @@ function RoutesContainer() {
             <Route exact path='/' component={Home} />
             <Route path="/sign_in" component={ValidatedLoginForm} />
             <Route path="/sign_up" component={SignUpComponent} />
-            <Route path='/games' component={Games} />
+            <Route path='/games/new' component={Games} />
+            <Route path='/games_list' component={GamesList} />
           </Switch>
     </div>
   </Router>

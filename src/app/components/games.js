@@ -1,160 +1,185 @@
 import React from 'react';
-import { connect } from 'react-redux';
+import {connect} from 'react-redux';
+import FilteredMultiSelect from 'react-filtered-multiselect'
 
 import {
-  ADD_TAG,
-  EDITOR_PAGE_LOADED,
-  REMOVE_TAG,
-  ARTICLE_SUBMITTED,
-  EDITOR_PAGE_UNLOADED,
-  UPDATE_FIELD_EDITOR
+    ADD_TAG,
+    ARTICLE_SUBMITTED,
+    EDITOR_PAGE_LOADED,
+    EDITOR_PAGE_UNLOADED,
+    REMOVE_TAG,
+    UPDATE_FIELD_EDITOR
 } from '../constants/actionTypes';
 
 
 const mapStateToProps = state => ({
-  // ...state.editor
+    // ...state.editor
 });
 
 const mapDispatchToProps = dispatch => ({
-  onAddTag: () =>
-      dispatch({ type: ADD_TAG }),
-  onLoad: payload =>
-      dispatch({ type: EDITOR_PAGE_LOADED, payload }),
-  onRemoveTag: tag =>
-      dispatch({ type: REMOVE_TAG, tag }),
-  onSubmit: payload =>
-      dispatch({ type: ARTICLE_SUBMITTED, payload }),
-  onUnload: payload =>
-      dispatch({ type: EDITOR_PAGE_UNLOADED }),
-  onUpdateField: (key, value) =>
-      dispatch({ type: UPDATE_FIELD_EDITOR, key, value })
+    onAddTag: () =>
+        dispatch({type: ADD_TAG}),
+    onLoad: payload =>
+        dispatch({type: EDITOR_PAGE_LOADED, payload}),
+    onRemoveTag: tag =>
+        dispatch({type: REMOVE_TAG, tag}),
+    onSubmit: payload =>
+        dispatch({type: ARTICLE_SUBMITTED, payload}),
+    onUnload: payload =>
+        dispatch({type: EDITOR_PAGE_UNLOADED}),
+    onUpdateField: (key, value) =>
+        dispatch({type: UPDATE_FIELD_EDITOR, key, value})
 });
 
 
-class Games extends React.Component{
-  constructor(props) {
-    super(props);
+class Games extends React.Component {
+    constructor(props) {
+        super(props);
 
-    const updateFieldEvent =
-        key => ev => this.props.onUpdateField(key, ev.target.value);
-    this.changeTitle = updateFieldEvent('title');
-    this.changeDescription = updateFieldEvent('description');
-    this.changeBody = updateFieldEvent('body');
-    this.changeTagInput = updateFieldEvent('tagInput');
+        this.state = {
+            value: 'select',
+            selectedUsers: []
+        }
+         this.usersOptions = [
+            {value: 1, text: 'User 1'},
+            {value: 2, text: 'User 2'}
+        ];
 
-    this.watchForEnter = ev => {
-      if (ev.keyCode === 13) {
-        ev.preventDefault();
-        this.props.onAddTag();
-      }
+        const updateFieldEvent =
+            key => ev => this.props.onUpdateField(key, ev.target.value);
+        this.changeTitle = updateFieldEvent('title');
+        this.changeDescription = updateFieldEvent('description');
+        this.changeBody = updateFieldEvent('body');
+        this.changeTagInput = updateFieldEvent('tagInput');
+
+        this.watchForEnter = ev => {
+            if (ev.keyCode === 13) {
+                ev.preventDefault();
+                this.props.onAddTag();
+            }
+        };
+
+        this.removeTagHandler = tag => () => {
+            this.props.onRemoveTag(tag);
+        };
+
+        this.submitForm = ev => {
+            ev.preventDefault();
+            const article = {
+                title: this.props.title,
+                description: this.props.description,
+                body: this.props.body,
+                tagList: this.props.tagList
+            };
+
+            const slug = {slug: this.props.articleSlug};
+            /*
+                  const promise = this.props.articleSlug ?
+                      agent.Articles.update(Object.assign(article, slug)) :
+                      agent.Articles.create(article);
+            */
+
+            // this.props.onSubmit(promise);
+        };
+    }
+
+    handleChange = (event) => {
+        this.setState({value: event.target.value});
     };
 
-    this.removeTagHandler = tag => () => {
-      this.props.onRemoveTag(tag);
+    getInitialState = () => {
+        return {
+            value: 'select'
+        }
     };
 
-    this.submitForm = ev => {
-      ev.preventDefault();
-      const article = {
-        title: this.props.title,
-        description: this.props.description,
-        body: this.props.body,
-        tagList: this.props.tagList
-      };
+    handleSelectionChange = (selectedUsers) => {
+        this.setState({selectedUsers})
+    }
 
-      const slug = { slug: this.props.articleSlug };
-/*
-      const promise = this.props.articleSlug ?
-          agent.Articles.update(Object.assign(article, slug)) :
-          agent.Articles.create(article);
-*/
+    handleDeselect(index) {
+        const selectedUsers = this.state.selectedUsers.slice();
+        selectedUsers.splice(index, 1)
+        this.setState({selectedUsers})
+    }
 
-      // this.props.onSubmit(promise);
-    };
-  }
 
-  render() {
-    return (
-        <div className="editor-page">
-          <div className="container page">
-            <div className="row">
-              <div className="col-md-10 offset-md-1 col-xs-12">
 
-                {/*<ListErrors errors={this.props.errors}></ListErrors>*/}
 
-                <form>
-                  <fieldset>
+    render() {
+        const selectedUsers = this.state.selectedUsers;
 
-                    <fieldset className="form-group">
-                      <input
-                          className="form-control form-control-lg"
-                          type="text"
-                          placeholder="Article Title"
-                          value={this.props.title}
-                          onChange={this.changeTitle} />
-                    </fieldset>
+        return (
+            <div className="editor-page">
+                <div className="container page">
+                    <div className="row">
+                        <div className="col-md-10 offset-md-1 col-xs-12">
 
-                    <fieldset className="form-group">
-                      <input
-                          className="form-control"
-                          type="text"
-                          placeholder="What's this article about?"
-                          value={this.props.description}
-                          onChange={this.changeDescription} />
-                    </fieldset>
+                            {/*<ListErrors errors={this.props.errors}></ListErrors>*/}
 
-                    <fieldset className="form-group">
-                    <textarea
-                        className="form-control"
-                        rows="8"
-                        placeholder="Write your article (in markdown)"
-                        value={this.props.body}
-                        onChange={this.changeBody}>
-                    </textarea>
-                    </fieldset>
+                            <form>
+                                <fieldset>
 
-                    <fieldset className="form-group">
-                      <input
-                          className="form-control"
-                          type="text"
-                          placeholder="Enter tags"
-                          value={this.props.tagInput}
-                          onChange={this.changeTagInput}
-                          onKeyUp={this.watchForEnter} />
+                                    <fieldset className="form-group">
+                                        <div>
+                                            <select id="lang" className="form-control" onChange={this.handleChange}
+                                                    value={this.state.value}>
+                                                <option value="Select Province ">Select Province</option>
+                                                <option value="Buenos Aires">Buenos Aires</option>
+                                                <option value="CABA">CABA</option>
+                                                <option value="Cordoba">Cordoba</option>
+                                            </select>
+                                        </div>
 
-                      <div className="tag-list">
-                        {
-                          (this.props.tagList || []).map(tag => {
-                            return (
-                                <span className="tag-default tag-pill" key={tag}>
-                              <i  className="ion-close-round"
-                                  onClick={this.removeTagHandler(tag)}>
-                              </i>
-                                  {tag}
-                            </span>
-                            );
-                          })
-                        }
-                      </div>
-                    </fieldset>
+                                    </fieldset>
 
-                    <button
-                        className="btn btn-lg pull-xs-right btn-primary"
-                        type="button"
-                        disabled={this.props.inProgress}
-                        onClick={this.submitForm}>
-                      Publish Article
-                    </button>
+                                    <fieldset className="form-group">
+                                        <input
+                                            className="form-control"
+                                            type="text"
+                                            placeholder="Number of towns"
+                                            value={this.props.description}
+                                            onChange={this.changeDescription}/>
+                                    </fieldset>
 
-                  </fieldset>
-                </form>
 
-              </div>
+                                    <fieldset className="form-group">
+
+
+                                        <FilteredMultiSelect
+
+                                            onChange={this.handleSelectionChange}
+                                            options={this.usersOptions}
+                                            selectedOptions={selectedUsers}
+                                        />
+                                        {selectedUsers.length === 0 && <p>(nothing selected yet)</p>}
+                                        {selectedUsers.length > 0 && <ul>
+                                            {selectedUsers.map((user, i) => <li key={user.id}>
+                                                {`${user.text} `}
+                                                <button type="button"  onClick={() => this.handleDeselect(i)}>
+                                                    &times;
+                                                </button>
+                                            </li>)}
+                                        </ul>}
+                                    </fieldset>
+
+                                    <button
+                                        className="btn btn-lg pull-xs-right btn-primary"
+                                        type="button"
+                                        disabled={this.props.inProgress}
+                                        onClick={this.submitForm}>
+                                        Create New Game
+                                    </button>
+
+                                </fieldset>
+                            </form>
+
+                        </div>
+                    </div>
+                </div>
             </div>
-          </div>
-        </div>
-    );
-  }
+        );
+    }
 
 }
 
