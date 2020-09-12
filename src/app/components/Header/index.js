@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 function Header() {
   // if metodoQueTraeVariable
   let navItems
-  if (true) {
+  if (!this.props.isAuthorized) {
     navItems = <ul className="navbar-nav ml-auto">
                 <li className="nav-item">
                   <Link className="nav-link" to={"/sign_in"}>Login</Link>
@@ -17,10 +17,8 @@ function Header() {
   }
   else{
     navItems = <ul className="navbar-nav ml-auto">
-                <li className="nav-item">
-                  <Link className="nav-link" to={"/sing_out"}>
+                <li className="nav-item" onClick={}>
                     Sign out
-                  </Link>
                 </li>
               </ul>
 

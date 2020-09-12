@@ -11,6 +11,11 @@ export default function(state = initialState, action) {
         ...state,
         isAuthorized: true,
       };
+    case LOGOUT:
+      return {
+        ...state,
+        isAuthorized: false,
+      };
     default:
       return state;
   }

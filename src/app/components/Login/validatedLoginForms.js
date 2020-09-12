@@ -27,8 +27,9 @@ class ValidatedLoginForm extends React.Component {
         initialValues={{email: "", password:""}}
         onSubmit={(values) => {
             this.props.loginUser(values)
-            console.log("esto entra")
-            console.log(this.props.isAuthorized)
+            if (this.props.isAuthorized) {
+                <Redirect to="/" />
+            }
         }}
         validationSchema = {Yup.object().shape({
             email: Yup.string()

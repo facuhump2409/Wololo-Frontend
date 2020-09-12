@@ -19,6 +19,9 @@ function RoutesContainer() {
             <Route exact path='/' component={Home} />
             <Route path="/sign_in" component={ValidatedLoginForm} />
             <Route path="/sign_up" component={SignUpComponent} />
+            <Route path="/sign_out" render={()=> (
+              <p>Sign Out Succesfully </p>
+            )}/>
             <AuthenticatedRoute path='/games' component={Games} />
           </Switch>
         </div>
