@@ -2,23 +2,32 @@ export const HEADERS = [{
   id: 1,
   value: '#',
   key: 'id',
-  nextOrder: true,
+  nextOrder: false,
+  arrow: 'down'
 }, {
   id: 2,
   value: 'Provincia',
   key: 'province',
   nextOrder: true,
+  arrow: 'down'
 }, {
   id: 3,
   value: 'Fecha',
   key: 'date',
   nextOrder: true,
+  arrow: 'down'
 }, {
   id: 4,
   value: 'Estado',
   key: 'status',
-  nextOrder: true
+  nextOrder: true,
+  arrow: 'down'
 }]
+
+export const CHANGE_ARROW = {
+  down: 'up',
+  up: 'down'
+}
 
 export const INITIAL_VALUES = [{
   id: 1,

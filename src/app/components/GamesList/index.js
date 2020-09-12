@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { Table } from 'reactstrap';
-import { HEADERS, INITIAL_VALUES } from './constants';
+import { HEADERS, INITIAL_VALUES, CHANGE_ARROW } from './constants';
 import { compareValues, filterValues } from './utils';
+import './Games.css'
 
 function GamesList() {
   const [rowValues, setRowValues] = useState(INITIAL_VALUES);
@@ -13,7 +14,10 @@ function GamesList() {
 
   function onHeaderClick(header) {
     setRowValues([...rowValues.sort((compareValues(header.key, header.nextOrder)))]);
-    setHeaders(headers.map(aHeader => aHeader.id === header.id ? {...header, nextOrder: !header.nextOrder} : aHeader))
+    setHeaders(headers.map(aHeader => aHeader.id === header.id ? 
+      {...header, nextOrder: !header.nextOrder, arrow: CHANGE_ARROW[header.arrow]} :
+      {...aHeader, nextOrder: true, arrow: 'down'}
+      ));
   }
 
   return (
@@ -31,7 +35,7 @@ function GamesList() {
         <thead>
           <tr>
             {headers.map(
-             header => <th key={header.id} onClick={() => onHeaderClick(header)}>{header.value}</th>
+             header => <th key={header.id} onClick={() => onHeaderClick(header)}>{header.value} <i className={`arrow ${header.arrow}`}></i></th>
             )}
           </tr>
         </thead>
