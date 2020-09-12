@@ -1,16 +1,34 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { login } from '../../services/auth';
+import { loginUser } from '../../../redux/actions';
 import { Formik } from "formik"
 import * as Yup from "yup"
 import GoogleBtn from './GoogleBtn';
+import { useRef } from 'react';
 
-const ValidatedLoginForm = (props) => (
-    <Formik
+class ValidatedLoginForm extends React.Component {
+    constructor(props) {
+        super (props);
+        this.handleSuccesfulAuth = this.handleSuccesfulAuth(this);
+        this.handleErrorAuth = this.handleErrorAuth(this);
+    }
+    
+    handleSuccesfulAuth() {
+
+    }
+
+    handleErrorAuth() {
+
+    }
+
+    render() {
+        return(
+            <Formik
         initialValues={{email: "", password:""}}
         onSubmit={(values) => {
-            props.login(values);
-            // console.log("Submitting") handle the login
+            this.props.loginUser(values)
+            console.log("esto entra")
+            console.log(this.props.isAuthorized)
         }}
         validationSchema = {Yup.object().shape({
             email: Yup.string()
@@ -78,7 +96,7 @@ const ValidatedLoginForm = (props) => (
                         </div>
 
                         <button type="submit" className="btn btn-primary btn-block" disabled={isSubmitting}>Submit</button>
-                        <GoogleBtn handleSuccesfulAuth={this.handleSuccesfulAuth}/>
+                        <GoogleBtn handleSuccesfulAuth={props.login}/>
                         <p className="forgot-password text-right">
                             Not a member yet? <a href="/sign-up">Sign up for free</a>
                         </p>
@@ -87,5 +105,13 @@ const ValidatedLoginForm = (props) => (
                 }
             }
     </Formik>
-);
-export default connect(null, { login })(ValidatedLoginForm);
+        )
+    }
+}
+
+const auth = state => { 
+    console.log(state)
+    return ({ isAuthorized: state.auth.isAuthorized })
+    }
+
+export default connect(auth, { loginUser })(ValidatedLoginForm);
