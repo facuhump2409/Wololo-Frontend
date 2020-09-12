@@ -32,7 +32,7 @@ const mapDispatchToProps = dispatch => ({
 });
 
 
-class Games extends React.Component {
+class NewGame extends React.Component {
     constructor(props) {
         super(props);
 
@@ -183,4 +183,4 @@ class Games extends React.Component {
 
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Games);
+export default connect(mapStateToProps, mapDispatchToProps)(NewGame);
