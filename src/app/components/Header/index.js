@@ -1,44 +1,33 @@
 import React from 'react';
+import { useSelector } from 'react-redux'
 import '../../../css/navbar.css'
 import { Link } from "react-router-dom";
 import { connect } from 'react-redux';
-import {activeAuthorization} from "../../../redux/reducers/auth";
+import { NOT_LOGGED_LINKS, LOGGED_LINKS } from './constants'
 
-function Header(authorization) {
-  let navItems
-  if (!authorization.isAuthorized) {
-    navItems = <ul className="navbar-nav ml-auto">
-                <li className="nav-item">
-                  <Link className="nav-link" to={"/sign_in"}>Login</Link>
-                </li>
-                <li className="nav-item">
-                  <Link className="nav-link" to={"/sign_up"}>Sign up</Link>
-                </li>
-              </ul>
-  }
-  else{
-    navItems = <ul className="navbar-nav ml-auto">
-                <li className="nav-item">
-                  <Link className="nav-link" to={"/sign_out"}>Sign out</Link>
-                </li>
-              </ul>
+function Header() {
+  const { isAuthorized } = useSelector(state => state.auth);
 
+  function createNavbar(items) {
+    console.log(items)
+    return items.map(item => (
+        <li className="nav-item">
+    <Link className="nav-link" to={item.to}>{item.name}</Link>
+        </li>
+    ))
   }
   return (
       <nav className="navbar navbar-expand-lg navbar-light">
         <div className="container">
           <Link className="navbar-brand" to={"/"}>Wololo</Link>
           <div className="collapse navbar-collapse" id="navbarTogglerDemo02">
-              {navItems}
+            <ul className="navbar-nav ml-auto">
+              {isAuthorized ? createNavbar(LOGGED_LINKS) : createNavbar(NOT_LOGGED_LINKS)}
+            </ul>
           </div>
         </div>
       </nav>
   );
 }
-function mapStateToProps(state) {
-    return {
-        isAuthorized: activeAuthorization(state)
-    }
-}
 
-export default connect(mapStateToProps)(Header);
+export default connect()(Header);

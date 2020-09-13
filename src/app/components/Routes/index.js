@@ -1,6 +1,7 @@
 import React from 'react';
 
-import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
+import { useSelector } from 'react-redux'
+import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import AuthenticatedRoute from './components/AuthenticatedRoute';
 import Home from '../home';
 import SignUpComponent from '../Login/signup';
@@ -11,6 +12,8 @@ import SignOut from "../Login/signOut"
 import NewGame from '../newGame'
 
 function RoutesContainer() {
+  const { isAuthorized } = useSelector(state => state.auth);
+
   return (
   <Router>
     <div className="App">
@@ -20,8 +23,8 @@ function RoutesContainer() {
             <Route path="/sign_in" component={ValidatedLoginForm} />
             <Route path="/sign_up" component={SignUpComponent} />
             <Route path="/sign_out" component={SignOut}/>
-            <Route path='/games' component={Games} />
-            <Route path='/newGame' component={NewGame} />
+            <AuthenticatedRoute path='/games' component={Games} isAuthenticated={isAuthorized} />
+            <AuthenticatedRoute path='/newGame' component={NewGame} isAuthenticated={isAuthorized} />
           </Switch>
     </div>
   </Router>
