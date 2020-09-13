@@ -46,10 +46,18 @@ function GamesList() {
           <tbody>
             {rowValues.map(
             rowValue => 
-            <tr key={rowValue.id}>
-                <th scope='row'>{rowValue.id}</th>
-                {Object.keys(rowValue.data).map(key => <td key={rowValue.data[key]}>{rowValue.data[key]}</td>)}
-              </tr>
+                <tr key={rowValue.id}>
+                  <th scope='row'>{rowValue.id}</th>
+                  {Object.keys(rowValue.data).map(key => <td key={rowValue.data[key]}>{rowValue.data[key]}</td>)}
+                  <th>
+                    { rowValue.data.status !== 'FINISHED' ? 
+                    <Link to={`/game/${rowValue.id}`}>
+                      <button className='btn btn-primary'>Jugar</button>
+                    </Link>
+                   : <button className='btn btn-primary'>Ver estadisticas</button>
+                   }
+                   </th>
+                </tr>
             )}
           </tbody>
         </Table>
