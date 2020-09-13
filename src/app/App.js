@@ -1,10 +1,15 @@
 import React from 'react';
-
+import {Provider} from 'react-redux';
 import Routes from './components/Routes'
+import 'bootstrap/dist/css/bootstrap.min.css';
+import '../css/index.css'
+import store from '../redux/store'
 
 function App() {
   return (
-      <Routes />
+    <Provider store={store}>
+      <Routes/>
+    </Provider>
   );
 }
 

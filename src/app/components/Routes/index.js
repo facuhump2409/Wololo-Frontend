@@ -1,27 +1,32 @@
 import React from 'react';
 
-import {BrowserRouter as Router, Route } from 'react-router-dom';
-
-import Home from '../../screens/Home';
-import Login from '../../screens/Login';
-import Header from '../components/Header';
-import Games from '../../screens/Games';
-import AuthenticatedRoute from './components/AuthenticatedRoute'
+import { useSelector } from 'react-redux'
+import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+import AuthenticatedRoute from './components/AuthenticatedRoute';
+import Home from '../home';
+import SignUpComponent from '../Login/signup';
+import Games from '../GamesList'
+import Header from '../Header'
+import ValidatedLoginForm from "../Login/validatedLoginForms"
+import SignOut from "../Login/signOut"
+import NewGame from '../newGame'
 
 function RoutesContainer() {
+  const { isAuthorized } = useSelector(state => state.auth);
+
   return (
   <Router>
+    <div className="App">
     <Header/>
-
-    <Route exact path='/'>
-      <Home />
-    </Route>
-
-    <Route exact path='/login'>
-      <Login/>
-    </Route>
-
-    <AuthenticatedRoute exact path='/games' component={Games}/>
+          <Switch>
+            <Route exact path='/' component={Home} />
+            <Route path="/sign_in" component={ValidatedLoginForm} />
+            <Route path="/sign_up" component={SignUpComponent} />
+            <Route path="/sign_out" component={SignOut}/>
+            <AuthenticatedRoute path='/games' component={Games} isAuthenticated={isAuthorized} />
+            <AuthenticatedRoute path='/newGame' component={NewGame} isAuthenticated={isAuthorized} />
+          </Switch>
+    </div>
   </Router>
   );
 }
