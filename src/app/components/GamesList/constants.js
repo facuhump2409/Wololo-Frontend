@@ -22,6 +22,12 @@ export const HEADERS = [{
   key: 'status',
   nextOrder: true,
   arrow: 'down'
+}, {
+  id: 5,
+  value: 'Accion',
+  key: 'action',
+  nextOrder: true,
+  arrow: 'down'
 }]
 
 export const CHANGE_ARROW = {
