@@ -27,7 +27,8 @@ class ValidatedLoginForm extends React.Component {
                 <div className="auth-inner">
                     <Formik
                 initialValues={{email: "", password:""}}
-                onSubmit={(values) => {
+                onSubmit={(values,{setSubmitting}) => {
+                    setSubmitting(true)
                     this.props.loginUser(values)
                     // this.props.loginUser(values).then(()=> { //TODO cambiar por then catch cuando hagamos con back
                     //     return this.props.history.push(`/`)

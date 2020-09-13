@@ -32,7 +32,8 @@ class SignUpComponent extends Component{
                 <div className="auth-inner">
                     <Formik
                         initialValues={{email: "", password:"",firstName: "",lastName: ""}}
-                        onSubmit={(values) => {
+                        onSubmit={(values,{setSubmitting}) => {
+                            setSubmitting(true)
                             this.handleSubmit(values)
                         }}
                         validationSchema = {Yup.object().shape({
