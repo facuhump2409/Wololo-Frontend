@@ -47,10 +47,7 @@
     ]
   },
   "devDependencies": {
-<<<<<<< HEAD
-    "react-test-renderer": "^16.13.1"
-=======
+    "react-test-renderer": "^16.13.1",
     "semantic-ui-react": "^1.2.1"
->>>>>>> origin/create_new_Game
   }
 }

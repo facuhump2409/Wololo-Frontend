@@ -1,11 +1,12 @@
 import React from 'react';
 import '../../../css/navbar.css'
 import { Link } from "react-router-dom";
+import { connect } from 'react-redux';
+import {activeAuthorization} from "../../../redux/reducers/auth";
 
-function Header() {
-  // if metodoQueTraeVariable
+function Header(authorization) {
   let navItems
-  if (!this.props.isAuthorized) {
+  if (!authorization.isAuthorized) {
     navItems = <ul className="navbar-nav ml-auto">
                 <li className="nav-item">
                   <Link className="nav-link" to={"/sign_in"}>Login</Link>
@@ -17,8 +18,8 @@ function Header() {
   }
   else{
     navItems = <ul className="navbar-nav ml-auto">
-                <li className="nav-item" onClick={}>
-                    Sign out
+                <li className="nav-item">
+                  <Link className="nav-link" to={"/sign_out"}>Sign out</Link>
                 </li>
               </ul>
 
@@ -34,5 +35,10 @@ function Header() {
       </nav>
   );
 }
+function mapStateToProps(state) {
+    return {
+        isAuthorized: activeAuthorization(state)
+    }
+}
 
-export default Header;
+export default connect(mapStateToProps)(Header);

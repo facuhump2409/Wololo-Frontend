@@ -1,6 +1,5 @@
-import { LOGIN } from './actionTypes';
-import { login } from '../services/auth';
-import { logout } from '../services/auth';
+import { LOGIN,LOGOUT } from './actionTypes';
+import { login,logout } from '../services/auth';
 
 // export const loginUser = (loginInfo) => {
 //   return function(dispatch) {
@@ -13,10 +12,10 @@ import { logout } from '../services/auth';
 export const loginUser = (loginInfo) => {
   return {
     type: LOGIN,
-    // payload: 
+    // payload:
   }
 }
-export const logOut = (token) => {
+export const signOutUser = (token) => {
   //logOut()
   return {
     type: LOGOUT

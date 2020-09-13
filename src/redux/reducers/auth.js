@@ -1,4 +1,4 @@
-import { LOGIN } from '../actionTypes';
+import { LOGIN,LOGOUT } from '../actionTypes';
 
 const initialState = {
   isAuthorized: false,
@@ -7,11 +7,13 @@ const initialState = {
 export default function(state = initialState, action) {
   switch(action.type) {
     case LOGIN:
+      console.log("entre")
       return {
         ...state,
         isAuthorized: true,
       };
     case LOGOUT:
+      console.log("entre")
       return {
         ...state,
         isAuthorized: false,
@@ -20,3 +22,5 @@ export default function(state = initialState, action) {
       return state;
   }
 }
+
+export const activeAuthorization = state => state.auth.isAuthorized
