@@ -22,5 +22,3 @@ export default function(state = initialState, action) {
       return state;
   }
 }
-
-export const activeAuthorization = state => state.auth.isAuthorized
