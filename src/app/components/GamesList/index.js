@@ -53,7 +53,7 @@ function GamesList() {
             )}
           </tbody>
         </Table>
-        <Link to='/sign_in'>
+        <Link to='/newGame'>
           <button className='btn btn-primary float-right'>Crear una partida</button>
         </Link>
       </div>
