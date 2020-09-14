@@ -4,7 +4,6 @@ import { loginUser } from '../../../redux/actions';
 import { Formik } from "formik"
 import * as Yup from "yup"
 import GoogleBtn from './GoogleBtn';
-import { Redirect } from "react-router-dom";
 
 class ValidatedLoginForm extends React.Component {
     constructor(props) {

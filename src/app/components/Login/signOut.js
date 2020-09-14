@@ -1,7 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { signOutUser } from '../../../redux/actions';
-import {Redirect} from "react-router-dom";
 
 function SignOut(props) {
     props.signOutUser()

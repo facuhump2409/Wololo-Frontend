@@ -66,7 +66,7 @@ class SignUpComponent extends Component{
                                                    name="firstName"
                                                    className="form-control" 
                                                    placeholder="First name" 
-                                                   value={values.name} 
+                                                   value={values.name}
                                                    onChange={handleChange}
                                                    onBlur={handleBlur}/>
                                         </div>

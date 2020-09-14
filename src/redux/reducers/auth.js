@@ -7,13 +7,11 @@ const initialState = {
 export default function(state = initialState, action) {
   switch(action.type) {
     case LOGIN:
-      console.log("entre")
       return {
         ...state,
         isAuthorized: true,
       };
     case LOGOUT:
-      console.log("entre")
       return {
         ...state,
         isAuthorized: false,
