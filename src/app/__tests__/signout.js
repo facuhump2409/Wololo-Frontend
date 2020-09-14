@@ -9,11 +9,22 @@ import RoutesContainer from "../components/Routes";
 import { render, unmountComponentAtNode } from "react-dom";
 import {act} from "react-dom/test-utils";
 import Route from "react-router";
+import * as actions from '../../redux/actions';
+import {LOGIN, LOGOUT} from "../../redux/actionTypes";
 configure({ adapter: new Adapter() });
 
 it("renders without crashing", () => {
   shallow(<App />);
 });
+
+describe("Actions", () => {
+  it('should return logout', function () {
+    const expected = {
+      type: LOGOUT
+    }
+    expect(actions.signOutUser()).toEqual(expected)
+  });
+})
 
 describe("SignOut function", () => {
   it("should set store authorized to false", async => {
@@ -25,7 +36,7 @@ describe("SignOut function", () => {
       pathMap[routeProps.path] = routeProps.component;
       return pathMap;
     }, {});
-
+    //TODO ver como testear clicks en signout
     // Check correct page content showed up
     // expect(useSelector(state => state.auth.isAuthorized)).toEqual (true);
   })
