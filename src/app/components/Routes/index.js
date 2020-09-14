@@ -29,7 +29,7 @@ function RoutesContainer(props) {
             <Route exact path='/' component={Home} />
             <Route path="/sign_in" component={ValidatedLoginForm} />
             <Route path="/sign_up" component={SignUpComponent} />
-            <Route path="/sign_out" render={handleLogout}/>
+            <Route key="sign-out-button" path="/sign_out" render={handleLogout}/>
             <AuthenticatedRoute path='/games' component={Games} isAuthenticated={isAuthorized} />
             <AuthenticatedRoute path='/newGame' component={NewGame} isAuthenticated={isAuthorized} />
           </Switch>
