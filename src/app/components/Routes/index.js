@@ -10,6 +10,7 @@ import Header from '../Header'
 import ValidatedLoginForm from "../Login/validatedLoginForms"
 import SignOut from "../Login/signOut"
 import NewGame from '../newGame'
+import Game from '../Game';
 
 function RoutesContainer() {
   const { isAuthorized } = useSelector(state => state.auth);
@@ -25,6 +26,7 @@ function RoutesContainer() {
             <Route path="/sign_out" component={SignOut}/>
             <AuthenticatedRoute path='/games' component={Games} isAuthenticated={isAuthorized} />
             <AuthenticatedRoute path='/newGame' component={NewGame} isAuthenticated={isAuthorized} />
+            <AuthenticatedRoute path='/game/:id' component={Game} isAuthenticated={isAuthorized} />
           </Switch>
     </div>
   </Router>

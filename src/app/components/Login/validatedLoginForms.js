@@ -34,6 +34,7 @@ class ValidatedLoginForm extends React.Component {
                     // }).catch(error=>{
                     //     return <p>Couldn't sign in correctly, please try again later</p>})
                     if (this.props.isAuthorized) {
+                        localStorage.setItem('isAuthorized', true);
                         this.props.history.push(`/`)
                     }
                 }}
