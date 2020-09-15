@@ -52,9 +52,9 @@ function GamesList() {
                   <th>
                     { rowValue.data.status !== 'FINISHED' ? 
                     <Link to={`/game/${rowValue.id}`}>
-                      <button className='btn btn-primary'>Jugar</button>
+                      <button className='btn btn-primary'>Play</button>
                     </Link>
-                   : <button className='btn btn-primary'>Ver estadisticas</button>
+                   : <button className='btn btn-primary'>See Statistics</button>
                    }
                    </th>
                 </tr>
@@ -62,7 +62,7 @@ function GamesList() {
           </tbody>
         </Table>
         <Link to='/newGame'>
-          <button className='btn btn-primary float-right'>Crear una partida</button>
+          <button className='btn btn-primary float-right'>Create new Game</button>
         </Link>
       </div>
     </div>

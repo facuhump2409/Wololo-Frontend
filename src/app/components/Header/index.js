@@ -9,13 +9,13 @@ function Header() {
   const { isAuthorized } = useSelector(state => state.auth);
 
   function createNavbar(items) {
-    console.log(items)
     return items.map(item => (
         <li className="nav-item">
     <Link className="nav-link" to={item.to}>{item.name}</Link>
         </li>
     ))
   }
+
   return (
       <nav className="navbar navbar-expand-lg navbar-light">
         <div className="container">

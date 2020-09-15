@@ -14,11 +14,11 @@ const Game = () => {
   }
 
   const handleClick1 = (event) => {
-    setTest('VAMOS MANAOS')
+    setTest('Clicked first town')
   }
 
   const handleClick2 = (event) => {
-    setTest('VAMO PECSI')
+    setTest('Clicked second town')
   }
 
   return (
@@ -44,6 +44,7 @@ const Game = () => {
           onClick={handleClick2} 
           />
         </map>
+
       </div>
         <h1>{test}</h1>
     </div>
