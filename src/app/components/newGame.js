@@ -1,34 +1,20 @@
 import React from 'react';
 import {connect} from 'react-redux';
 import FilteredMultiSelect from 'react-filtered-multiselect'
+import {Formik} from "formik";
+import * as Yup from "yup";
+import {Link} from "react-router-dom";
 
-import {
-    ADD_TAG,
-    ARTICLE_SUBMITTED,
-    EDITOR_PAGE_LOADED,
-    EDITOR_PAGE_UNLOADED,
-    REMOVE_TAG,
-    UPDATE_FIELD_EDITOR
-} from '../constants/actionTypes';
+const BOOTSTRAP_CLASSES = {
+    filter: 'form-control',
+    select: 'form-control',
+    button: 'btn btn btn-block btn-default',
+    buttonActive: 'btn btn btn-block btn-primary',
+}
 
 
-const mapStateToProps = state => ({
+const mapStateToProps = () => ({
     // ...state.editor
-});
-
-const mapDispatchToProps = dispatch => ({
-    onAddTag: () =>
-        dispatch({type: ADD_TAG}),
-    onLoad: payload =>
-        dispatch({type: EDITOR_PAGE_LOADED, payload}),
-    onRemoveTag: tag =>
-        dispatch({type: REMOVE_TAG, tag}),
-    onSubmit: payload =>
-        dispatch({type: ARTICLE_SUBMITTED, payload}),
-    onUnload: payload =>
-        dispatch({type: EDITOR_PAGE_UNLOADED}),
-    onUpdateField: (key, value) =>
-        dispatch({type: UPDATE_FIELD_EDITOR, key, value})
 });
 
 
@@ -40,47 +26,11 @@ class NewGame extends React.Component {
             value: 'select',
             selectedUsers: []
         }
-         this.usersOptions = [
+        this.usersOptions = [
             {value: 1, text: 'User 1'},
             {value: 2, text: 'User 2'}
         ];
 
-        const updateFieldEvent =
-            key => ev => this.props.onUpdateField(key, ev.target.value);
-        this.changeTitle = updateFieldEvent('title');
-        this.changeDescription = updateFieldEvent('description');
-        this.changeBody = updateFieldEvent('body');
-        this.changeTagInput = updateFieldEvent('tagInput');
-
-        this.watchForEnter = ev => {
-            if (ev.keyCode === 13) {
-                ev.preventDefault();
-                this.props.onAddTag();
-            }
-        };
-
-        this.removeTagHandler = tag => () => {
-            this.props.onRemoveTag(tag);
-        };
-
-        this.submitForm = ev => {
-            ev.preventDefault();
-            const article = {
-                title: this.props.title,
-                description: this.props.description,
-                body: this.props.body,
-                tagList: this.props.tagList
-            };
-
-            const slug = {slug: this.props.articleSlug};
-            /*
-                  const promise = this.props.articleSlug ?
-                      agent.Articles.update(Object.assign(article, slug)) :
-                      agent.Articles.create(article);
-            */
-
-            // this.props.onSubmit(promise);
-        };
     }
 
     handleChange = (event) => {
@@ -104,76 +54,93 @@ class NewGame extends React.Component {
     }
 
 
-
-
     render() {
         const selectedUsers = this.state.selectedUsers;
 
         return (
-            <div className="editor-page">
+            <div>
                 <div className="container page">
                     <div className="row">
                         <div className="col-md-10 offset-md-1 col-xs-12">
+                            <label>Create New Game</label>
 
-                            {/*<ListErrors errors={this.props.errors}></ListErrors>*/}
+                            <Formik
+                                initialValues={{selectProvince: "", password: ""}}
+                                onSubmit={() => {
+                                }}
+                                validationSchema={Yup.object().shape({
+                                    selectProvince: Yup.string()
+                                        .required("Please select a state"),
+                                    towns: Yup.number().required("Please enter the number of towns")
 
-                            <form>
-                                <fieldset>
+                                })
+                                }>
 
-                                    <fieldset className="form-group">
-                                        <div>
-                                            <select id="lang" className="form-control" onChange={this.handleChange}
-                                                    value={this.state.value}>
-                                                <option value="Select Province ">Select Province</option>
-                                                <option value="Buenos Aires">Buenos Aires</option>
-                                                <option value="CABA">CABA</option>
-                                                <option value="Cordoba">Cordoba</option>
-                                            </select>
-                                        </div>
+                                <form>
+                                    <fieldset>
 
+                                        <fieldset className="form-group">
+                                            <div>
+                                                <select name="selectProvince" className="form-control"
+                                                        onChange={this.handleChange}
+                                                        value={this.state.value}>
+                                                    <option value="">Select Province</option>
+                                                    <option value="Buenos Aires">Buenos Aires</option>
+                                                    <option value="CABA">CABA</option>
+                                                    <option value="Cordoba">Cordoba</option>
+                                                </select>
+                                            </div>
+
+                                        </fieldset>
+
+                                        <fieldset className="form-group">
+                                            <input
+                                                name="towns"
+                                                className="form-control"
+                                                type="text"
+                                                placeholder="Number of towns"
+                                            />
+                                        </fieldset>
+
+
+                                        <fieldset className="form-group">
+                                            <label>Select Users</label>
+
+                                            <div>
+                                                <FilteredMultiSelect
+                                                    name="users"
+                                                    classNames={BOOTSTRAP_CLASSES}
+                                                    onChange={this.handleSelectionChange}
+                                                    options={this.usersOptions}
+                                                    selectedOptions={selectedUsers}
+                                                />
+
+
+                                                {selectedUsers.length === 0 && <p>(nothing selected yet)</p>}
+                                                {selectedUsers.length > 0 && <ul>
+                                                    {selectedUsers.map((user, i) => <li key={user.id}>
+                                                        {`${user.text} `}
+
+                                                        <button type="button" onClick={() => this.handleDeselect(i)}>
+                                                            &times;
+                                                        </button>
+                                                    </li>)}
+                                                </ul>}
+                                            </div>
+
+
+                                        </fieldset>
+                                        <Link to='/games'>
+                                            <button
+                                                className="btn btn-lg pull-xs-right btn-primary"
+                                                type="submit"
+                                                onClick={this.submitForm}>
+                                                Create New Game
+                                            </button>
+                                        </Link>
                                     </fieldset>
-
-                                    <fieldset className="form-group">
-                                        <input
-                                            className="form-control"
-                                            type="text"
-                                            placeholder="Number of towns"
-                                            value={this.props.description}
-                                            onChange={this.changeDescription}/>
-                                    </fieldset>
-
-
-                                    <fieldset className="form-group">
-
-
-                                        <FilteredMultiSelect
-
-                                            onChange={this.handleSelectionChange}
-                                            options={this.usersOptions}
-                                            selectedOptions={selectedUsers}
-                                        />
-                                        {selectedUsers.length === 0 && <p>(nothing selected yet)</p>}
-                                        {selectedUsers.length > 0 && <ul>
-                                            {selectedUsers.map((user, i) => <li key={user.id}>
-                                                {`${user.text} `}
-                                                <button type="button"  onClick={() => this.handleDeselect(i)}>
-                                                    &times;
-                                                </button>
-                                            </li>)}
-                                        </ul>}
-                                    </fieldset>
-
-                                    <button
-                                        className="btn btn-lg pull-xs-right btn-primary"
-                                        type="button"
-                                        disabled={this.props.inProgress}
-                                        onClick={this.submitForm}>
-                                        Create New Game
-                                    </button>
-
-                                </fieldset>
-                            </form>
-
+                                </form>
+                            </Formik>
                         </div>
                     </div>
                 </div>
@@ -183,4 +150,4 @@ class NewGame extends React.Component {
 
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(NewGame);
+export default connect(mapStateToProps)(NewGame);
