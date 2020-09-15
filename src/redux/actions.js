@@ -15,7 +15,7 @@ export const loginUser = (loginInfo) => {
     // payload:
   }
 }
-export const signOutUser = (token) => {
+export const signOutUser = () => {
   //logOut()
   return {
     type: LOGOUT

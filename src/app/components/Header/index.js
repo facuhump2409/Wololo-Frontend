@@ -6,11 +6,10 @@ import { connect } from 'react-redux';
 import { NOT_LOGGED_LINKS, LOGGED_LINKS } from './constants'
 
 function Header() {
-  const { isAuthorized } = useSelector(state => state.auth);
-
+  const isAuthorized = useSelector(state => state.auth.isAuthorized);
   function createNavbar(items) {
     return items.map(item => (
-        <li className="nav-item">
+        <li className="nav-item" key={item.id}>
     <Link className="nav-link" to={item.to}>{item.name}</Link>
         </li>
     ))
