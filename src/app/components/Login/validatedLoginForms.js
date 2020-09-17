@@ -25,7 +25,7 @@ class ValidatedLoginForm extends React.Component {
             <div className="auth-wrapper">
                 <div className="auth-inner">
                     <Formik
-                initialValues={{email: "", password:""}}
+                initialValues={{mail: "", password:""}}
                 onSubmit={(values,{setSubmitting}) => {
                     setSubmitting(true)
                     this.props.loginUser(values)
@@ -39,7 +39,7 @@ class ValidatedLoginForm extends React.Component {
                     }
                 }}
                 validationSchema = {Yup.object().shape({
-                    email: Yup.string()
+                    mail: Yup.string()
                     .email("Incorrect email format")
                     .required("Please enter a valid email"),
                     password: Yup.string()
@@ -66,7 +66,7 @@ class ValidatedLoginForm extends React.Component {
                                 <div className="form-group">
                                     <label>Email address</label>
                                     <input
-                                    name="email"
+                                    name="mail"
                                     type="email"
                                     className="form-control"
                                     placeholder="Enter email"
@@ -76,8 +76,8 @@ class ValidatedLoginForm extends React.Component {
                                     // className={errors.email && touched.email && "error"}
                                     />
                                 </div>
-                                {errors.email && touched.email && (
-                                    <div className="input-feedback">{errors.email}</div>
+                                {errors.mail && touched.mail && (
+                                    <div className="input-feedback">{errors.mail}</div>
                                 )}
 
                                 <div className="form-group">

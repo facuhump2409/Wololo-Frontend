@@ -1,8 +1,6 @@
 import React, {Component} from 'react';
-import GoogleBtn from './GoogleBtn';
-import {signUp} from "../../../services/auth";
+import {signUpUser} from '../../../redux/actions';
 import {Formik} from "formik";
-import {Redirect} from "react-router-dom";
 import * as Yup from "yup";
 
 class SignUpComponent extends Component{
@@ -19,11 +17,11 @@ class SignUpComponent extends Component{
 
     handleSubmit(values){
         console.log(values)
-        this.handleSign()
-        // this.signUp(values).then(()=> { //TODO cambiar despues a signUp(values) que le pega posta a back
-        //     return this.props.history.push(`/`)
-        // }).catch(error=>{
-        //     return <p>Couldn't sign up correctly, please try again later</p>})
+        // this.handleSign()
+        this.props.signUpUser(values).then(()=> { //TODO cambiar despues a signUp(values) que le pega posta a back
+            return this.handleSign
+        }).catch(error=>{
+            return <p>Couldn't sign up correctly, please try again later</p>})
     }
 
     render() {
