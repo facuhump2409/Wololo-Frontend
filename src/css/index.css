@@ -55,6 +55,14 @@ body, html, .App, #root, .auth-wrapper {
   box-shadow: none;
 }
 
+.loading-element {
+  width: 100%;
+  height: 100;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
 .auth-wrapper h3 {
   text-align: center;
   margin: 0;

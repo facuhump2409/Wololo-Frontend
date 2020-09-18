@@ -4,6 +4,7 @@ import { loginUser } from '../../../redux/actions';
 import { Formik } from "formik"
 import * as Yup from "yup"
 import GoogleBtn from './GoogleBtn';
+import {trackPromise} from "react-promise-tracker";
 
 class ValidatedLoginForm extends React.Component {
     constructor(props) {
@@ -11,7 +12,8 @@ class ValidatedLoginForm extends React.Component {
         // this.handleSuccesfulAuth = this.handleSuccesfulAuth(this);
         // this.handleErrorAuth = this.handleErrorAuth(this);
     }
-    
+
+
     // handleSuccesfulAuth() {
 
     // }
@@ -28,15 +30,16 @@ class ValidatedLoginForm extends React.Component {
                 initialValues={{mail: "", password:""}}
                 onSubmit={(values,{setSubmitting}) => {
                     setSubmitting(true)
-                    this.props.loginUser(values)
-                    // this.props.loginUser(values).then(()=> { //TODO cambiar por then catch cuando hagamos con back
-                    //     return this.props.history.push(`/`)
-                    // }).catch(error=>{
-                    //     return <p>Couldn't sign in correctly, please try again later</p>})
-                    if (this.props.isAuthorized) {
+                    // this.props.loginUser(values)
+                    trackPromise(this.props.loginUser(values).then(()=> { //TODO cambiar por then catch cuando hagamos con back
                         localStorage.setItem('isAuthorized', true);
-                        this.props.history.push(`/`)
-                    }
+                        return this.props.history.push(`/`)
+                    }).catch(error=>{
+                        return <p>Couldn't sign in correctly, please try again later</p>}))
+                    // if (this.props.isAuthorized) {
+                    //     localStorage.setItem('isAuthorized', true);
+                    //     this.props.history.push(`/`)
+                    // }
                 }}
                 validationSchema = {Yup.object().shape({
                     mail: Yup.string()

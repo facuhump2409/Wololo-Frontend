@@ -4,10 +4,12 @@ import { BrowserRouter } from "react-router-dom";
 import './css/index.css';
 import App from './app/App';
 import * as serviceWorker from './serviceWorker';
+import {LoadingIndicator} from "./app/components/Login/loadingIndicator";
 
 ReactDOM.render(
   <BrowserRouter>
     <App />
+    <LoadingIndicator/>
   </BrowserRouter>,
   document.getElementById('root')
 );
