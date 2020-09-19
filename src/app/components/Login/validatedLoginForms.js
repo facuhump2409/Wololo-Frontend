@@ -111,10 +111,10 @@ class ValidatedLoginForm extends React.Component {
                         )
                         }
                     }
-                        <LoadingIndicator/>
-                        <ListErrors errors={this.props.errors} />
             </Formik>
-                    </div>
+                    <LoadingIndicator/>
+                    <ListErrors errors={this.props.errors} />
+                </div>
                     </div>
         )
     }

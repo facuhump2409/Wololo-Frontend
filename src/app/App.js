@@ -4,13 +4,10 @@ import Routes from './components/Routes'
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '../css/index.css'
 import {store} from '../redux/store'
-import {push} from "react-router-redux";
-import {REDIRECT} from "../redux/actionTypes";
 
-
-function App(props) {
+function App() {
   return (
-    <Provider store={props.store}>
+    <Provider store={store}>
       <Routes/>
     </Provider>
   );
