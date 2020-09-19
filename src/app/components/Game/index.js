@@ -1,52 +1,31 @@
 import React, { useState } from 'react'
+import Map from './components/Map'
+import { towns } from './constants'
 
 const Game = () => {
-  const [imageDimensions, setImageDimensions] = useState({dimensions: {}}) 
-  const [test, setTest] = useState('');
-
-  const handleOnImageLoad = (event) => {
-    setImageDimensions({
-      dimensions: {
-        height: event.target.offsetHeight,
-        width: event.target.offsetWidth
-      }
-    })
-  }
-
-  const handleClick1 = (event) => {
-    setTest('Clicked first town')
-  }
-
-  const handleClick2 = (event) => {
-    setTest('Clicked second town')
+  const [town, setTown] = useState(null)
+  
+  const handleHover = (area) => {
+    setTown(area.name);
   }
 
   return (
     <div>
 
       <div className='d-flex justify-content-center'>
-        <img 
-          src={process.env.PUBLIC_URL + '/Buenos_aires.webp'} 
-          alt='provincia' 
-          useMap='#gameMap'
-          onLoad={handleOnImageLoad}
-          />
-
-        <map name="gameMap">
-          <area shape='rect'
-          coords={`0, 0, ${imageDimensions.dimensions.width/2}, ${imageDimensions.dimensions.height}`} 
-          alt='Player 1'
-          onClick={handleClick1} 
-          />
-          <area shape='rect'
-          coords={`${imageDimensions.dimensions.width/2}, 0, ${imageDimensions.dimensions.width}, ${imageDimensions.dimensions.height}`} 
-          alt='Player 1'
-          onClick={handleClick2} 
-          />
-        </map>
-
+        
+      <Map name='gameMap' handleHover={handleHover}/>
+        
       </div>
-        <h1>{test}</h1>
+      { towns.find(aTown => aTown.name === town) ? 
+      [towns.find(aTown => aTown.name === town)].map(aTown => (<div>
+        <p>Town name: {aTown.name}</p>
+        <p>Owner: {aTown.owner.username}</p>
+        <p>Coordinates: LATITUDE {aTown.coordinates.lat}, LONGITUDE {aTown.coordinates.lon}</p>
+        <p>gauchos quantity: {aTown.gauchos}</p>
+        <p>is locked: {aTown.isLocked.toString()}</p>
+      </div>))
+      : null }
     </div>
   )
 }
