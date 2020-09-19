@@ -1,4 +1,6 @@
 export const LOGIN = 'LOGIN'
 export const LOGOUT = 'LOGOUT'
 export const SIGNUP = 'SIGNUP'
+export const REDIRECT = 'REDIRECT'
 export const ASYNC_START = 'ASYNC_START'
+export const ASYNC_END = 'ASYNC_START'

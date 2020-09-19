@@ -3,9 +3,7 @@ import { login,signOut,signUp } from '../services/auth';
 
 export const loginUser = (loginInfo) => {
   return function (dispatch) {
-    return login(loginInfo).then (response => function(){
-      dispatch({ type: LOGIN , payload: response}) //asi tenemos la respuesta de la API
-    }).catch(err => console.log("Error Password or email are incorrect")) //dispatch({error})
+      dispatch({ type: LOGIN , payload: login(loginInfo)}) //asi tenemos la respuesta de la API
   }
 }
 

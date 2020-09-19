@@ -6,6 +6,7 @@ import * as Yup from "yup"
 import GoogleBtn from './GoogleBtn';
 import {trackPromise} from "react-promise-tracker";
 import {LoadingIndicator} from "./loadingIndicator";
+import ListErrors from "../ListErrors";
 
 class ValidatedLoginForm extends React.Component {
     constructor(props) {
@@ -20,7 +21,6 @@ class ValidatedLoginForm extends React.Component {
                 initialValues={{mail: "", password:""}}
                 onSubmit={(values,{setSubmitting}) => {
                     setSubmitting(true)
-                    // this.props.loginUser(values)
                     trackPromise(this.props.loginUser(values))
                     // trackPromise(this.props.loginUser(values).then(()=> { //TODO cambiar por then catch cuando hagamos con back
                     //     localStorage.setItem('isAuthorized', true);
@@ -97,7 +97,12 @@ class ValidatedLoginForm extends React.Component {
                                     </div>
                                 </div>
 
-                                <button type="submit" className="btn btn-primary btn-block" disabled={isSubmitting}>Submit</button>
+                                <button
+                                    type="submit"
+                                    className="btn btn-primary btn-block"
+                                    disabled={isSubmitting}>
+                                    Submit
+                                </button>
                                 <GoogleBtn handleSuccesfulAuth={props.login}/>
                                 <p className="forgot-password text-right">
                                     Not a member yet? <a href="/sign-up">Sign up for free</a>
@@ -107,6 +112,7 @@ class ValidatedLoginForm extends React.Component {
                         }
                     }
                         <LoadingIndicator/>
+                        <ListErrors errors={this.props.errors} />
             </Formik>
                     </div>
                     </div>

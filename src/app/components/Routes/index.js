@@ -12,9 +12,27 @@ import NewGame from '../newGame'
 import Game from '../Game';
 import {signOutUser} from "../../../redux/actions";
 import {Redirect} from "react-router-dom";
+import {LOGOUT, REDIRECT} from "../../../redux/actionTypes";
+import { store } from '../../../redux/store';
+import {push} from "react-router-redux";
+
+const mapDispatchToProps = dispatch => ({
+  onRedirect: () =>
+      dispatch({ type: REDIRECT }),
+  onSignOut: () =>
+      dispatch({type: LOGOUT})
+});
 
 function RoutesContainer(props) {
   const { isAuthorized } = useSelector(state => state.auth);
+
+  function componentWillReceiveProps(nextProps) {
+    if (nextProps.redirectTo) {
+        // this.context.router.replace(nextProps.redirectTo);
+        store.dispatch(push(nextProps.redirectTo));
+        this.props.onRedirect();
+    }
+  }
 
   function handleLogout() {
     props.signOutUser()
@@ -40,4 +58,4 @@ function RoutesContainer(props) {
   );
 }
 
-export default connect(null, { signOutUser })(RoutesContainer);
+export default connect(null, { signOutUser,mapDispatchToProps })(RoutesContainer);

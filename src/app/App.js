@@ -1,13 +1,16 @@
 import React from 'react';
-import {Provider} from 'react-redux';
+import {Provider,connect} from 'react-redux';
 import Routes from './components/Routes'
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '../css/index.css'
-import store from '../redux/store'
+import {store} from '../redux/store'
+import {push} from "react-router-redux";
+import {REDIRECT} from "../redux/actionTypes";
 
-function App() {
+
+function App(props) {
   return (
-    <Provider store={store}>
+    <Provider store={props.store}>
       <Routes/>
     </Provider>
   );
