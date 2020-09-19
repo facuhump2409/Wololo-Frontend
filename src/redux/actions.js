@@ -2,10 +2,10 @@ import {LOGIN, LOGOUT, SIGNUP} from './actionTypes';
 import { login,signOut,signUp } from '../services/auth';
 
 export const loginUser = (loginInfo) => {
-  return function(dispatch) {
-    login(loginInfo).then((response) => dispatch({
-      type: LOGIN
-    })).catch(err => console.log('Catch Error => ',err));
+  return function (dispatch) {
+    return login(loginInfo).then (response => function(){
+      dispatch({ type: LOGIN , payload: response}) //asi tenemos la respuesta de la API
+    }).catch(err => console.log("Error Password or email are incorrect")) //dispatch({error})
   }
 }
 

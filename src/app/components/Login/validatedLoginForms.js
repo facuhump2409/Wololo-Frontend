@@ -5,22 +5,12 @@ import { Formik } from "formik"
 import * as Yup from "yup"
 import GoogleBtn from './GoogleBtn';
 import {trackPromise} from "react-promise-tracker";
+import {LoadingIndicator} from "./loadingIndicator";
 
 class ValidatedLoginForm extends React.Component {
     constructor(props) {
         super (props);
-        // this.handleSuccesfulAuth = this.handleSuccesfulAuth(this);
-        // this.handleErrorAuth = this.handleErrorAuth(this);
     }
-
-
-    // handleSuccesfulAuth() {
-
-    // }
-
-    // handleErrorAuth() {
-
-    // }
 
     render() {
         return(
@@ -31,11 +21,12 @@ class ValidatedLoginForm extends React.Component {
                 onSubmit={(values,{setSubmitting}) => {
                     setSubmitting(true)
                     // this.props.loginUser(values)
-                    trackPromise(this.props.loginUser(values).then(()=> { //TODO cambiar por then catch cuando hagamos con back
-                        localStorage.setItem('isAuthorized', true);
-                        return this.props.history.push(`/`)
-                    }).catch(error=>{
-                        return <p>Couldn't sign in correctly, please try again later</p>}))
+                    trackPromise(this.props.loginUser(values))
+                    // trackPromise(this.props.loginUser(values).then(()=> { //TODO cambiar por then catch cuando hagamos con back
+                    //     localStorage.setItem('isAuthorized', true);
+                    //     return this.props.history.push(`/`)
+                    // }).catch(error=>{
+                    //     return <p>Couldn't sign in correctly, please try again later</p>}))
                     // if (this.props.isAuthorized) {
                     //     localStorage.setItem('isAuthorized', true);
                     //     this.props.history.push(`/`)
@@ -115,6 +106,7 @@ class ValidatedLoginForm extends React.Component {
                         )
                         }
                     }
+                        <LoadingIndicator/>
             </Formik>
                     </div>
                     </div>
