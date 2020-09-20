@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import ImageMapper from 'react-image-mapper';
 import './index.css'
 
-function Map({ name, handleHover }) {
+function Map({ name, handleHover, handleClick }) {
   const dimensions = { width: 500, height: 500 }
 
   const MAP = {
@@ -11,10 +11,6 @@ function Map({ name, handleHover }) {
     { name:'Castelar', shape: 'rect', coords: [0, 0, dimensions.width/2, dimensions.height], strokeColor: '#000000' },
     { name:'Villa Crespo', shape: 'rect', coords: [dimensions.width/2, 0, dimensions.width, dimensions.height], strokeColor: '#000000' }
   ]}
-
-  const handleClick = (area) => {
-    console.log(area.name);
-  }
 
   return (  
   <ImageMapper 
