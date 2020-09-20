@@ -15,6 +15,7 @@ import {LOGOUT, REDIRECT} from "../../../redux/actionTypes";
 import { store } from '../../../redux/store';
 import {push} from "react-router-redux";
 import {signOut} from "../../../services/auth";
+import SignOutComponent from "../Login/SignOut";
 
 const mapStateToProps = state => {
   return {
@@ -24,22 +25,22 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => ({
   onRedirect: () =>
-      dispatch({ type: REDIRECT }),
-  onSignOut: () =>
-      dispatch({type: LOGOUT, payload: signOut()})
+      dispatch({ type: REDIRECT })//,
+  // onSignOut: () =>
+  //     dispatch({type: LOGOUT, payload: signOut()})
 });
 
 function RoutesContainer(props) {
   const { isAuthorized } = useSelector(state => state.auth);
 
-  function handleSignOut(){
-    props.onSignOut()
-  }
+  // function handleSignOut(){
+  //   props.onSignOut()
+  // }
 
   useEffect(() => {
     console.log("Props que estan updateadas",props.redirectTo)
     if (props.redirectTo) {
-      store.dispatch(push(props.redirectTo));
+      store.dispatch(props.history.push(props.redirectTo));
       props.onRedirect();
     }
   })
@@ -52,7 +53,7 @@ function RoutesContainer(props) {
             <Route exact path='/' component={Home} />
             <Route path="/sign_in" component={ValidatedLoginForm} />
             <Route path="/sign_up" component={SignUpComponent} />
-            <Route key="sign-out-button" path="/sign_out" render={handleSignOut}/>
+            <Route key="sign-out-button" path="/sign_out" component={SignOutComponent}/>
             <AuthenticatedRoute path='/games' component={Games} isAuthenticated={isAuthorized} />
             <AuthenticatedRoute path='/newGame' component={NewGame} isAuthenticated={isAuthorized} />
             <AuthenticatedRoute path='/game/:id' component={Game} isAuthenticated={isAuthorized} />
