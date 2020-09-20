@@ -1,5 +1,4 @@
-import React, {Component} from 'react'
-import { usePromiseTracker } from "react-promise-tracker";
+import React from 'react'
 import Loader from 'react-loader-spinner';
 
 export const LoadingIndicator = (display) => {
@@ -10,5 +9,4 @@ export const LoadingIndicator = (display) => {
                 <Loader type="ThreeDots" color="#0000FF" height="100" width="100" />
             </div>
         );
-
 }

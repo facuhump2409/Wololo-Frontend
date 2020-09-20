@@ -4,7 +4,7 @@ import * as Yup from "yup";
 import {SIGNUP} from "../../../redux/actionTypes";
 import {connect} from "react-redux";
 import {signUp} from "../../../services/auth";
-import ListErrors from "../ListErrors";
+import ErrorMessage from "../errorMessage";
 
 const mapStateToProps = state => ({ ...state.auth });
 
@@ -28,12 +28,12 @@ class SignUpComponent extends Component{
             <div className="auth-wrapper">
                 <div className="auth-inner">
                     <Formik
-                        initialValues={{email: "", password:"",username: ""}}
+                        initialValues={{mail: "", password:"",username: ""}}
                         onSubmit={(values) => {
                             this.handleSubmit(values)
                         }}
                         validationSchema = {Yup.object().shape({
-                            email: Yup.string()
+                            mail: Yup.string()
                                 .email("Incorrect email format")
                                 .required("Please enter a valid email"),
                             password: Yup.string()
@@ -68,18 +68,18 @@ class SignUpComponent extends Component{
                                         <div className="form-group">
                                             <label>Email address</label>
                                             <input
-                                                type="email"
-                                                name="email"
+                                                type="mail"
+                                                name="mail"
                                                 className="form-control"
                                                 placeholder="Enter email"
-                                                value={values.email}
+                                                value={values.mail}
                                                 onChange={handleChange}
                                                 onBlur={handleBlur}
                                                 // className={errors.email && touched.email && "error"}
                                             />
                                         </div>
-                                        {errors.email && touched.email && (
-                                            <div className="input-feedback">{errors.email}</div>
+                                        {errors.mail && touched.mail && (
+                                            <div className="input-feedback">{errors.mail}</div>
                                         )}
 
                                         <div className="form-group">
@@ -108,7 +108,7 @@ class SignUpComponent extends Component{
                             }
                         }
                     </Formik>
-                    <ListErrors errors={this.props.errors} />
+                    <ErrorMessage errors={this.props.errors} />
                 </div>
             </div>
         );

@@ -6,7 +6,7 @@ import * as Yup from "yup"
 import GoogleBtn from './GoogleBtn';
 import {trackPromise} from "react-promise-tracker";
 import {LoadingIndicator} from "./loadingIndicator";
-import ListErrors from "../ListErrors";
+import ErrorMessage from "../errorMessage";
 import {LOGIN, LOGIN_PAGE_UNLOADED} from "../../../redux/actionTypes";
 import {login} from "../../../services/auth";
 
@@ -71,7 +71,7 @@ class ValidatedLoginForm extends React.Component {
                                 } = props;
                         return (
                             <form onSubmit={handleSubmit}>
-                                <h3>Sign In</h3>
+                                <h3>Login</h3>
 
                                 <div className="form-group">
                                     <label>Email address</label>
@@ -125,7 +125,7 @@ class ValidatedLoginForm extends React.Component {
                     }
             </Formik>
                     <LoadingIndicator display={this.props.inProgress}/>
-                    <ListErrors errors={this.props.errors} />
+                    <ErrorMessage errors={this.props.errors} />
                     <GoogleBtn/>
                     <p className="forgot-password text-right">
                         Not a member yet? <a href="/sign-up">Sign up for free</a>

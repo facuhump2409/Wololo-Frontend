@@ -16,7 +16,7 @@ export default (state = initialState, action) => {
         case SIGNUP:
             return {
                 ...state,
-                redirectTo: action.error ? null : '/',
+                redirectTo: action.error ? null : '/games',
                 currentUser: action.error ? null : action.payload.username
             };
         default:
