@@ -20,19 +20,18 @@ import SignOutComponent from "../Login/SignOut";
 const mapStateToProps = state => {
   return {
     currentUser: state.common.currentUser,
-    redirectTo: state.common.redirectTo
-  }};
+    redirectTo: state.common.redirectTo,
+    isAuthorized: state.auth.isAuthorized
+}};
 
 const mapDispatchToProps = dispatch => ({
   onRedirect: () =>
-      dispatch({ type: REDIRECT })//,
-  // onSignOut: () =>
-  //     dispatch({type: LOGOUT, payload: signOut()})
+      dispatch({ type: REDIRECT }),
+  onSignOut: () =>
+      dispatch({type: LOGOUT, payload: signOut()})
 });
 
 function RoutesContainer(props) {
-  const { isAuthorized } = useSelector(state => state.auth);
-
   // function handleSignOut(){
   //   props.onSignOut()
   // }
@@ -40,7 +39,7 @@ function RoutesContainer(props) {
   useEffect(() => {
     console.log("Props que estan updateadas",props.redirectTo)
     if (props.redirectTo) {
-      store.dispatch(props.history.push(props.redirectTo));
+      store.dispatch(push(props.redirectTo));
       props.onRedirect();
     }
   })
@@ -48,15 +47,17 @@ function RoutesContainer(props) {
   return (
   <Router>
     <div className="App">
-    <Header/>
+    <Header>
+
+    </Header>
           <Switch>
             <Route exact path='/' component={Home} />
             <Route path="/sign_in" component={ValidatedLoginForm} />
             <Route path="/sign_up" component={SignUpComponent} />
             <Route key="sign-out-button" path="/sign_out" component={SignOutComponent}/>
-            <AuthenticatedRoute path='/games' component={Games} isAuthenticated={isAuthorized} />
-            <AuthenticatedRoute path='/newGame' component={NewGame} isAuthenticated={isAuthorized} />
-            <AuthenticatedRoute path='/game/:id' component={Game} isAuthenticated={isAuthorized} />
+            <AuthenticatedRoute path='/games' component={Games} isAuthenticated={props.isAuthorized} />
+            <AuthenticatedRoute path='/newGame' component={NewGame} isAuthenticated={props.isAuthorized} />
+            <AuthenticatedRoute path='/game/:id' component={Game} isAuthenticated={props.isAuthorized} />
           </Switch>
     </div>
   </Router>

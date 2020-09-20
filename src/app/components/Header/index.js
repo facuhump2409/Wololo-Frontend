@@ -4,14 +4,13 @@ import '../../../css/navbar.css'
 import { Link } from "react-router-dom";
 import { connect } from 'react-redux';
 import { NOT_LOGGED_LINKS, LOGGED_LINKS } from './constants'
+import NavbarItem from "./navbarItem";
 
-function Header() {
+function Header(props) {
   const isAuthorized = useSelector(state => state.auth.isAuthorized);
   function createNavbar(items) {
     return items.map(item => (
-        <li className="nav-item" key={item.id}>
-    <Link className="nav-link" to={item.to}>{item.name}</Link>
-        </li>
+        <NavbarItem item={item} />
     ))
   }
 

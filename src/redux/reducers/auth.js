@@ -7,6 +7,8 @@ export default function(state = initialState, action) {
     case LOGOUT:
       return {
         ...state,
+        inProgress: false,
+        errors: action.error ? action.payload.message : null,
         isAuthorized: false,
       };
     case ASYNC_START:

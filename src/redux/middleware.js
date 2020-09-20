@@ -20,7 +20,7 @@ const promiseMiddleware = store => next => action => {
                 //     return
                 // }
                 console.log('RESULT', res);
-                action.payload = res;
+                action.payload = res.data;
                 store.dispatch({ type: ASYNC_END });
                 store.dispatch(action);
             }

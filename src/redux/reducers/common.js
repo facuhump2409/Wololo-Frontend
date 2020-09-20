@@ -14,14 +14,14 @@ export default (state = initialState, action) => {
             return {
                 ...state,
                 redirectTo: action.error ? null : '/',
-                currentUser: null
+                // currentUser: null
             };
         case LOGIN:
         case SIGNUP:
             return {
                 ...state,
                 redirectTo: action.error ? null : '/games',
-                currentUser: action.error ? null : action.payload.username
+                // currentUser: action.error ? null : action.payload
             };
         default:
             return state;
