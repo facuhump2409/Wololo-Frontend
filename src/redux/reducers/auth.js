@@ -4,11 +4,6 @@ import {initialState} from "./utils";
 
 export default function(state = initialState, action) {
   switch(action.type) {
-      //ver que no setee siempre en true el isAuthorized
-      // return {
-      //   ...state,
-      //   isAuthorized: action.response === 200//true,
-      // };
     case LOGOUT:
       return {
         ...state,
@@ -24,8 +19,8 @@ export default function(state = initialState, action) {
       return {
         ...state,
         inProgress: false,
-        errors: action.error ? action.payload.errors : null
-        // isAuthorized: action.response === 200,
+        errors: action.error ? action.payload.message : null,
+        isAuthorized: !action.error,
       };
     default:
       return state;

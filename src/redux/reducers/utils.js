@@ -1,3 +1,4 @@
 export const initialState = {
-    isAuthorized: localStorage.getItem('isAuthorized') || false,
+    isAuthorized: false,//localStorage.getItem('isAuthorized') || false,
+    inProgress: false
 }

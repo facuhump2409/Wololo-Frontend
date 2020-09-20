@@ -10,24 +10,25 @@ const promiseMiddleware = store => next => action => {
     if (isPromise(action.payload)) {
         store.dispatch({ type: ASYNC_START, subtype: action.type });
 
-        action.payload.then(
-            res => {
+        action.payload.then((res) => {
+            if (res.ok) {
                 console.log('RESULT', res);
                 action.payload = res;
                 store.dispatch({ type: ASYNC_END, promise: action.payload });
                 store.dispatch(action);
-            },
-            error => {
+            }
+            else {
+                const error = res
                 console.log('ERROR', error);
                 action.error = true;
-                action.payload = error.response.body;
-                if (!action.skipTracking) {
-                    store.dispatch({ type: ASYNC_END, promise: action.payload });
-                }
+                action.payload = error.data;
+                // if (!action.skipTracking) {
+                //     store.dispatch({ type: ASYNC_END, promise: action.payload });
+                // }
+                store.dispatch({ type: ASYNC_END, promise: action.payload });
                 store.dispatch(action);
             }
-        );
-
+            })
         return;
     }
 

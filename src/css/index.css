@@ -40,6 +40,12 @@ body, html, .App, #root, .auth-wrapper {
   text-align: left;
 }
 
+.error-message {
+  background-color: #ff7272;
+  color: white;
+  padding: 1em;
+}
+
 .auth-inner {
   width: 450px;
   margin: auto;

@@ -12,11 +12,14 @@ import {login} from "../../../services/auth";
 
 const mapDispatchToProps = dispatch => ({
     onSubmit: (values) =>
-        dispatch({ type: LOGIN, payload: login(values) }),
+        trackPromise(dispatch({ type: LOGIN, payload: login(values) })),
     onUnload: () =>
         dispatch({ type: LOGIN_PAGE_UNLOADED })
 });
 
+// const auth = state => {
+//     return ({ auth: state.auth })
+// }
 const mapStateToProps = state => ({ ...state.auth });
 
 class ValidatedLoginForm extends React.Component {
@@ -28,6 +31,7 @@ class ValidatedLoginForm extends React.Component {
     }
 
     render() {
+        console.log('ERRORES MIRAR: ',this.props.errors,this.props.inProgress)
         return(
             <div className="auth-wrapper">
                 <div className="auth-inner">
@@ -35,9 +39,9 @@ class ValidatedLoginForm extends React.Component {
                 initialValues={{mail: "", password:""}}
                 onSubmit={(values,{setSubmitting}) => {
                     // trackPromise(this.props.loginUser(values))
-                    trackPromise(this.props.onSubmit(values))
+                    // trackPromise(this.props.onSubmit(values))
+                    this.props.onSubmit(values)
                     // this.handleLogin(values)
-                    setSubmitting(true)
                     // trackPromise(this.props.loginUser(values).then(()=> { //TODO cambiar por then catch cuando hagamos con back
                     //     localStorage.setItem('isAuthorized', true);
                     //     return this.props.history.push(`/`)
@@ -116,20 +120,20 @@ class ValidatedLoginForm extends React.Component {
                                 <button
                                     type="submit"
                                     className="btn btn-primary btn-block"
-                                    disabled={isSubmitting}>
+                                    disabled={this.props.inProgress}>
                                     Submit
                                 </button>
-                                <GoogleBtn handleSuccesfulAuth={props.login}/>
-                                <p className="forgot-password text-right">
-                                    Not a member yet? <a href="/sign-up">Sign up for free</a>
-                                </p>
                             </form>
                         )
                         }
                     }
             </Formik>
-                    <LoadingIndicator/>
+                    <LoadingIndicator display={this.props.inProgress}/>
                     <ListErrors errors={this.props.errors} />
+                    <GoogleBtn/>
+                    <p className="forgot-password text-right">
+                        Not a member yet? <a href="/sign-up">Sign up for free</a>
+                    </p>
                 </div>
                     </div>
         )

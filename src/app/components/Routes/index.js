@@ -15,18 +15,19 @@ import {Redirect} from "react-router-dom";
 import {LOGOUT, REDIRECT} from "../../../redux/actionTypes";
 import { store } from '../../../redux/store';
 import {push} from "react-router-redux";
+import {signOut} from "../../../services/auth";
 
 const mapDispatchToProps = dispatch => ({
   onRedirect: () =>
       dispatch({ type: REDIRECT }),
   onSignOut: () =>
-      dispatch({type: LOGOUT})
+      dispatch({type: LOGOUT, payload: signOut()})
 });
 
 function RoutesContainer(props) {
   const { isAuthorized } = useSelector(state => state.auth);
 
-  function componentWillReceiveProps(nextProps) {
+  function componentDidUpdate(nextProps) {
     if (nextProps.redirectTo) {
         // this.context.router.replace(nextProps.redirectTo);
         store.dispatch(push(nextProps.redirectTo));
@@ -37,7 +38,7 @@ function RoutesContainer(props) {
   function handleLogout() {
     props.signOutUser()
     // props.history.push(`/`)
-    return <Redirect to="/"/>
+    // return <Redirect to="/"/>
   }
 
   return (
