@@ -22,17 +22,19 @@ const Game = () => {
   }
 
   return (
-    <div>
+    <div className='container'>
+      <div className='row'>
+        <div className='d-flex justify-content-center col-6'>
+          <Map name='gameMap' handleHover={handleHover} handleClick={handleClick}/>  
+        </div>
 
-      <div className='d-flex justify-content-center'>
-      <Map name='gameMap' handleHover={handleHover} handleClick={handleClick}/>  
+        <div className='d-flex justify-content-center col-6'>
+          { town && towns.find(aTown => aTown.name === town) ? 
+            <TownInfo town={towns.find(aTown => aTown.name === town)} clicked={clicked} handleReturn={handleReturn} />
+            : null 
+          }
+        </div>
       </div>
-
-    <div className='d-flex justify-content-center'>
-      { town && towns.find(aTown => aTown.name === town) ? 
-      <TownInfo town={towns.find(aTown => aTown.name === town)} clicked={clicked} handleReturn={handleReturn} />
-      : null }
-    </div>
     </div>
   )
 }
