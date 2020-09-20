@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 
 import {connect, useSelector} from 'react-redux'
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
@@ -36,13 +36,14 @@ function RoutesContainer(props) {
     props.onSignOut()
   }
 
-  function componentDidUpdate(prevProps) {
-    console.log("Props que estan updateadas",prevProps.redirectTo)
+  useEffect(() => {
+    console.log("Props que estan updateadas",props.redirectTo)
     if (props.redirectTo) {
       store.dispatch(push(props.redirectTo));
-      this.props.onRedirect();
+      props.onRedirect();
     }
-  }
+  })
+
   return (
   <Router>
     <div className="App">
