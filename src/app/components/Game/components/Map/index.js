@@ -8,8 +8,8 @@ function Map({ name, handleHover }) {
   const MAP = {
     name,
     areas: [
-    { name:'PBA', shape: 'rect', coords: [0, 0, dimensions.width/2, dimensions.height], strokeColor: '#000000' },
-    { name:'2', shape: 'rect', coords: [dimensions.width/2, 0, dimensions.width, dimensions.height], strokeColor: '#000000' }
+    { name:'Castelar', shape: 'rect', coords: [0, 0, dimensions.width/2, dimensions.height], strokeColor: '#000000' },
+    { name:'Villa Crespo', shape: 'rect', coords: [dimensions.width/2, 0, dimensions.width, dimensions.height], strokeColor: '#000000' }
   ]}
 
   const handleClick = (area) => {

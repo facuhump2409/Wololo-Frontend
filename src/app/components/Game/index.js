@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import Map from './components/Map'
+import TownInfo from './components/TownInfo'
 import { towns } from './constants'
 
 const Game = () => {
@@ -13,19 +14,14 @@ const Game = () => {
     <div>
 
       <div className='d-flex justify-content-center'>
-        
-      <Map name='gameMap' handleHover={handleHover}/>
-        
+      <Map name='gameMap' handleHover={handleHover}/>  
       </div>
-      { towns.find(aTown => aTown.name === town) ? 
-      [towns.find(aTown => aTown.name === town)].map(aTown => (<div>
-        <p>Town name: {aTown.name}</p>
-        <p>Owner: {aTown.owner.username}</p>
-        <p>Coordinates: LATITUDE {aTown.coordinates.lat}, LONGITUDE {aTown.coordinates.lon}</p>
-        <p>gauchos quantity: {aTown.gauchos}</p>
-        <p>is locked: {aTown.isLocked.toString()}</p>
-      </div>))
+
+    <div className='d-flex justify-content-center'>
+      { town && towns.find(aTown => aTown.name === town) ? 
+      <TownInfo town={towns.find(aTown => aTown.name === town)} />
       : null }
+    </div>
     </div>
   )
 }
