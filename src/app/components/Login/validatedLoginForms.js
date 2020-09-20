@@ -17,9 +17,6 @@ const mapDispatchToProps = dispatch => ({
         dispatch({ type: LOGIN_PAGE_UNLOADED })
 });
 
-// const auth = state => {
-//     return ({ auth: state.auth })
-// }
 const mapStateToProps = state => ({ ...state.auth });
 
 class ValidatedLoginForm extends React.Component {
@@ -31,13 +28,12 @@ class ValidatedLoginForm extends React.Component {
     }
 
     render() {
-        console.log('ERRORES MIRAR: ',this.props.errors,this.props.inProgress)
         return(
             <div className="auth-wrapper">
                 <div className="auth-inner">
                     <Formik
                 initialValues={{mail: "", password:""}}
-                onSubmit={(values,{setSubmitting}) => {
+                onSubmit={(values) => {
                     // trackPromise(this.props.loginUser(values))
                     // trackPromise(this.props.onSubmit(values))
                     this.props.onSubmit(values)

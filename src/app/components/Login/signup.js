@@ -1,27 +1,26 @@
 import React, {Component} from 'react';
-import {signUpUser} from '../../../redux/actions';
 import {Formik} from "formik";
 import * as Yup from "yup";
+import {SIGNUP} from "../../../redux/actionTypes";
+import {connect} from "react-redux";
+import {signUp} from "../../../services/auth";
+import ListErrors from "../ListErrors";
+
+const mapStateToProps = state => ({ ...state.auth });
+
+const mapDispatchToProps = dispatch => ({
+    onSignUp: (values) =>
+        dispatch({ type: SIGNUP, payload: signUp(values) })
+});
 
 class SignUpComponent extends Component{
     constructor(props) {
         super (props);
         this.handleSubmit = this.handleSubmit.bind(this);
-        this.handleSign = this.handleSign.bind(this);
-    }
-
-    handleSign() {
-        this.props.history.push(`/`)
-        // return <Redirect to="/sign_in"/>
     }
 
     handleSubmit(values){
-        console.log(values)
-        // this.handleSign()
-        this.props.signUpUser(values).then(()=> { //TODO cambiar despues a signUp(values) que le pega posta a back
-            return this.handleSign
-        }).catch(error=>{
-            return <p>Couldn't sign up correctly, please try again later</p>})
+        this.props.onSignUp(values)
     }
 
     render() {
@@ -29,9 +28,8 @@ class SignUpComponent extends Component{
             <div className="auth-wrapper">
                 <div className="auth-inner">
                     <Formik
-                        initialValues={{email: "", password:"",firstName: "",lastName: ""}}
-                        onSubmit={(values,{setSubmitting}) => {
-                            setSubmitting(true)
+                        initialValues={{email: "", password:"",username: ""}}
+                        onSubmit={(values) => {
                             this.handleSubmit(values)
                         }}
                         validationSchema = {Yup.object().shape({
@@ -50,7 +48,6 @@ class SignUpComponent extends Component{
                                 const { values,
                                     touched,
                                     errors,
-                                    isSubmitting,
                                     handleChange,
                                     handleSubmit,
                                     handleBlur,
@@ -59,25 +56,14 @@ class SignUpComponent extends Component{
                                     <form onSubmit={handleSubmit}>
                                         <h3>Sign Up</h3>
                                         <div className="form-group">
-                                            <label>First name</label>
+                                            <label>Username</label>
                                             <input type="text"
-                                                   name="firstName"
+                                                   name="username"
                                                    className="form-control" 
-                                                   placeholder="First name" 
-                                                   value={values.name}
+                                                   placeholder="Username"
+                                                   value={values.username}
                                                    onChange={handleChange}
                                                    onBlur={handleBlur}/>
-                                        </div>
-                                        <div className="form-group">
-                                            <label>Last name</label>
-                                            <input
-                                                type="text"
-                                                name="lastName"
-                                                className="form-control"
-                                                placeholder="Last name"
-                                                value={values.lastname}
-                                                onChange={handleChange}
-                                                onBlur={handleBlur}/>
                                         </div>
                                         <div className="form-group">
                                             <label>Email address</label>
@@ -113,7 +99,7 @@ class SignUpComponent extends Component{
                                         )}
                                         
 
-                                        <button type="submit" className="btn btn-primary btn-block" disabled={isSubmitting}>Sign Up</button>
+                                        <button type="submit" className="btn btn-primary btn-block" disabled={this.props.inProgress}>Sign Up</button>
                                         <p className="forgot-password text-right">
                                             Already registered <a href="/sign-in">Sign In</a>
                                         </p>
@@ -122,11 +108,11 @@ class SignUpComponent extends Component{
                             }
                         }
                     </Formik>
+                    <ListErrors errors={this.props.errors} />
                 </div>
             </div>
         );
     }
 
 }
-
-export default SignUpComponent;
+export default connect(mapStateToProps, mapDispatchToProps)(SignUpComponent);

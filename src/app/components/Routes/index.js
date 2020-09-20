@@ -10,12 +10,17 @@ import Header from '../Header'
 import ValidatedLoginForm from "../Login/validatedLoginForms"
 import NewGame from '../newGame'
 import Game from '../Game';
-import {signOutUser} from "../../../redux/actions";
 import {Redirect} from "react-router-dom";
 import {LOGOUT, REDIRECT} from "../../../redux/actionTypes";
 import { store } from '../../../redux/store';
 import {push} from "react-router-redux";
 import {signOut} from "../../../services/auth";
+
+const mapStateToProps = state => {
+  return {
+    currentUser: state.common.currentUser,
+    redirectTo: state.common.redirectTo
+  }};
 
 const mapDispatchToProps = dispatch => ({
   onRedirect: () =>
@@ -27,20 +32,17 @@ const mapDispatchToProps = dispatch => ({
 function RoutesContainer(props) {
   const { isAuthorized } = useSelector(state => state.auth);
 
-  function componentDidUpdate(nextProps) {
-    if (nextProps.redirectTo) {
-        // this.context.router.replace(nextProps.redirectTo);
-        store.dispatch(push(nextProps.redirectTo));
-        this.props.onRedirect();
+  function handleSignOut(){
+    props.onSignOut()
+  }
+
+  function componentDidUpdate(prevProps) {
+    console.log("Props que estan updateadas",prevProps.redirectTo)
+    if (props.redirectTo) {
+      store.dispatch(push(props.redirectTo));
+      this.props.onRedirect();
     }
   }
-
-  function handleLogout() {
-    props.signOutUser()
-    // props.history.push(`/`)
-    // return <Redirect to="/"/>
-  }
-
   return (
   <Router>
     <div className="App">
@@ -49,7 +51,7 @@ function RoutesContainer(props) {
             <Route exact path='/' component={Home} />
             <Route path="/sign_in" component={ValidatedLoginForm} />
             <Route path="/sign_up" component={SignUpComponent} />
-            <Route key="sign-out-button" path="/sign_out" render={handleLogout}/>
+            <Route key="sign-out-button" path="/sign_out" render={handleSignOut}/>
             <AuthenticatedRoute path='/games' component={Games} isAuthenticated={isAuthorized} />
             <AuthenticatedRoute path='/newGame' component={NewGame} isAuthenticated={isAuthorized} />
             <AuthenticatedRoute path='/game/:id' component={Game} isAuthenticated={isAuthorized} />
@@ -59,4 +61,4 @@ function RoutesContainer(props) {
   );
 }
 
-export default connect(null, { signOutUser,mapDispatchToProps })(RoutesContainer);
+export default connect(mapStateToProps, mapDispatchToProps)(RoutesContainer);
