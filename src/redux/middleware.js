@@ -38,7 +38,7 @@ const localStorageMiddleware = store => next => action => {
     if ((action.type === SIGNUP || action.type === LOGIN) && !action.error) {
         localStorage.setItem('isAuthorized', true);
     } else if (action.type === LOGOUT) {
-        localStorage.setItem('jwt', false);
+        localStorage.setItem('isAuthorized', false);
     }
 
     next(action);

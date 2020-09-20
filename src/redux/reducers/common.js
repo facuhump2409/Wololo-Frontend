@@ -1,22 +1,18 @@
 import {
     REDIRECT,
     LOGOUT,
-    SETTINGS_SAVED,
+    SETTINGS_SAVED, LOGIN,
 } from '../actionTypes';
 import {SIGNUP} from "../actionTypes";
+import {initialState} from "./utils";
 
-const defaultState = {
-    appName: 'Conduit',
-    token: null,
-    viewChangeCounter: 0
-};
-
-export default (state = defaultState, action) => {
+export default (state = initialState, action) => {
     switch (action.type) {
         case REDIRECT:
             return { ...state, redirectTo: null };
         case LOGOUT:
             return { ...state, redirectTo: '/', token: null, currentUser: null };
+        case LOGIN:
         case SIGNUP:
             return {
                 ...state,

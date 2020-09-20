@@ -1,17 +1,14 @@
 import {ASYNC_START, LOGIN, LOGOUT, SIGNUP} from '../actionTypes';
+import {initialState} from "./utils";
 
-const initialState = {
-  isAuthorized: localStorage.getItem('isAuthorized') || false,
-}
 
 export default function(state = initialState, action) {
   switch(action.type) {
-    case LOGIN:
       //ver que no setee siempre en true el isAuthorized
-      return {
-        ...state,
-        isAuthorized: action.response === 200//true,
-      };
+      // return {
+      //   ...state,
+      //   isAuthorized: action.response === 200//true,
+      // };
     case LOGOUT:
       return {
         ...state,
@@ -22,6 +19,7 @@ export default function(state = initialState, action) {
         return { ...state, inProgress: true };
       }
       break;
+    case LOGIN:
     case SIGNUP:
       return {
         ...state,

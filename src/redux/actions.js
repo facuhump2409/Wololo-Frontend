@@ -1,11 +1,10 @@
 import {LOGIN, LOGOUT, SIGNUP} from './actionTypes';
 import { login,signOut,signUp } from '../services/auth';
 
-export const loginUser = (loginInfo) => {
-  return function (dispatch) {
-      dispatch({ type: LOGIN , payload: login(loginInfo)}) //asi tenemos la respuesta de la API
-  }
-}
+export const loginUser = loginInfo => {
+  return function(dispatch) {
+  dispatch({ type: LOGIN , payload: login(loginInfo)}) //asi tenemos la respuesta de la API
+}};
 
 export const signUpUser = (signupInfo) => {
   return function(dispatch) {

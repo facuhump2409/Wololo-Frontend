@@ -7,10 +7,24 @@ import GoogleBtn from './GoogleBtn';
 import {trackPromise} from "react-promise-tracker";
 import {LoadingIndicator} from "./loadingIndicator";
 import ListErrors from "../ListErrors";
+import {LOGIN, LOGIN_PAGE_UNLOADED} from "../../../redux/actionTypes";
+import {login} from "../../../services/auth";
+
+const mapDispatchToProps = dispatch => ({
+    onSubmit: (values) =>
+        dispatch({ type: LOGIN, payload: login(values) }),
+    onUnload: () =>
+        dispatch({ type: LOGIN_PAGE_UNLOADED })
+});
+
+const mapStateToProps = state => ({ ...state.auth });
 
 class ValidatedLoginForm extends React.Component {
     constructor(props) {
         super (props);
+    }
+    componentWillUnmount() {
+        this.props.onUnload();
     }
 
     render() {
@@ -20,8 +34,10 @@ class ValidatedLoginForm extends React.Component {
                     <Formik
                 initialValues={{mail: "", password:""}}
                 onSubmit={(values,{setSubmitting}) => {
+                    // trackPromise(this.props.loginUser(values))
+                    trackPromise(this.props.onSubmit(values))
+                    // this.handleLogin(values)
                     setSubmitting(true)
-                    trackPromise(this.props.loginUser(values))
                     // trackPromise(this.props.loginUser(values).then(()=> { //TODO cambiar por then catch cuando hagamos con back
                     //     localStorage.setItem('isAuthorized', true);
                     //     return this.props.history.push(`/`)
@@ -120,8 +136,4 @@ class ValidatedLoginForm extends React.Component {
     }
 }
 
-const auth = state => { 
-    return ({ isAuthorized: state.auth.isAuthorized })
-    }
-
-export default connect(auth, { loginUser })(ValidatedLoginForm);
+export default connect(mapStateToProps, mapDispatchToProps)(ValidatedLoginForm);
