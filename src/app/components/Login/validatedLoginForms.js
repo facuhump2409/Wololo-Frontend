@@ -43,6 +43,7 @@ class ValidatedLoginForm extends React.Component {
                     // trackPromise(this.props.loginUser(values))
                     // trackPromise(this.props.onSubmit(values))
                     this.props.onSubmit(values)
+                    // this.props.history.push(`/`)
                     // this.handleLogin(values)
                     // trackPromise(this.props.loginUser(values).then(()=> { //TODO cambiar por then catch cuando hagamos con back
                     //     localStorage.setItem('isAuthorized', true);

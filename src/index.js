@@ -6,7 +6,7 @@ import App from './app/App';
 import * as serviceWorker from './serviceWorker';
 
 ReactDOM.render(
-    <BrowserRouter>
+    <BrowserRouter forceRefresh={true}>
       <App/>
     </BrowserRouter>,
   document.getElementById('root')

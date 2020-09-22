@@ -16,6 +16,7 @@ import { store } from '../../../redux/store';
 import {push} from "react-router-redux";
 import {signOut} from "../../../services/auth";
 import SignOutComponent from "../Login/SignOut";
+import {withRouter} from 'react-router'
 
 const mapStateToProps = state => {
   return {
@@ -39,7 +40,7 @@ function RoutesContainer(props) {
   useEffect(() => {
     console.log("Props que estan updateadas",props.redirectTo)
     if (props.redirectTo) {
-      store.dispatch(push(props.redirectTo));
+      props.history.push(props.redirectTo)
       props.onRedirect();
     }
   })
@@ -64,4 +65,4 @@ function RoutesContainer(props) {
   );
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(RoutesContainer);
+export default connect(mapStateToProps, mapDispatchToProps)(withRouter(RoutesContainer));
