@@ -1,4 +1,4 @@
-import {ASYNC_START, LOGIN, LOGIN_PAGE_UNLOADED, LOGOUT, SIGNUP} from '../actionTypes';
+import {ASYNC_START, LOGIN, LOGIN_PAGE_LOADED, LOGIN_PAGE_UNLOADED, LOGOUT, SIGNUP} from '../actionTypes';
 import {initialState} from "./utils";
 
 
@@ -12,7 +12,7 @@ export default function(state = initialState, action) {
         isAuthorized: false,
       };
     case ASYNC_START:
-      return { ...state, inProgress: true };
+      return { ...state, inProgress: true, errors: null };
     case LOGIN:
     case SIGNUP:
       return {
@@ -22,6 +22,7 @@ export default function(state = initialState, action) {
         isAuthorized: !action.error,
       };
     case LOGIN_PAGE_UNLOADED:
+    case LOGIN_PAGE_LOADED:
       return {
         ...state,
         errors: null

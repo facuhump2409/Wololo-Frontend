@@ -7,14 +7,16 @@ import GoogleBtn from './GoogleBtn';
 import {trackPromise} from "react-promise-tracker";
 import {LoadingIndicator} from "./loadingIndicator";
 import ErrorMessage from "../errorMessage";
-import {LOGIN, LOGIN_PAGE_UNLOADED} from "../../../redux/actionTypes";
+import {LOGIN, LOGIN_PAGE_LOADED, LOGIN_PAGE_UNLOADED} from "../../../redux/actionTypes";
 import {login} from "../../../services/auth";
 
 const mapDispatchToProps = dispatch => ({
     onSubmit: (values) =>
         trackPromise(dispatch({ type: LOGIN, payload: login(values) })),
     onUnload: () =>
-        dispatch({ type: LOGIN_PAGE_UNLOADED })
+        dispatch({ type: LOGIN_PAGE_UNLOADED }),
+    onLoad: () =>
+        dispatch({type: LOGIN_PAGE_LOADED})
 });
 
 const mapStateToProps = state => ({ ...state.auth });
@@ -23,6 +25,10 @@ class ValidatedLoginForm extends React.Component {
     constructor(props) {
         super (props);
     }
+    componentDidMount() {
+        this.props.onLoad();
+    }
+
     componentWillUnmount() {
         this.props.onUnload();
     }

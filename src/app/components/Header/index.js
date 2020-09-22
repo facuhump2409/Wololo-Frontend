@@ -10,7 +10,7 @@ function Header(props) {
   const isAuthorized = useSelector(state => state.auth.isAuthorized);
   function createNavbar(items) {
     return items.map(item => (
-        <NavbarItem item={item} />
+        <NavbarItem item={item} key={item.id}/>
     ))
   }
 
