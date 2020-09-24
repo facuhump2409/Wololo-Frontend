@@ -1,6 +1,5 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { loginUser } from '../../../redux/actions';
 import { Formik } from "formik"
 import * as Yup from "yup"
 import GoogleBtn from './GoogleBtn';

@@ -4,7 +4,6 @@ import Adapter from "enzyme-adapter-react-16";
 import App from "../App";
 import RoutesContainer from "../components/Routes";
 import Route from "react-router";
-import * as actions from '../../redux/actions';
 import {LOGIN, LOGOUT} from "../../redux/actionTypes";
 configure({ adapter: new Adapter() });
 
@@ -17,7 +16,6 @@ describe("Actions", () => {
     const expected = {
       type: LOGOUT
     }
-    expect(actions.signOutUser()).toEqual(expected)
   });
 })
 
