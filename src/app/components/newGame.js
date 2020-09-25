@@ -4,6 +4,8 @@ import FilteredMultiSelect from 'react-filtered-multiselect'
 import {Formik} from "formik";
 import * as Yup from "yup";
 import {Link} from "react-router-dom";
+import { getUsers } from '../../services/users';
+import { GET_USERS } from '../../redux/actionTypes';
 
 const BOOTSTRAP_CLASSES = {
     filter: 'form-control',
@@ -13,10 +15,11 @@ const BOOTSTRAP_CLASSES = {
 }
 
 
-const mapStateToProps = () => ({
-    // ...state.editor
-});
+const mapStateToProps = (state) => ({...state.users});
 
+const mapDispatchToProps = dispatch => ({
+    getParticipants: () => dispatch({ type: GET_USERS, payload: getUsers })
+})
 
 class NewGame extends React.Component {
     constructor(props) {
@@ -26,15 +29,15 @@ class NewGame extends React.Component {
             value: 'select',
             selectedUsers: []
         }
-        this.usersOptions = [
-            {value: 1, text: 'User 1'},
-            {value: 2, text: 'User 2'}
-        ];
 
     }
 
+    componentDidMount() {
+        this.props.getParticipants();
+    }
+
     handleChange = (event) => {
-        this.setState({value: event.target.value});
+        this.setState({value: event.target.value });
     };
 
     getInitialState = () => {
@@ -56,7 +59,6 @@ class NewGame extends React.Component {
 
     render() {
         const selectedUsers = this.state.selectedUsers;
-
         return (
             <div>
                 <div className="container page">
@@ -66,7 +68,8 @@ class NewGame extends React.Component {
 
                             <Formik
                                 initialValues={{selectProvince: "", password: ""}}
-                                onSubmit={() => {
+                                onSubmit={(value) => {
+                                    console.log('hola');
                                 }}
                                 validationSchema={Yup.object().shape({
                                     selectProvince: Yup.string()
@@ -75,71 +78,77 @@ class NewGame extends React.Component {
 
                                 })
                                 }>
-
-                                <form>
-                                    <fieldset>
-
-                                        <fieldset className="form-group">
-                                            <div>
-                                                <select name="selectProvince" className="form-control"
-                                                        onChange={this.handleChange}
-                                                        value={this.state.value}>
-                                                    <option value="">Select Province</option>
-                                                    <option value="Buenos Aires">Buenos Aires</option>
-                                                    <option value="CABA">CABA</option>
-                                                    <option value="Cordoba">Cordoba</option>
-                                                </select>
-                                            </div>
-
-                                        </fieldset>
-
-                                        <fieldset className="form-group">
-                                            <input
-                                                name="towns"
-                                                className="form-control"
-                                                type="text"
-                                                placeholder="Number of towns"
-                                            />
-                                        </fieldset>
-
-
-                                        <fieldset className="form-group">
-                                            <label>Select Users</label>
-
-                                            <div>
-                                                <FilteredMultiSelect
-                                                    name="users"
-                                                    classNames={BOOTSTRAP_CLASSES}
-                                                    onChange={this.handleSelectionChange}
-                                                    options={this.usersOptions}
-                                                    selectedOptions={selectedUsers}
+                                {
+                                    props => {
+                                        const { 
+                                                handleSubmit,
+                                            } = props;
+                                    return (<form onSubmit={handleSubmit}>
+                                        <fieldset>
+    
+                                            <fieldset className="form-group">
+                                                <div>
+                                                    <select name="selectProvince" className="form-control"
+                                                            onChange={this.handleChange}
+                                                            value={this.state.value}>
+                                                        <option value="">Select Province</option>
+                                                        <option value="Buenos Aires">Buenos Aires</option>
+                                                        <option value="CABA">CABA</option>
+                                                        <option value="Cordoba">Cordoba</option>
+                                                    </select>
+                                                </div>
+    
+                                            </fieldset>
+    
+                                            <fieldset className="form-group">
+                                                <input
+                                                    name="towns"
+                                                    className="form-control"
+                                                    type="text"
+                                                    placeholder="Number of towns"
                                                 />
-
-
-                                                {selectedUsers.length === 0 && <p>(nothing selected yet)</p>}
-                                                {selectedUsers.length > 0 && <ul>
-                                                    {selectedUsers.map((user, i) => <li key={user.id}>
-                                                        {`${user.text} `}
-
-                                                        <button type="button" onClick={() => this.handleDeselect(i)}>
-                                                            &times;
-                                                        </button>
-                                                    </li>)}
-                                                </ul>}
-                                            </div>
-
-
+                                            </fieldset>
+    
+    
+                                            <fieldset className="form-group">
+                                                <label>Select Users</label>
+    
+                                                <div>
+                                                    <FilteredMultiSelect
+                                                        name="users"
+                                                        classNames={BOOTSTRAP_CLASSES}
+                                                        onChange={this.handleSelectionChange}
+                                                        options={this.props.users.map((user, index) => ({ value: user.id, text: user.mail }))}
+                                                        selectedOptions={selectedUsers}
+                                                    />
+    
+    
+                                                    {selectedUsers.length === 0 && <p>(nothing selected yet)</p>}
+                                                    {selectedUsers.length > 0 && <ul>
+                                                        {selectedUsers.map((user, i) => <li key={user.id}>
+                                                            {`${user.text} `}
+    
+                                                            <button type="button" onClick={() => this.handleDeselect(i)}>
+                                                                &times;
+                                                            </button>
+                                                        </li>)}
+                                                    </ul>}
+                                                </div>
+    
+    
+                                            </fieldset>
+                                            
+                                                <button
+                                                    className="btn btn-lg pull-xs-right btn-primary"
+                                                    type="submit"
+                                                    onClick={handleSubmit}>
+                                                    Create New Game
+                                                </button>
+                                            
                                         </fieldset>
-                                        <Link to='/games'>
-                                            <button
-                                                className="btn btn-lg pull-xs-right btn-primary"
-                                                type="submit"
-                                                onClick={this.submitForm}>
-                                                Create New Game
-                                            </button>
-                                        </Link>
-                                    </fieldset>
-                                </form>
+                                    </form>)
+                                }
+                            }
                             </Formik>
                         </div>
                     </div>
@@ -150,4 +159,4 @@ class NewGame extends React.Component {
 
 }
 
-export default connect(mapStateToProps)(NewGame);
+export default connect(mapStateToProps, mapDispatchToProps)(NewGame);

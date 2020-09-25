@@ -16,7 +16,6 @@ describe("Actions", () => {
     const expected = {
       type: LOGOUT
     }
-    expect(actions.signOutUser()).toEqual(expected)
   });
 })
 
