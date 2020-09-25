@@ -4,52 +4,69 @@ import './index.css'
 
 
 function Map({ name, handleHover, handleClick, towns }) {
-  const dimensions = { width: 500, height: 500 }
   
-  const circle = (x, factMultX, factMultY) => 
-    [(dimensions.width * (1 + (2*factMultX)))/(2 ** (x+1)), (dimensions.height * (1 + (2*factMultY)))/ (2**(x+1)), dimensions.width/(2**(x+1))]
+
+  const dimensions = { width: 500, height: 500 }
+
+  const circle = (factor, { factMultX, factMultY }) =>
+    [(dimensions.width * (1 + (2 * factMultX))) / (2 ** (factor + 1)),
+     (dimensions.height * (1 + (2 * factMultY))) / (2 ** (factor + 1)),
+      dimensions.width / (2 ** (factor + 1))
+    ]
 
   const getFactor = (townsQuantity) => {
     let factor = 0;
-    while(4**factor < townsQuantity) {
+    while (4 ** factor < townsQuantity) {
       factor++;
     }
     return factor;
   }
 
-  const createCircles = factor => {
-    const maxCirclesInLine = factor ** 2;
-    let circles = [];
+  const createCircles = (factor, towns) => {
+    let usedPoints = [];
+    
+    const randomNumber = (factor) => Math.floor(Math.random() * (2**factor));
 
-    for(let i = 0; i < maxCirclesInLine; i++) {
-      for(let j = 0; j < maxCirclesInLine; j++) {
-        circles.push(circle(factor, i, j));
-      }
+    const randomPoint = (factor) => {
+      let point = { factMultX: randomNumber(factor), factMultY: randomNumber(factor) };
+      
+      if(usedPoints.some(aPoint => isSamePoint(aPoint, point))) return randomPoint(factor);
+      
+      usedPoints.push(point);
+      return point;
     }
 
-    return circles;
+    const isSamePoint = (aPoint, anotherPoint) => aPoint.factMultX === anotherPoint.factMultX && aPoint.factMultY === anotherPoint.factMultY
+
+    return towns.map(aTown => ({
+      name: aTown.name, 
+      shape: 'circle', 
+      coords: circle(factor, randomPoint(factor)),
+      strokeColor: '#000000', 
+      preFillColor: 'rgba(255,255,255,0.5)' 
+    }));
   }
 
   function createAreas() {
     const factor = getFactor(towns.length);
-    const circles = createCircles(factor);
-    return towns.map((aTown, index) => ({ name: aTown.name, shape: 'circle', coords: circles[index], strokeColor: '#000000', preFillColor:'rgba(255,255,255,0.5)'}))
+    return createCircles(factor, towns);
   }
-
+  const [circles, setCircles] = useState(createAreas());
+  
   const MAP = {
     name,
-    areas: createAreas(),
+    areas: circles,
   }
 
-  return (  
-  <ImageMapper 
-  src={process.env.PUBLIC_URL + '/Buenos_aires.webp'} 
-  map={MAP} 
-  onClick={ area => handleClick(area) } 
-  onMouseEnter={area => handleHover(area) }
-  width={dimensions.width} 
-  height={dimensions.height} />
-)
+  return (
+    <ImageMapper
+      src={process.env.PUBLIC_URL + '/Buenos_aires.webp'}
+      map={MAP}
+      onClick={area => handleClick(area)}
+      onMouseEnter={area => handleHover(area)}
+      width={dimensions.width}
+      height={dimensions.height} />
+  )
 }
 
 export default Map;
