@@ -10,7 +10,8 @@ export default function(state = initialState, action) {
       return {
         ...state,
         inProgress: false,
-        errors: action.error ? action.payload.message : null,
+        errors: action.error ? (action.payload.message ? action.payload.message : action.payload)
+         : null,
         users: action.payload
       }
       default: 

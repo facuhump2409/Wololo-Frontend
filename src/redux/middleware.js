@@ -12,7 +12,6 @@ const promiseMiddleware = store => next => action => {
 
         // const currentView = store.getState().viewChangeCounter;
         // const skipTracking = action.skipTracking;
-
         action.payload.then((res) => {
             if (res.ok) {
                 // const currentState = store.getState()

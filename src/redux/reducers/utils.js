@@ -1,6 +1,7 @@
 export const initialState = {
     isAuthorized: (localStorage.getItem('isAuthorized') === 'true') || false,
     inProgress: false,
-    user: null
+    user: null,
+    games: []
     // redirectTo: null
 }

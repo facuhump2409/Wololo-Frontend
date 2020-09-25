@@ -5,7 +5,8 @@ import {Formik} from "formik";
 import * as Yup from "yup";
 import {Link} from "react-router-dom";
 import { getUsers } from '../../services/users';
-import { GET_USERS } from '../../redux/actionTypes';
+import { createGame } from '../../services/games';
+import { GET_USERS, CREATE_GAME } from '../../redux/actionTypes';
 
 const BOOTSTRAP_CLASSES = {
     filter: 'form-control',
@@ -15,10 +16,11 @@ const BOOTSTRAP_CLASSES = {
 }
 
 
-const mapStateToProps = (state) => ({...state.users});
+const mapStateToProps = (state) => ({ ...state.users });
 
 const mapDispatchToProps = dispatch => ({
-    getParticipants: () => dispatch({ type: GET_USERS, payload: getUsers })
+    getParticipants: () => dispatch({ type: GET_USERS, payload: getUsers }),
+    createGame: (gameData) => dispatch({type: CREATE_GAME, payload: createGame(gameData) })
 })
 
 class NewGame extends React.Component {
@@ -26,8 +28,7 @@ class NewGame extends React.Component {
         super(props);
 
         this.state = {
-            value: 'select',
-            selectedUsers: []
+            selectedUsers: [],
         }
 
     }
@@ -36,15 +37,15 @@ class NewGame extends React.Component {
         this.props.getParticipants();
     }
 
-    handleChange = (event) => {
-        this.setState({value: event.target.value });
-    };
-
     getInitialState = () => {
         return {
             value: 'select'
         }
     };
+
+    users() {
+        return !this.props.errors ? this.props.users.map((user, index) => ({ value: user.id, text: user.mail })) : []
+    }
 
     handleSelectionChange = (selectedUsers) => {
         this.setState({selectedUsers})
@@ -67,21 +68,26 @@ class NewGame extends React.Component {
                             <label>Create New Game</label>
 
                             <Formik
-                                initialValues={{selectProvince: "", password: ""}}
-                                onSubmit={(value) => {
-                                    console.log('hola');
+                                initialValues={{selectProvince: "", towns: ""}}
+                                onSubmit={(values, {setSubmitting}) => {
+                                    this.props.createGame({
+                                        provinceName: values.selectProvince,
+                                        townAmount: parseInt(values.towns),
+                                        participantsIds: this.state.selectedUsers.map(user => user.value),
+                                    })
+                                    .setSubmitting(false);
                                 }}
-                                validationSchema={Yup.object().shape({
+                                validator={() => Yup.object().shape({
                                     selectProvince: Yup.string()
                                         .required("Please select a state"),
                                     towns: Yup.number().required("Please enter the number of towns")
-
                                 })
-                                }>
+                            }>
                                 {
                                     props => {
                                         const { 
                                                 handleSubmit,
+                                                handleChange
                                             } = props;
                                     return (<form onSubmit={handleSubmit}>
                                         <fieldset>
@@ -89,7 +95,7 @@ class NewGame extends React.Component {
                                             <fieldset className="form-group">
                                                 <div>
                                                     <select name="selectProvince" className="form-control"
-                                                            onChange={this.handleChange}
+                                                            onChange={handleChange}
                                                             value={this.state.value}>
                                                         <option value="">Select Province</option>
                                                         <option value="Buenos Aires">Buenos Aires</option>
@@ -105,6 +111,7 @@ class NewGame extends React.Component {
                                                     name="towns"
                                                     className="form-control"
                                                     type="text"
+                                                    onChange={handleChange}
                                                     placeholder="Number of towns"
                                                 />
                                             </fieldset>
@@ -118,7 +125,7 @@ class NewGame extends React.Component {
                                                         name="users"
                                                         classNames={BOOTSTRAP_CLASSES}
                                                         onChange={this.handleSelectionChange}
-                                                        options={this.props.users.map((user, index) => ({ value: user.id, text: user.mail }))}
+                                                        options={this.users()}
                                                         selectedOptions={selectedUsers}
                                                     />
     
@@ -141,7 +148,7 @@ class NewGame extends React.Component {
                                                 <button
                                                     className="btn btn-lg pull-xs-right btn-primary"
                                                     type="submit"
-                                                    onClick={handleSubmit}>
+                                                    >
                                                     Create New Game
                                                 </button>
                                             

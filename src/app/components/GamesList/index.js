@@ -1,13 +1,14 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom'
 import { Table } from 'reactstrap';
 import { HEADERS, INITIAL_VALUES, CHANGE_ARROW } from './constants';
 import { compareValues, filterValues } from './utils';
 import './Games.css'
 import {trackPromise} from "react-promise-tracker";
-import {LOGIN, LOGIN_PAGE_LOADED, LOGIN_PAGE_UNLOADED} from "../../../redux/actionTypes";
+import {GET_GAMES, LOGIN, LOGIN_PAGE_LOADED, LOGIN_PAGE_UNLOADED} from "../../../redux/actionTypes";
 import {login} from "../../../services/auth";
-import {connect} from "react-redux";
+import { getGames } from "../../../services/games";
+import {connect, useDispatch} from "react-redux";
 
 const mapDispatchToProps = dispatch => ({
   onSubmit: (values) =>
@@ -20,10 +21,15 @@ const mapDispatchToProps = dispatch => ({
 
 const mapStateToProps = state => ({ ...state.games });
 
-function GamesList() {
+function GamesList(props) {
 
+  const dispatch = useDispatch()
   const [rowValues, setRowValues] = useState(INITIAL_VALUES);
   const [headers, setHeaders] = useState(HEADERS);
+
+  useEffect(() => {
+    dispatch({ type: GET_GAMES, payload: getGames() });
+  }, [dispatch])
 
   function handleSearchChange(event) {
     return event.target.value ? setRowValues(filterValues(rowValues, event.target.value)) : setRowValues(INITIAL_VALUES);
