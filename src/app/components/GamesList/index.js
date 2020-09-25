@@ -4,8 +4,24 @@ import { Table } from 'reactstrap';
 import { HEADERS, INITIAL_VALUES, CHANGE_ARROW } from './constants';
 import { compareValues, filterValues } from './utils';
 import './Games.css'
+import {trackPromise} from "react-promise-tracker";
+import {LOGIN, LOGIN_PAGE_LOADED, LOGIN_PAGE_UNLOADED} from "../../../redux/actionTypes";
+import {login} from "../../../services/auth";
+import {connect} from "react-redux";
+
+const mapDispatchToProps = dispatch => ({
+  onSubmit: (values) =>
+      trackPromise(dispatch({ type: LOGIN, payload: login(values) })),
+  onUnload: () =>
+      dispatch({ type: LOGIN_PAGE_UNLOADED }),
+  onLoad: () =>
+      dispatch({type: LOGIN_PAGE_LOADED})
+});
+
+const mapStateToProps = state => ({ ...state.games });
 
 function GamesList() {
+
   const [rowValues, setRowValues] = useState(INITIAL_VALUES);
   const [headers, setHeaders] = useState(HEADERS);
 
@@ -69,4 +85,4 @@ function GamesList() {
   );
 }
 
-export default GamesList;
+export default connect(mapStateToProps, mapDispatchToProps)(GamesList);

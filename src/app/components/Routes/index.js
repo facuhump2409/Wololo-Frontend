@@ -10,10 +10,7 @@ import Header from '../Header'
 import ValidatedLoginForm from "../Login/validatedLoginForms"
 import NewGame from '../newGame'
 import Game from '../Game';
-import {Redirect} from "react-router-dom";
 import {LOGOUT, REDIRECT} from "../../../redux/actionTypes";
-import { store } from '../../../redux/store';
-import {push} from "react-router-redux";
 import {signOut} from "../../../services/auth";
 import SignOutComponent from "../Login/SignOut";
 import {withRouter} from 'react-router'
