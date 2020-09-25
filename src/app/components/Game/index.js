@@ -25,7 +25,7 @@ const Game = () => {
     <div className='container'>
       <div className='row'>
         <div className='d-flex justify-content-center col-6'>
-          <Map name='gameMap' handleHover={handleHover} handleClick={handleClick}/>  
+          <Map name='gameMap' handleHover={handleHover} handleClick={handleClick} towns={towns} />  
         </div>
 
         <div className='d-flex justify-content-center col-6'>
