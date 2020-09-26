@@ -1,15 +1,9 @@
 import React from 'react';
-import handleLogout from '../components/Routes/index'
-import {useSelector} from "react-redux";
 import {configure, mount, shallow} from "enzyme";
 import Adapter from "enzyme-adapter-react-16";
 import App from "../App";
-import MemoryRouter from "react-router-dom";
 import RoutesContainer from "../components/Routes";
-import { render, unmountComponentAtNode } from "react-dom";
-import {act} from "react-dom/test-utils";
 import Route from "react-router";
-import * as actions from '../../redux/actions';
 import {LOGIN, LOGOUT} from "../../redux/actionTypes";
 configure({ adapter: new Adapter() });
 
@@ -22,7 +16,6 @@ describe("Actions", () => {
     const expected = {
       type: LOGOUT
     }
-    expect(actions.signOutUser()).toEqual(expected)
   });
 })
 
