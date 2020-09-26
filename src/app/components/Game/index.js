@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
-import { GET_GAME } from '../../../redux/actionTypes';
-import { getGame } from '../../../services/games';
-import {townsFrom} from './utils'
+import { GET_GAME, PASS_TURN, SURRENDER } from '../../../redux/actionTypes';
+import { getGame, finishTurn, surrender } from '../../../services/games';
+import { townsFrom, isMyTurn } from './utils'
+import { Button } from 'reactstrap'
 import Map from './components/Map'
 import TownInfo from './components/TownInfo'
 
@@ -23,11 +24,19 @@ const Game = (props) => {
   }
 
   const handleClick = () => {
-    setClicked(true);
+    if(isMyTurn(activeGame, 3)) setClicked(true);
   }
 
   const handleReturn = () => {
     setClicked(false);
+  }
+
+  const handleSurrender = () => {
+    dispatch({ type: SURRENDER, payload: surrender(activeGame.id) })
+  }
+
+  const passTurn = () => {
+    dispatch({ type: PASS_TURN, payload: finishTurn(activeGame.id) })
   }
 
   return (
@@ -35,7 +44,7 @@ const Game = (props) => {
     <div className='container'>
       <div className='row'>
         <div className='d-flex justify-content-center col-6'>
-          <Map name='gameMap' game={activeGame} handleHover={handleHover} handleClick={handleClick} currentUser={2} />  
+          <Map name='gameMap' game={activeGame} handleHover={handleHover} handleClick={handleClick} currentUser={3} />  
         </div>
 
         <div className='d-flex justify-content-center col-6'>
@@ -49,6 +58,14 @@ const Game = (props) => {
             currentUserTowns={townsFrom(3, activeGame.province.towns)}/>
             : null 
           }
+        </div>
+      </div>
+      <div className='row' style={{marginTop: '20px'}}>
+        <div className='d-flex justify-content-center col-6'>
+          <Button color='danger' onClick={handleSurrender}>Surrender</Button>  
+        </div>
+        <div className='d-flex justify-content-center col-6'>
+          <Button color='primary' onClick={passTurn}>Pass Turn</Button>  
         </div>
       </div>
     </div>

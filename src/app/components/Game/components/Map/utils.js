@@ -33,7 +33,7 @@ const createCircles = (factor, towns, dimensions, currentUser) => {
   }
 
   const isSamePoint = (aPoint, anotherPoint) => aPoint.factMultX === anotherPoint.factMultX && aPoint.factMultY === anotherPoint.factMultY
-  
+
   return towns.map(aTown => ({
     name: aTown.name, 
     shape: 'circle', 
