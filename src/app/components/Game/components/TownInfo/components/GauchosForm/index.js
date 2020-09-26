@@ -1,12 +1,11 @@
 import React, { useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux'
-import { Form, Input, Button, FormFeedback, Label } from 'reactstrap'
+import { useDispatch } from 'react-redux'
+import { Form, Input, Button, FormFeedback } from 'reactstrap'
 import { MOVE_GAUCHOS } from '../../../../../../../redux/actionTypes'
 import { moveGauchos } from '../../../../../../../services/games'
 
-function GauchosForm({ currentTown, currentUserTowns, onBack, onMoveGauchos }) {
+function GauchosForm({ currentGame, currentTown, currentUserTowns, onBack, onMoveGauchos }) {
   const dispatch = useDispatch();
-  const { activeGame } = useSelector(state => state.games);
 
   const [selectedTown, setSelectedTown] = useState(null);
   const [selectedQuantity, setSelectedQuantity] = useState(0);
@@ -24,7 +23,7 @@ function GauchosForm({ currentTown, currentUserTowns, onBack, onMoveGauchos }) {
   const handleSubmit = (event) => {
     event.preventDefault()
     if(invalidQuantity || !selectedTown) return;
-    dispatch({ type: MOVE_GAUCHOS, payload: moveGauchos(activeGame.id, selectedTown.id, currentTown.id, selectedQuantity) })
+    dispatch({ type: MOVE_GAUCHOS, payload: moveGauchos(currentGame.id, selectedTown.id, currentTown.id, selectedQuantity) })
     onMoveGauchos();
   }
 

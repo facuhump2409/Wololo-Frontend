@@ -2,17 +2,22 @@ import React, { useState } from 'react';
 import { useDispatch } from 'react-redux'; 
 import { Card, CardImg, CardText, CardBody, CardTitle, Button } from 'reactstrap';
 import GauchosForm from './components/GauchosForm'
+import AttackForm from './components/AttackForm'
 import { getChangeSpecialization } from './utils'
-import { updateSpecialization } from '../../../../../services/games'
-import { CHANGE_SPECIALIZATION } from '../../../../../redux/actionTypes'
+import { updateSpecialization, attackTown } from '../../../../../services/games'
+import { CHANGE_SPECIALIZATION, ATTACK_TOWN } from '../../../../../redux/actionTypes'
 
 function TownInfo({ activeGame, town, currentUserTowns, clicked, onReturn, currentUser }) {
   const dispatch = useDispatch();
+  
   const [movingGauchos, setMovingGauchos] = useState(false);
+  const [attacking, setAttacking] = useState(false);
+
   const isTownFromUser = currentUser === town.ownerId;
 
   const handleReturn = () => {
     setMovingGauchos(false);
+    setAttacking(false);
     onReturn();
   }
 
@@ -23,6 +28,10 @@ function TownInfo({ activeGame, town, currentUserTowns, clicked, onReturn, curre
   const handleChangeSpecialization = (specialization) => {
     dispatch({ type: CHANGE_SPECIALIZATION, payload: updateSpecialization(activeGame.id, town.id, specialization) })
     onReturn();
+  }
+
+  const handleAttack = () => {
+    setAttacking(!attacking)
   }
 
   return (
@@ -49,14 +58,29 @@ function TownInfo({ activeGame, town, currentUserTowns, clicked, onReturn, curre
         {!town.isLocked ?
           <Button color='info' onClick={handleMoveGauchos}>add gauchos</Button> : null}
         </>)
-        : <Button color='primary'>attack</Button> 
+        : <Button color='primary' onClick={handleAttack}>attack</Button> 
         }
       </div>
       : null 
       }
       {
         movingGauchos ? (
-          <GauchosForm currentTown={town} currentUserTowns={currentUserTowns} onBack={handleMoveGauchos} onMoveGauchos={handleReturn}/>
+          <GauchosForm 
+            currentGame={activeGame} 
+            currentTown={town} 
+            currentUserTowns={currentUserTowns} 
+            onBack={handleMoveGauchos} 
+            onMoveGauchos={handleReturn}/>
+      ) : null
+      }
+            {
+        attacking ? (
+          <AttackForm 
+            currentGame={activeGame}
+            currentTown={town} 
+            currentUserTowns={currentUserTowns} 
+            onBack={handleAttack} 
+            onAttack={handleReturn}/>
       ) : null
       }
     </CardBody>
