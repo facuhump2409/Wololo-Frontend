@@ -4,6 +4,7 @@ import GauchosForm from './components/GauchosForm'
 
 function TownInfo({ town, currentUserTowns, clicked, onReturn, currentUser }) {
   const [movingGauchos, setMovingGauchos] = useState(false);
+  const isTownFromUser = currentUser === town.ownerId;
 
   const handleReturn = () => {
     setMovingGauchos(false);
@@ -22,11 +23,11 @@ function TownInfo({ town, currentUserTowns, clicked, onReturn, currentUser }) {
       <CardText>Owner: {town.ownerId}</CardText>
       <CardText>Coordinates: LATITUDE {town.coordinates.lat}, LONGITUDE {town.coordinates.lon}</CardText>
       <CardText>gauchos quantity: {town.gauchos}</CardText>
-      <CardText>is locked: {town.isLocked.toString()}</CardText>
+      {isTownFromUser ? <CardText>is locked: {town.isLocked.toString()}</CardText> : null}
       { clicked ? 
       <div className='d-flex justify-content-around'>
       <Button color='danger' onClick={handleReturn}>return</Button>
-      {currentUser === town.ownerId ? (!town.isLocked ? <Button color='info' onClick={handleMoveGauchos}>add gauchos</Button> : <></>) : <Button color='primary'>attack</Button> }
+      { isTownFromUser ? (!town.isLocked ? <Button color='info' onClick={handleMoveGauchos}>add gauchos</Button> : <></>) : <Button color='primary'>attack</Button> }
       </div>
       : null 
       }
