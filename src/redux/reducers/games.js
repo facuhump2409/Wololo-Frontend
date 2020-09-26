@@ -1,4 +1,4 @@
-import {ASYNC_START, GAMES_PAGE_LOADED, GAMES_PAGE_UNLOADED, GET_GAMES, CREATE_GAME, GET_GAME, MOVE_GAUCHOS} from '../actionTypes';
+import {ASYNC_START, GAMES_PAGE_LOADED, GAMES_PAGE_UNLOADED, GET_GAMES, CREATE_GAME, GET_GAME, MOVE_GAUCHOS, CHANGE_SPECIALIZATION} from '../actionTypes';
 import {initialState} from "./utils";
 
 
@@ -26,6 +26,7 @@ export default function(state = initialState, action) {
             }
         case GET_GAME:
         case MOVE_GAUCHOS:
+        case CHANGE_SPECIALIZATION:
             return {
                 ...state,
                 inProgress: false,

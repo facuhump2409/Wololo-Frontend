@@ -1,8 +1,13 @@
 import React, { useState } from 'react';
+import { useDispatch } from 'react-redux'; 
 import { Card, CardImg, CardText, CardBody, CardTitle, Button } from 'reactstrap';
 import GauchosForm from './components/GauchosForm'
+import { getChangeSpecialization } from './utils'
+import { updateSpecialization } from '../../../../../services/games'
+import { CHANGE_SPECIALIZATION } from '../../../../../redux/actionTypes'
 
-function TownInfo({ town, currentUserTowns, clicked, onReturn, currentUser }) {
+function TownInfo({ activeGame, town, currentUserTowns, clicked, onReturn, currentUser }) {
+  const dispatch = useDispatch();
   const [movingGauchos, setMovingGauchos] = useState(false);
   const isTownFromUser = currentUser === town.ownerId;
 
@@ -13,6 +18,11 @@ function TownInfo({ town, currentUserTowns, clicked, onReturn, currentUser }) {
 
   const handleMoveGauchos = () => {
     setMovingGauchos(!movingGauchos);
+  }
+
+  const handleChangeSpecialization = (specialization) => {
+    dispatch({ type: CHANGE_SPECIALIZATION, payload: updateSpecialization(activeGame.id, town.id, specialization) })
+    onReturn();
   }
 
   return (
@@ -27,7 +37,20 @@ function TownInfo({ town, currentUserTowns, clicked, onReturn, currentUser }) {
       { clicked ? 
       <div className='d-flex justify-content-around'>
       <Button color='danger' onClick={handleReturn}>return</Button>
-      { isTownFromUser ? (!town.isLocked ? <Button color='info' onClick={handleMoveGauchos}>add gauchos</Button> : <></>) : <Button color='primary'>attack</Button> }
+      { isTownFromUser ? (
+        <>
+        <Button 
+          color='info' 
+          onClick={() => handleChangeSpecialization(getChangeSpecialization[town.specialization])}
+          >
+          Change Specialization to {getChangeSpecialization[town.specialization].toLowerCase()}
+          </Button>
+
+        {!town.isLocked ?
+          <Button color='info' onClick={handleMoveGauchos}>add gauchos</Button> : null}
+        </>)
+        : <Button color='primary'>attack</Button> 
+        }
       </div>
       : null 
       }

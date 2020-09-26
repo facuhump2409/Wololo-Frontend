@@ -39,8 +39,14 @@ const Game = (props) => {
         </div>
 
         <div className='d-flex justify-content-center col-6'>
-          { town  ? 
-            <TownInfo town={town} clicked={clicked} onReturn={handleReturn} currentUser={3} currentUserTowns={townsFrom(3, activeGame.province.towns)}/>
+          { town ? 
+            <TownInfo 
+            activeGame={activeGame} 
+            town={town} 
+            clicked={clicked} 
+            onReturn={handleReturn} 
+            currentUser={3} 
+            currentUserTowns={townsFrom(3, activeGame.province.towns)}/>
             : null 
           }
         </div>
