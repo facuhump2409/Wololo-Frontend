@@ -1,4 +1,4 @@
-import {ASYNC_START, GAMES_PAGE_LOADED, GAMES_PAGE_UNLOADED, GET_GAMES, CREATE_GAME} from '../actionTypes';
+import {ASYNC_START, GAMES_PAGE_LOADED, GAMES_PAGE_UNLOADED, GET_GAMES, CREATE_GAME, GET_GAME} from '../actionTypes';
 import {initialState} from "./utils";
 
 
@@ -24,6 +24,13 @@ export default function(state = initialState, action) {
                 errors: action.error ? action.payload.message : null,
                 games: action.payload
             }
+        case GET_GAME:
+            return {
+                ...state,
+                inProgress: false,
+                errors: action.error ? action.payload.message : null,
+                activeGame: action.payload
+            }
         case CREATE_GAME:
             return {
                 ...state,
@@ -33,5 +40,4 @@ export default function(state = initialState, action) {
         default:
             return state;
     }
-    return state;
 }

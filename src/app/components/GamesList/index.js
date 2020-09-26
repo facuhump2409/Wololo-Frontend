@@ -5,10 +5,11 @@ import { HEADERS, INITIAL_VALUES, CHANGE_ARROW } from './constants';
 import { compareValues, filterValues, mapGames } from './utils';
 import './Games.css'
 import {trackPromise} from "react-promise-tracker";
-import {GET_GAMES, LOGIN, LOGIN_PAGE_LOADED, LOGIN_PAGE_UNLOADED} from "../../../redux/actionTypes";
+import {GET_GAME, GET_GAMES, LOGIN, LOGIN_PAGE_LOADED, LOGIN_PAGE_UNLOADED} from "../../../redux/actionTypes";
 import {login} from "../../../services/auth";
 import { getGames } from "../../../services/games";
 import {connect, useDispatch} from "react-redux";
+import games from '../../../redux/reducers/games';
 
 const mapDispatchToProps = dispatch => ({
   onSubmit: (values) =>
@@ -43,6 +44,10 @@ function GamesList(props) {
       ));
   }
 
+  function handlePlayClick(event) {
+    return dispatch({ type: GET_GAME, payload: props.games.find(aGame => aGame.id === parseInt(event.target.value)) })
+  }
+
   return (
     <div className='games-container'>
       <div className='games-inner'>
@@ -54,7 +59,6 @@ function GamesList(props) {
           aria-label="Search"
           onChange={handleSearchChange}
           />
-
         <Table striped>
           <thead>
             <tr>
@@ -74,7 +78,7 @@ function GamesList(props) {
                   <th>
                     { rowValue.data.status !== 'FINISHED' ? 
                     <Link to={`/game/${rowValue.id}`}>
-                      <button className='btn btn-primary'>Play</button>
+                      <button className='btn btn-primary' value={rowValue.id} onClick={handlePlayClick}>Play</button>
                     </Link>
                    : <button className='btn btn-primary'>See Statistics</button>
                    }

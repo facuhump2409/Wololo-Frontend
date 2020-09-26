@@ -3,7 +3,7 @@ import {connect} from 'react-redux';
 import FilteredMultiSelect from 'react-filtered-multiselect'
 import {Formik} from "formik";
 import * as Yup from "yup";
-import {Link} from "react-router-dom";
+import { Link } from "react-router-dom";
 import { getUsers } from '../../services/users';
 import { createGame } from '../../services/games';
 import { GET_USERS, CREATE_GAME } from '../../redux/actionTypes';
