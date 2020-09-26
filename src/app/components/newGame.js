@@ -44,7 +44,7 @@ class NewGame extends React.Component {
     };
 
     users() {
-        return !this.props.errors ? this.props.users.map((user, index) => ({ value: user.id, text: user.mail })) : []
+        return !this.props.errors ? this.props.users.map((user, index) => ({ value: user.id, text: user.username })) : []
     }
 
     handleSelectionChange = (selectedUsers) => {

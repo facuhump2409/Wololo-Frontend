@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom'
 import { Table } from 'reactstrap';
 import { HEADERS, INITIAL_VALUES, CHANGE_ARROW } from './constants';
-import { compareValues, filterValues } from './utils';
+import { compareValues, filterValues, mapGames } from './utils';
 import './Games.css'
 import {trackPromise} from "react-promise-tracker";
 import {GET_GAMES, LOGIN, LOGIN_PAGE_LOADED, LOGIN_PAGE_UNLOADED} from "../../../redux/actionTypes";
@@ -66,7 +66,7 @@ function GamesList(props) {
             </tr>
           </thead>
           <tbody>
-            {rowValues.map(
+            {mapGames(props.games).map(
             rowValue => 
                 <tr key={rowValue.id}>
                   <th scope='row'>{rowValue.id}</th>

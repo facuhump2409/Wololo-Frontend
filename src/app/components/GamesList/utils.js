@@ -11,3 +11,12 @@ export const filterValues = (objects, comparingValue) => {
   return objects.filter(aValue => aValue.id == comparingValue 
     || Object.keys(aValue.data).some(key => aValue.data[key].toUpperCase().includes(comparingValue.toUpperCase())))
 }
+
+export const mapGames = (games) => games.map(game => ({ 
+  id: game.id, 
+  data: { 
+    province: game.province.name, 
+    date: new Date(game.date).toDateString(), 
+    status: game.status 
+  } 
+}))
