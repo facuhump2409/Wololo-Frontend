@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { GET_GAME } from '../../../redux/actionTypes';
 import { getGame } from '../../../services/games';
+import {townsFrom} from './utils'
 import Map from './components/Map'
 import TownInfo from './components/TownInfo'
 
@@ -39,7 +40,7 @@ const Game = (props) => {
 
         <div className='d-flex justify-content-center col-6'>
           { town  ? 
-            <TownInfo town={town} clicked={clicked} handleReturn={handleReturn} />
+            <TownInfo town={town} clicked={clicked} onReturn={handleReturn} currentUser={3} currentUserTowns={townsFrom(3, activeGame.province.towns)}/>
             : null 
           }
         </div>
