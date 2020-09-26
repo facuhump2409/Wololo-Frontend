@@ -14,9 +14,6 @@ function TownInfo({ town, currentUserTowns, clicked, onReturn, currentUser }) {
     setMovingGauchos(!movingGauchos);
   }
 
-  const moveGauchos = () => {
-  }
-
   return (
   <Card>
     <CardImg top width='100%' src={town.imageUrl} alt='Town Image' />
@@ -29,13 +26,13 @@ function TownInfo({ town, currentUserTowns, clicked, onReturn, currentUser }) {
       { clicked ? 
       <div className='d-flex justify-content-around'>
       <Button color='danger' onClick={handleReturn}>return</Button>
-      {currentUser === town.ownerId ? <Button color='info' onClick={handleMoveGauchos}>add gauchos</Button> : <Button color='primary'>attack</Button> }
+      {currentUser === town.ownerId ? (!town.isLocked ? <Button color='info' onClick={handleMoveGauchos}>add gauchos</Button> : <></>) : <Button color='primary'>attack</Button> }
       </div>
       : null 
       }
       {
         movingGauchos ? (
-          <GauchosForm currentTown={town} currentUserTowns={currentUserTowns} onBack={handleMoveGauchos} onMoveGauchos={moveGauchos}/>
+          <GauchosForm currentTown={town} currentUserTowns={currentUserTowns} onBack={handleMoveGauchos} onMoveGauchos={handleReturn}/>
       ) : null
       }
     </CardBody>

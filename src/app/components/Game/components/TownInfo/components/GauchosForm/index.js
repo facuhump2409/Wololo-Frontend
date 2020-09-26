@@ -1,8 +1,14 @@
 import React, { useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux'
 import { Form, Input, Button, FormFeedback, Label } from 'reactstrap'
+import { MOVE_GAUCHOS } from '../../../../../../../redux/actionTypes'
+import { moveGauchos } from '../../../../../../../services/games'
 
 function GauchosForm({ currentTown, currentUserTowns, onBack, onMoveGauchos }) {
-  const [selectedTown, setSelectedTown] = useState(currentUserTowns[0]);
+  const dispatch = useDispatch();
+  const { activeGame } = useSelector(state => state.games);
+
+  const [selectedTown, setSelectedTown] = useState(null);
   const [selectedQuantity, setSelectedQuantity] = useState(0);
   const [invalidQuantity, setInvalidQuantity] = useState(false);
 
@@ -18,14 +24,16 @@ function GauchosForm({ currentTown, currentUserTowns, onBack, onMoveGauchos }) {
   const handleSubmit = (event) => {
     event.preventDefault()
     if(invalidQuantity || !selectedTown) return;
-    
+    dispatch({ type: MOVE_GAUCHOS, payload: moveGauchos(activeGame.id, selectedTown.id, currentTown.id, selectedQuantity) })
+    onMoveGauchos();
   }
 
   return (
     <Form style={{marginTop: '10px'}} onSubmit={handleSubmit}>
-      <Input type='select' name='select' onChange={handleSelectTown} placeholder='Select Town'>
+      <Input type='select' name='select' onChange={handleSelectTown} placeholder='Select Town' invalid={!selectedTown}>
         {currentUserTowns.map(town => town.id === currentTown.id ? <></> : <option value={town.id}>{town.name}</option>)}
       </Input>
+      <FormFeedback>Please select a Town</FormFeedback>
       <Input 
         placeholder='Select Gauchos quantity'
         style={{marginTop: '10px', width: '100%'}} 
