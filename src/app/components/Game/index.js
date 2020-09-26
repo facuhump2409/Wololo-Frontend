@@ -1,53 +1,59 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
+import { useSelector, useDispatch } from 'react-redux'
+import { GET_GAME } from '../../../redux/actionTypes';
+import { getGame } from '../../../services/games';
+import {townsFrom} from './utils'
+import Map from './components/Map'
+import TownInfo from './components/TownInfo'
 
-const Game = () => {
-  const [imageDimensions, setImageDimensions] = useState({dimensions: {}}) 
-  const [test, setTest] = useState('');
+const Game = (props) => {
+  const dispatch = useDispatch();
+  const { activeGame, errors } = useSelector(state => state.games)
+  const [town, setTown] = useState(null);
+  const [clicked, setClicked] = useState(false);
 
-  const handleOnImageLoad = (event) => {
-    setImageDimensions({
-      dimensions: {
-        height: event.target.offsetHeight,
-        width: event.target.offsetWidth
-      }
-    })
+  useEffect(() => {
+    if(!activeGame) dispatch({ type: GET_GAME, payload: getGame(parseInt(props.match.params.id)) })
+  }, [dispatch, props.match.params.id, activeGame])
+
+  const handleHover = (area) => {
+    if(!clicked) {
+      setTown(activeGame.province.towns.find(aTown => aTown.name === area.name));
+    }
   }
 
-  const handleClick1 = (event) => {
-    setTest('Clicked first town')
+  const handleClick = () => {
+    setClicked(true);
   }
 
-  const handleClick2 = (event) => {
-    setTest('Clicked second town')
+  const handleReturn = () => {
+    setClicked(false);
   }
 
   return (
-    <div>
+    activeGame && !errors ? (
+    <div className='container'>
+      <div className='row'>
+        <div className='d-flex justify-content-center col-6'>
+          <Map name='gameMap' game={activeGame} handleHover={handleHover} handleClick={handleClick} currentUser={2} />  
+        </div>
 
-      <div className='d-flex justify-content-center'>
-        <img 
-          src={process.env.PUBLIC_URL + '/Buenos_aires.webp'} 
-          alt='provincia' 
-          useMap='#gameMap'
-          onLoad={handleOnImageLoad}
-          />
-
-        <map name="gameMap">
-          <area shape='rect'
-          coords={`0, 0, ${imageDimensions.dimensions.width/2}, ${imageDimensions.dimensions.height}`} 
-          alt='Player 1'
-          onClick={handleClick1} 
-          />
-          <area shape='rect'
-          coords={`${imageDimensions.dimensions.width/2}, 0, ${imageDimensions.dimensions.width}, ${imageDimensions.dimensions.height}`} 
-          alt='Player 1'
-          onClick={handleClick2} 
-          />
-        </map>
-
+        <div className='d-flex justify-content-center col-6'>
+          { town ? 
+            <TownInfo 
+            activeGame={activeGame} 
+            town={town} 
+            clicked={clicked} 
+            onReturn={handleReturn} 
+            currentUser={3} 
+            currentUserTowns={townsFrom(3, activeGame.province.towns)}/>
+            : null 
+          }
+        </div>
       </div>
-        <h1>{test}</h1>
     </div>
+    ) :
+    <h1>No Active Game</h1>
   )
 }
 

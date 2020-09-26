@@ -1,29 +1,26 @@
 import React, {Component} from 'react';
-import GoogleBtn from './GoogleBtn';
-import {signUp} from "../../../services/auth";
 import {Formik} from "formik";
-import {Redirect} from "react-router-dom";
 import * as Yup from "yup";
+import {SIGNUP} from "../../../redux/actionTypes";
+import {connect} from "react-redux";
+import {signUp} from "../../../services/auth";
+import ErrorMessage from "../errorMessage";
+
+const mapStateToProps = state => ({ ...state.auth });
+
+const mapDispatchToProps = dispatch => ({
+    onSignUp: (values) =>
+        dispatch({ type: SIGNUP, payload: signUp(values) })
+});
 
 class SignUpComponent extends Component{
     constructor(props) {
         super (props);
         this.handleSubmit = this.handleSubmit.bind(this);
-        this.handleSign = this.handleSign.bind(this);
-    }
-
-    handleSign() {
-        this.props.history.push(`/`)
-        // return <Redirect to="/sign_in"/>
     }
 
     handleSubmit(values){
-        console.log(values)
-        this.handleSign()
-        // this.signUp(values).then(()=> { //TODO cambiar despues a signUp(values) que le pega posta a back
-        //     return this.props.history.push(`/`)
-        // }).catch(error=>{
-        //     return <p>Couldn't sign up correctly, please try again later</p>})
+        this.props.onSignUp(values)
     }
 
     render() {
@@ -31,13 +28,12 @@ class SignUpComponent extends Component{
             <div className="auth-wrapper">
                 <div className="auth-inner">
                     <Formik
-                        initialValues={{email: "", password:"",firstName: "",lastName: ""}}
-                        onSubmit={(values,{setSubmitting}) => {
-                            setSubmitting(true)
+                        initialValues={{mail: "", password:"",username: ""}}
+                        onSubmit={(values) => {
                             this.handleSubmit(values)
                         }}
                         validationSchema = {Yup.object().shape({
-                            email: Yup.string()
+                            mail: Yup.string()
                                 .email("Incorrect email format")
                                 .required("Please enter a valid email"),
                             password: Yup.string()
@@ -52,7 +48,6 @@ class SignUpComponent extends Component{
                                 const { values,
                                     touched,
                                     errors,
-                                    isSubmitting,
                                     handleChange,
                                     handleSubmit,
                                     handleBlur,
@@ -61,41 +56,30 @@ class SignUpComponent extends Component{
                                     <form onSubmit={handleSubmit}>
                                         <h3>Sign Up</h3>
                                         <div className="form-group">
-                                            <label>First name</label>
+                                            <label>Username</label>
                                             <input type="text"
-                                                   name="firstName"
+                                                   name="username"
                                                    className="form-control" 
-                                                   placeholder="First name" 
-                                                   value={values.name}
+                                                   placeholder="Username"
+                                                   value={values.username}
                                                    onChange={handleChange}
                                                    onBlur={handleBlur}/>
                                         </div>
                                         <div className="form-group">
-                                            <label>Last name</label>
-                                            <input
-                                                type="text"
-                                                name="lastName"
-                                                className="form-control"
-                                                placeholder="Last name"
-                                                value={values.lastname}
-                                                onChange={handleChange}
-                                                onBlur={handleBlur}/>
-                                        </div>
-                                        <div className="form-group">
                                             <label>Email address</label>
                                             <input
-                                                type="email"
-                                                name="email"
+                                                type="mail"
+                                                name="mail"
                                                 className="form-control"
                                                 placeholder="Enter email"
-                                                value={values.email}
+                                                value={values.mail}
                                                 onChange={handleChange}
                                                 onBlur={handleBlur}
                                                 // className={errors.email && touched.email && "error"}
                                             />
                                         </div>
-                                        {errors.email && touched.email && (
-                                            <div className="input-feedback">{errors.email}</div>
+                                        {errors.mail && touched.mail && (
+                                            <div className="input-feedback">{errors.mail}</div>
                                         )}
 
                                         <div className="form-group">
@@ -115,7 +99,7 @@ class SignUpComponent extends Component{
                                         )}
                                         
 
-                                        <button type="submit" className="btn btn-primary btn-block" disabled={isSubmitting}>Sign Up</button>
+                                        <button type="submit" className="btn btn-primary btn-block" disabled={this.props.inProgress}>Sign Up</button>
                                         <p className="forgot-password text-right">
                                             Already registered <a href="/sign-in">Sign In</a>
                                         </p>
@@ -124,11 +108,11 @@ class SignUpComponent extends Component{
                             }
                         }
                     </Formik>
+                    <ErrorMessage errors={this.props.errors} />
                 </div>
             </div>
         );
     }
 
 }
-
-export default SignUpComponent;
+export default connect(mapStateToProps, mapDispatchToProps)(SignUpComponent);

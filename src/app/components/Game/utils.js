@@ -1,0 +1,1 @@
+export const townsFrom = (user, towns) => towns.filter(aTown => aTown.ownerId === user);

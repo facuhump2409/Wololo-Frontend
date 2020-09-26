@@ -6,9 +6,9 @@ import App from './app/App';
 import * as serviceWorker from './serviceWorker';
 
 ReactDOM.render(
-  <BrowserRouter>
-    <App />
-  </BrowserRouter>,
+    <BrowserRouter forceRefresh={true}>
+      <App/>
+    </BrowserRouter>,
   document.getElementById('root')
 );
 

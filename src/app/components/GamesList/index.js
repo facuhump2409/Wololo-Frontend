@@ -1,13 +1,36 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom'
 import { Table } from 'reactstrap';
 import { HEADERS, INITIAL_VALUES, CHANGE_ARROW } from './constants';
-import { compareValues, filterValues } from './utils';
+import { compareValues, filterValues, mapGames } from './utils';
 import './Games.css'
+import {trackPromise} from "react-promise-tracker";
+import {GET_GAME, GET_GAMES, LOGIN, LOGIN_PAGE_LOADED, LOGIN_PAGE_UNLOADED} from "../../../redux/actionTypes";
+import {login} from "../../../services/auth";
+import { getGames } from "../../../services/games";
+import {connect, useDispatch} from "react-redux";
+import games from '../../../redux/reducers/games';
 
-function GamesList() {
+const mapDispatchToProps = dispatch => ({
+  onSubmit: (values) =>
+      trackPromise(dispatch({ type: LOGIN, payload: login(values) })),
+  onUnload: () =>
+      dispatch({ type: LOGIN_PAGE_UNLOADED }),
+  onLoad: () =>
+      dispatch({type: LOGIN_PAGE_LOADED})
+});
+
+const mapStateToProps = state => ({ ...state.games });
+
+function GamesList(props) {
+
+  const dispatch = useDispatch()
   const [rowValues, setRowValues] = useState(INITIAL_VALUES);
   const [headers, setHeaders] = useState(HEADERS);
+
+  useEffect(() => {
+    dispatch({ type: GET_GAMES, payload: getGames() });
+  }, [dispatch])
 
   function handleSearchChange(event) {
     return event.target.value ? setRowValues(filterValues(rowValues, event.target.value)) : setRowValues(INITIAL_VALUES);
@@ -21,6 +44,10 @@ function GamesList() {
       ));
   }
 
+  function handlePlayClick(event) {
+    return dispatch({ type: GET_GAME, payload: props.games.find(aGame => aGame.id === parseInt(event.target.value)) })
+  }
+
   return (
     <div className='games-container'>
       <div className='games-inner'>
@@ -32,7 +59,6 @@ function GamesList() {
           aria-label="Search"
           onChange={handleSearchChange}
           />
-
         <Table striped>
           <thead>
             <tr>
@@ -44,7 +70,7 @@ function GamesList() {
             </tr>
           </thead>
           <tbody>
-            {rowValues.map(
+            {mapGames(props.games).map(
             rowValue => 
                 <tr key={rowValue.id}>
                   <th scope='row'>{rowValue.id}</th>
@@ -52,7 +78,7 @@ function GamesList() {
                   <th>
                     { rowValue.data.status !== 'FINISHED' ? 
                     <Link to={`/game/${rowValue.id}`}>
-                      <button className='btn btn-primary'>Play</button>
+                      <button className='btn btn-primary' value={rowValue.id} onClick={handlePlayClick}>Play</button>
                     </Link>
                    : <button className='btn btn-primary'>See Statistics</button>
                    }
@@ -69,4 +95,4 @@ function GamesList() {
   );
 }
 
-export default GamesList;
+export default connect(mapStateToProps, mapDispatchToProps)(GamesList);
