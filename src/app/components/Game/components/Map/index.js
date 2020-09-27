@@ -8,6 +8,7 @@ function Map({ name, game, handleHover, handleClick, currentUser }) {
   const dimensions = { width: 500, height: 500 }
 
   const [circles, setCircles] = useState(createAreas(dimensions, game.province.towns, currentUser));
+  
   return (
     <ImageMapper
       src={game.province.imageUrl}
