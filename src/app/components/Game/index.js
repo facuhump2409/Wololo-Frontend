@@ -20,6 +20,7 @@ const Game = (props) => {
   }, [dispatch, props.match.params.id, activeGame])
 
   const handleHover = (area) => {
+    console.log(area);
     if(!clicked) {
       setTown(activeGame.province.towns.find(aTown => aTown.name === area.name));
     }

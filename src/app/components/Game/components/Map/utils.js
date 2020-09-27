@@ -46,8 +46,10 @@ const createCircles = (factor, towns, dimensions, currentUser) => {
     coords: circle(factor, randomPoint(factor), dimensions),
     strokeColor: 'rgba(0,0,0,0.3)', 
     preFillColor: isTownFrom(aTown, currentUser) ? colors.current : (!aTown.ownerId ? colors.unOwned : colorFor(aTown.ownerId)),
-    test: 'test'
+    owner: aTown.ownerId
   }));
 }
 
 export const createAreas = (dimensions, towns, currentUser) => createCircles(getFactor(towns.length), towns, dimensions, currentUser);
+
+export const updateAreas = (circles, towns) => { debugger; return circles }
