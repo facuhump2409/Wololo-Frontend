@@ -22,10 +22,7 @@ const Game = (props) => {
   useEffect(() => {
     if(!activeGame && !inProgress) { 
       dispatch({ type: GET_GAME, payload: getGame(props.match.params.id) })
-   } else if(gameChanged) {
-     setCircles(updateAreas(circles, activeGame.province.towns, currentUser))
-     dispatch({ type: 'MAP_UPDATED' })
-   }
+    }
   }, [dispatch, props.match.params.id, activeGame, dimensions, currentUser, inProgress, gameChanged, circles])
 
   const handleHover = (area) => {
@@ -38,6 +35,12 @@ const Game = (props) => {
     if(!circles) {
       setCircles(createAreas(dimensions, activeGame.province.towns, currentUser))
     }
+  }
+
+  const updateCircles = () => {
+    setCircles(updateAreas(circles, activeGame.province.towns, currentUser))
+    debugger;
+    dispatch({ type: 'MAP_UPDATED' })
   }
 
   const handleClick = () => {
@@ -63,7 +66,7 @@ const Game = (props) => {
         <div className='d-flex justify-content-center col-6'>
           <Map name='gameMap' 
           dimensions={dimensions} 
-          circles={circles ? circles : initializeCircles() } 
+          circles={circles ? (gameChanged ? updateCircles() : circles) : initializeCircles() } 
           imageUrl={activeGame.province.imageUrl} 
           handleHover={handleHover} 
           handleClick={handleClick} 
