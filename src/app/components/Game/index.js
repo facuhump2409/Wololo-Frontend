@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { GET_GAME, PASS_TURN, SURRENDER } from '../../../redux/actionTypes';
 import { getGame, finishTurn, surrender } from '../../../services/games';
+import { createAreas, updateAreas } from './components/Map/utils';
 import { getFromLocal } from '../../../services/localStorage'
 import { townsFrom, isMyTurn, isActive } from './utils'
 import { Button } from 'reactstrap'
@@ -11,18 +12,31 @@ import TownInfo from './components/TownInfo'
 const Game = (props) => {
   const dispatch = useDispatch();
   const currentUser = getFromLocal('currentUser');
-  const { activeGame, errors } = useSelector(state => state.games)
+  const { activeGame, errors, inProgress, gameChanged } = useSelector(state => state.games)
   const [town, setTown] = useState(null);
   const [clicked, setClicked] = useState(false);
 
+  const dimensions = { width: 500, height: 500 }
+  const [circles, setCircles] = useState(null);
+
   useEffect(() => {
-    if(!activeGame) dispatch({ type: GET_GAME, payload: getGame(props.match.params.id) })
-  }, [dispatch, props.match.params.id, activeGame])
+    if(!activeGame && !inProgress) { 
+      dispatch({ type: GET_GAME, payload: getGame(props.match.params.id) })
+   } else if(gameChanged) {
+     setCircles(updateAreas(circles, activeGame.province.towns, currentUser))
+     dispatch({ type: 'MAP_UPDATED' })
+   }
+  }, [dispatch, props.match.params.id, activeGame, dimensions, currentUser, inProgress, gameChanged, circles])
 
   const handleHover = (area) => {
-    console.log(area);
     if(!clicked) {
-      setTown(activeGame.province.towns.find(aTown => aTown.name === area.name));
+      setTown(area.town);
+    }
+  }
+
+  const initializeCircles = () => {
+    if(!circles) {
+      setCircles(createAreas(dimensions, activeGame.province.towns, currentUser))
     }
   }
 
@@ -47,7 +61,13 @@ const Game = (props) => {
     <div className='container'>
       <div className='row'>
         <div className='d-flex justify-content-center col-6'>
-          <Map name='gameMap' game={activeGame} handleHover={handleHover} handleClick={handleClick} currentUser={currentUser.id} />  
+          <Map name='gameMap' 
+          dimensions={dimensions} 
+          circles={circles ? circles : initializeCircles() } 
+          imageUrl={activeGame.province.imageUrl} 
+          handleHover={handleHover} 
+          handleClick={handleClick} 
+          currentUser={currentUser.id} />  
         </div>
 
         <div className='d-flex justify-content-center col-6'>

@@ -58,7 +58,7 @@ const authLocalStorage = (action) => {
 const storageActions = {
     [SIGNUP]: (action) => authLocalStorage(action),
     [LOGIN]: (action) => authLocalStorage(action),
-    [LOGOUT]: (action) => {        
+    [LOGOUT]: () => {        
         saveToLocal('isAuthorized', 'false');
         removeFromLocal('currentUser');
     },

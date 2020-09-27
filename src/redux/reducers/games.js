@@ -36,7 +36,13 @@ export default function(state = initialState, action) {
                 ...state,
                 inProgress: false,
                 errors: action.error ? action.payload.message : null,
-                activeGame: action.payload
+                activeGame: action.payload,
+                gameChanged: true,
+            }
+        case 'MAP_UPDATED':
+            return {
+                ...state,
+                gameChanged: false,
             }
         case CREATE_GAME:
             return {
