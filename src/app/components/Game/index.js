@@ -6,12 +6,14 @@ import { townsFrom, isMyTurn } from './utils'
 import { Button } from 'reactstrap'
 import Map from './components/Map'
 import TownInfo from './components/TownInfo'
+import SweetAlert from "react-bootstrap-sweetalert";
 
 const Game = (props) => {
   const dispatch = useDispatch();
   const { activeGame, errors } = useSelector(state => state.games)
   const [town, setTown] = useState(null);
   const [clicked, setClicked] = useState(false);
+  const [showSurrenderModal, setSurrenderModal] = useState(false);
 
   useEffect(() => {
     if(!activeGame) dispatch({ type: GET_GAME, payload: getGame(parseInt(props.match.params.id)) })
@@ -62,8 +64,18 @@ const Game = (props) => {
       </div>
       <div className='row' style={{marginTop: '20px'}}>
         <div className='d-flex justify-content-center col-6'>
-          <Button color='danger' onClick={handleSurrender}>Surrender</Button>  
+          <Button color='danger' onClick={setSurrenderModal(true)}>Surrender</Button>
         </div>
+        {/*<SweetAlert*/}
+        {/*    success*/}
+        {/*    title="Game Created Succesfully!"*/}
+        {/*    onConfirm={() => handleSurrender()}*/}
+        {/*    onCancel={() => setSurrenderModal(false)}*/}
+        {/*    timeout={1000}*/}
+        {/*    show={showSurrenderModal}*/}
+        {/*>*/}
+        {/*  Redirecting to all your games*/}
+        {/*</SweetAlert>*/}
         <div className='d-flex justify-content-center col-6'>
           <Button color='primary' onClick={passTurn}>Pass Turn</Button>  
         </div>

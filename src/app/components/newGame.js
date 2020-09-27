@@ -68,7 +68,6 @@ class NewGame extends React.Component {
     }
 
     onGameCreated() {
-        console.log('MIRAR',this.props.finishedCreation)
         return this.props.finishedCreation? this.props.redirectGame() : null
     }
 
@@ -92,17 +91,20 @@ class NewGame extends React.Component {
                                     })
                                     .setSubmitting(false);
                                 }}
-                                validator={() => Yup.object().shape({
+                                validationSchema={Yup.object().shape({
                                     selectProvince: Yup.string()
                                         .required("Please select a state"),
                                     towns: Yup.number().required("Please enter the number of towns")
+                                        .max(16, "The amount of towns can't be greater than 16")
                                 })
                             }>
                                 {
                                     props => {
                                         const { 
                                                 handleSubmit,
-                                                handleChange
+                                                handleChange,
+                                                errors,
+                                                touched
                                             } = props;
                                     return (<form onSubmit={handleSubmit}>
                                         <fieldset>
@@ -120,6 +122,9 @@ class NewGame extends React.Component {
                                                 </div>
     
                                             </fieldset>
+                                            {errors.selectProvince && touched.selectProvince && (
+                                                <div className="input-feedback">{errors.selectProvince}</div>
+                                            )}
     
                                             <fieldset className="form-group">
                                                 <input
@@ -130,7 +135,9 @@ class NewGame extends React.Component {
                                                     placeholder="Number of towns"
                                                 />
                                             </fieldset>
-    
+                                            {errors.towns && touched.towns && (
+                                                <div className="input-feedback">{errors.towns}</div>
+                                            )}
     
                                             <fieldset className="form-group">
                                                 <label>Select Users</label>
