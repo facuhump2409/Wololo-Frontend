@@ -30,7 +30,7 @@ function GauchosForm({ currentGame, currentTown, currentUserTowns, onBack, onMov
   return (
     <Form style={{marginTop: '10px'}} onSubmit={handleSubmit}>
       <Input type='select' name='select' onChange={handleSelectTown} placeholder='Select Town' invalid={!selectedTown}>
-        {currentUserTowns.map(town => town.id === currentTown.id ? <></> : <option value={town.id}>{town.name}</option>)}
+        {currentUserTowns.map(town => town.id === currentTown.id ? null : <option value={town.id}>{town.name}</option>)}
       </Input>
       <FormFeedback>Please select a Town</FormFeedback>
       <Input 

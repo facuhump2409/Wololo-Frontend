@@ -1,7 +1,6 @@
-import {
-    ASYNC_START, GAMES_PAGE_LOADED, GAMES_PAGE_UNLOADED,
-    GET_GAMES, CREATE_GAME, GET_GAME, MOVE_GAUCHOS, CHANGE_SPECIALIZATION, ATTACK_TOWN, LOGIN, SIGNUP, REDIRECT_GAME
-}
+import { ASYNC_START, GAMES_PAGE_LOADED, GAMES_PAGE_UNLOADED, 
+    GET_GAMES, CREATE_GAME, GET_GAME, MOVE_GAUCHOS, CHANGE_SPECIALIZATION, ATTACK_TOWN,
+    PASS_TURN, SURRENDER } 
     from '../actionTypes';
 import {initialState} from "./utils";
 
@@ -42,6 +41,7 @@ export default function(state = initialState, action) {
         case MOVE_GAUCHOS:
         case CHANGE_SPECIALIZATION:
         case ATTACK_TOWN:
+        case PASS_TURN:
             return {
                 ...state,
                 inProgress: false,
@@ -55,7 +55,13 @@ export default function(state = initialState, action) {
                 errors: action.error ? action.payload.message : null,
                 finishedCreation: !action.error
             }
-        
+        case SURRENDER:
+            return {
+                ...state,
+                inProgress: false,
+                errors: action.error ? action.payload.message : null,
+                redirectTo: '/games'
+            }
         default:
             return state;
     }
