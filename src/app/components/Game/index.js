@@ -12,10 +12,11 @@ import SweetAlert from "react-bootstrap-sweetalert";
 const Game = (props) => {
   const dispatch = useDispatch();
   const currentUser = getFromLocal('currentUser');
-  const { activeGame, errors } = useSelector(state => state.games)
+  const { activeGame, errors, inProgress } = useSelector(state => state.games)
   const [town, setTown] = useState(null);
   const [clicked, setClicked] = useState(false);
   const [showSurrenderModal, setSurrenderModal] = useState(false);
+  const [showTurnModal, setTurnModal] = useState(false);
 
   useEffect(() => {
     if(!activeGame) dispatch({ type: GET_GAME, payload: getGame(props.match.params.id) })
@@ -40,14 +41,21 @@ const Game = (props) => {
       console.log("Entre")
       dispatch({ type: SURRENDER, payload: surrender(activeGame.id) })
     }
+    setSurrenderModal(false)
   }
 
   const showModal = () => {
     setSurrenderModal(true)
   }
 
+  const showPassModal = () => {
+    setTurnModal(true)
+  }
+
   const passTurn = () => {
+    console.log("entre a pass")
     dispatch({ type: PASS_TURN, payload: finishTurn(activeGame.id) })
+    setTurnModal(false)
   }
 
   return (
@@ -92,8 +100,18 @@ const Game = (props) => {
           Your opponent will win the battle
         </SweetAlert>
         <div className='d-flex justify-content-center col-6'>
-          <Button color='primary' onClick={passTurn}>Pass Turn</Button>  
+          <Button color='primary' onClick={showPassModal}>Pass Turn</Button>
         </div>
+        <SweetAlert
+            info
+            title="It's your opponents turn now"
+            onConfirm={() => passTurn()}
+            onCancel={() => passTurn()}
+            // timeout={2000}
+            show={showTurnModal}
+        >
+          Wait until they play to attack again
+        </SweetAlert>
 
       </div>
     </div>

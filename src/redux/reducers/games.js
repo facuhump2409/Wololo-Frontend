@@ -6,7 +6,7 @@ import {initialState} from "./utils";
 
 
 export default function(state = initialState, action) {
-    const validAsyncSubtypes = [GET_GAMES,ATTACK_TOWN,CREATE_GAME,GAMES_PAGE_LOADED]
+    const validAsyncSubtypes = [GET_GAMES,ATTACK_TOWN,CREATE_GAME,GAMES_PAGE_LOADED,PASS_TURN]
     switch(action.type) {
         case ASYNC_START:
             if (validAsyncSubtypes.includes(action.subtype)) { //no olvidar especificar los casos que tiene que hacer sino siempre setea in progress
