@@ -3,7 +3,7 @@ import { useSelector, useDispatch } from 'react-redux'
 import { GET_GAME, PASS_TURN, SURRENDER } from '../../../redux/actionTypes';
 import { getGame, finishTurn, surrender } from '../../../services/games';
 import { getFromLocal } from '../../../services/localStorage'
-import { townsFrom, isMyTurn } from './utils'
+import { townsFrom, isMyTurn, isActive } from './utils'
 import { Button } from 'reactstrap'
 import Map from './components/Map'
 import TownInfo from './components/TownInfo'
@@ -42,7 +42,7 @@ const Game = (props) => {
   }
 
   return (
-    activeGame && !errors ? (
+    activeGame && isActive(activeGame) && !errors ? (
     <div className='container'>
       <div className='row'>
         <div className='d-flex justify-content-center col-6'>
