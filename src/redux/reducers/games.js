@@ -1,6 +1,6 @@
 import {
     ASYNC_START, GAMES_PAGE_LOADED, GAMES_PAGE_UNLOADED,
-    GET_GAMES, CREATE_GAME, GET_GAME, MOVE_GAUCHOS, CHANGE_SPECIALIZATION, ATTACK_TOWN, LOGIN, SIGNUP
+    GET_GAMES, CREATE_GAME, GET_GAME, MOVE_GAUCHOS, CHANGE_SPECIALIZATION, ATTACK_TOWN, LOGIN, SIGNUP, REDIRECT_GAME
 }
     from '../actionTypes';
 import {initialState} from "./utils";
@@ -26,6 +26,11 @@ export default function(state = initialState, action) {
                 inProgress: false,
                 errors: null
             }
+        case REDIRECT_GAME:
+            return{
+                ...state,
+                finishedCreation: false
+            }
         case GET_GAMES:
             return {
                 ...state,
@@ -48,6 +53,7 @@ export default function(state = initialState, action) {
                 ...state,
                 inProgress: false,
                 errors: action.error ? action.payload.message : null,
+                finishedCreation: !action.error
             }
         
         default:

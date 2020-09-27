@@ -30,9 +30,6 @@ const mapDispatchToProps = dispatch => ({
 });
 
 function RoutesContainer(props) {
-  // function handleSignOut(){
-  //   props.onSignOut()
-  // }
 
   useEffect(() => {
     console.log("Props que estan updateadas",props.redirectTo)

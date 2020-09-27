@@ -1,7 +1,7 @@
 import {
     REDIRECT,
     LOGOUT,
-    SETTINGS_SAVED, LOGIN, CREATE_GAME
+    SETTINGS_SAVED, LOGIN, CREATE_GAME, REDIRECT_GAME
 } from '../actionTypes';
 import {SIGNUP} from "../actionTypes";
 import {initialState} from "./utils";
@@ -18,7 +18,7 @@ export default (state = initialState, action) => {
             };
         case LOGIN:
         case SIGNUP:
-        case CREATE_GAME:
+        case REDIRECT_GAME:
             return {
                 ...state,
                 redirectTo: action.error ? null : '/games',

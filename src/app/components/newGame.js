@@ -6,9 +6,10 @@ import * as Yup from "yup";
 import { Link } from "react-router-dom";
 import { getUsers } from '../../services/users';
 import { createGame } from '../../services/games';
-import { GET_USERS, CREATE_GAME } from '../../redux/actionTypes';
+import {GET_USERS, CREATE_GAME, REDIRECT_GAME} from '../../redux/actionTypes';
 import {LoadingIndicator} from "../loadingIndicator";
 import ErrorMessage from "./errorMessage";
+import SweetAlert from "react-bootstrap-sweetalert";
 
 const BOOTSTRAP_CLASSES = {
     filter: 'form-control',
@@ -21,12 +22,15 @@ const mapStateToProps = state => {
     return {
         users: state.users.users,
         errors: state.users.errors,
-        inProgress: state.games.inProgress
+        inProgress: state.games.inProgress,
+        finishedCreation: state.games.finishedCreation,
+        gamesErrors: state.games.errors
     }};
 
 const mapDispatchToProps = dispatch => ({
     getParticipants: () => dispatch({ type: GET_USERS, payload: getUsers }),
-    createGame: (gameData) => dispatch({type: CREATE_GAME, payload: createGame(gameData) })
+    createGame: (gameData) => dispatch({type: CREATE_GAME, payload: createGame(gameData) }),
+    redirectGame: () => dispatch({ type: REDIRECT_GAME })
 })
 
 class NewGame extends React.Component {
@@ -63,6 +67,10 @@ class NewGame extends React.Component {
         this.setState({selectedUsers})
     }
 
+    onGameCreated() {
+        console.log('MIRAR',this.props.finishedCreation)
+        return this.props.finishedCreation? this.props.redirectGame() : null
+    }
 
     render() {
         const selectedUsers = this.state.selectedUsers;
@@ -165,7 +173,17 @@ class NewGame extends React.Component {
                             }
                             </Formik>
                             <LoadingIndicator display={this.props.inProgress}/>
-                            <ErrorMessage errors={this.props.errors} />
+                            <ErrorMessage errors={this.props.gamesErrors} />
+                            <SweetAlert
+                                success
+                                title="Game Created Succesfully!"
+                                onConfirm={() => this.onGameCreated()}
+                                onCancel={() => this.onGameCreated()}
+                                timeout={1000}
+                                show={this.props.finishedCreation}
+                            >
+                                Redirecting to all your games
+                            </SweetAlert>
                         </div>
                     </div>
                 </div>
