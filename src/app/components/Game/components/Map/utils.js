@@ -39,7 +39,7 @@ const createCircles = (factor, towns, dimensions, currentUser) => {
     shape: 'circle', 
     coords: circle(factor, randomPoint(factor), dimensions),
     strokeColor: 'rgba(0,0,0,0.3)', 
-    preFillColor: isTownFrom(aTown, currentUser) ? 'rgba(255,255,255,0.5)' : randomColorBy(aTown.ownerId) 
+    preFillColor: isTownFrom(aTown, currentUser) ? 'rgba(255,255,255,0.5)' : 'rgba(0,0,0,0.5)'
   }));
 }
 

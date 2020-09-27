@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { GET_GAME, PASS_TURN, SURRENDER } from '../../../redux/actionTypes';
 import { getGame, finishTurn, surrender } from '../../../services/games';
+import { getFromLocal } from '../../../services/localStorage'
 import { townsFrom, isMyTurn } from './utils'
 import { Button } from 'reactstrap'
 import Map from './components/Map'
@@ -9,12 +10,13 @@ import TownInfo from './components/TownInfo'
 
 const Game = (props) => {
   const dispatch = useDispatch();
+  const currentUser = getFromLocal('currentUser');
   const { activeGame, errors } = useSelector(state => state.games)
   const [town, setTown] = useState(null);
   const [clicked, setClicked] = useState(false);
 
   useEffect(() => {
-    if(!activeGame) dispatch({ type: GET_GAME, payload: getGame(parseInt(props.match.params.id)) })
+    if(!activeGame) dispatch({ type: GET_GAME, payload: getGame(props.match.params.id) })
   }, [dispatch, props.match.params.id, activeGame])
 
   const handleHover = (area) => {
@@ -24,7 +26,7 @@ const Game = (props) => {
   }
 
   const handleClick = () => {
-    if(isMyTurn(activeGame, 3)) setClicked(true);
+    if(isMyTurn(activeGame, currentUser.id)) setClicked(true)
   }
 
   const handleReturn = () => {
@@ -44,7 +46,7 @@ const Game = (props) => {
     <div className='container'>
       <div className='row'>
         <div className='d-flex justify-content-center col-6'>
-          <Map name='gameMap' game={activeGame} handleHover={handleHover} handleClick={handleClick} currentUser={3} />  
+          <Map name='gameMap' game={activeGame} handleHover={handleHover} handleClick={handleClick} currentUser={currentUser.id} />  
         </div>
 
         <div className='d-flex justify-content-center col-6'>
@@ -54,8 +56,8 @@ const Game = (props) => {
             town={town} 
             clicked={clicked} 
             onReturn={handleReturn} 
-            currentUser={3} 
-            currentUserTowns={townsFrom(3, activeGame.province.towns)}/>
+            currentUser={currentUser.id} 
+            currentUserTowns={townsFrom(currentUser.id, activeGame.province.towns)}/>
             : null 
           }
         </div>
