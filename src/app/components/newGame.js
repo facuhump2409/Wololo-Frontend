@@ -186,7 +186,7 @@ class NewGame extends React.Component {
                                 title="Game Created Succesfully!"
                                 onConfirm={() => this.onGameCreated()}
                                 onCancel={() => this.onGameCreated()}
-                                timeout={1000}
+                                timeout={2000}
                                 show={this.props.finishedCreation}
                             >
                                 Redirecting to all your games

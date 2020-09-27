@@ -35,8 +35,15 @@ const Game = (props) => {
     setClicked(false);
   }
 
-  const handleSurrender = () => {
-    dispatch({ type: SURRENDER, payload: surrender(activeGame.id) })
+  const handleSurrender = (showSurrenderModal) => {
+    if (showSurrenderModal) {
+      console.log("Entre")
+      dispatch({ type: SURRENDER, payload: surrender(activeGame.id) })
+    }
+  }
+
+  const showModal = () => {
+    setSurrenderModal(true)
   }
 
   const passTurn = () => {
@@ -66,21 +73,28 @@ const Game = (props) => {
       </div>
       <div className='row' style={{marginTop: '20px'}}>
         <div className='d-flex justify-content-center col-6'>
-          <Button color='danger' onClick={setSurrenderModal(true)}>Surrender</Button>
+          <Button color='danger' onClick={showModal}>Surrender</Button>
         </div>
-        {/*<SweetAlert*/}
-        {/*    success*/}
-        {/*    title="Game Created Succesfully!"*/}
-        {/*    onConfirm={() => handleSurrender()}*/}
-        {/*    onCancel={() => setSurrenderModal(false)}*/}
-        {/*    timeout={1000}*/}
-        {/*    show={showSurrenderModal}*/}
-        {/*>*/}
-        {/*  Redirecting to all your games*/}
-        {/*</SweetAlert>*/}
+        <SweetAlert
+            // warning
+            custom
+            showCancel
+            confirmBtnText="Yes, I forfeit"
+            confirmBtnBsStyle="danger"
+            title="Are you sure you want to surrender?"
+            onConfirm={() => handleSurrender(showSurrenderModal)}
+            onCancel={() => setSurrenderModal(false)}
+            timeout={1000}
+            customIcon={process.env.PUBLIC_URL + "/carryOn.jpeg"}
+            show={showSurrenderModal}
+            focusCancelBtn
+        >
+          Your opponent will win the battle
+        </SweetAlert>
         <div className='d-flex justify-content-center col-6'>
           <Button color='primary' onClick={passTurn}>Pass Turn</Button>  
         </div>
+
       </div>
     </div>
     ) :
