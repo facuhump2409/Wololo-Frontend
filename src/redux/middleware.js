@@ -46,14 +46,27 @@ const promiseMiddleware = store => next => action => {
     next(action);
 };
 
-const localStorageMiddleware = store => next => action => {
-    if ((action.type === SIGNUP || action.type === LOGIN) && !action.error) {
+const authLocalStorage = (action) => {
+    if(!action.error) {
         saveToLocal('isAuthorized', 'true');
         saveToLocal('currentUser', action.payload);
-    } else if (action.type === LOGOUT && !action.error) {
+    } else {
+        saveToLocal('isAuthorized', 'false');
+    }
+}
+
+const storageActions = {
+    [SIGNUP]: (action) => authLocalStorage(action),
+    [LOGIN]: (action) => authLocalStorage(action),
+    [LOGOUT]: (action) => {        
         saveToLocal('isAuthorized', 'false');
         removeFromLocal('currentUser');
-    }
+    },
+    authorizedAction: (action) => { if(action.error) saveToLocal('isAuthorized', 'false') }
+}
+
+const localStorageMiddleware = store => next => action => {
+    storageActions[action.type] ? storageActions[action.type](action) : storageActions.authorizedAction(action);
     next(action);
 };
 
