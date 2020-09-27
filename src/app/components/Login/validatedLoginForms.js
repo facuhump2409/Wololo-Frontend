@@ -4,7 +4,7 @@ import { Formik } from "formik"
 import * as Yup from "yup"
 import GoogleBtn from './GoogleBtn';
 import {trackPromise} from "react-promise-tracker";
-import {LoadingIndicator} from "./loadingIndicator";
+import {LoadingIndicator} from "../../loadingIndicator";
 import ErrorMessage from "../errorMessage";
 import {LOGIN, LOGIN_PAGE_LOADED, LOGIN_PAGE_UNLOADED} from "../../../redux/actionTypes";
 import {login} from "../../../services/auth";

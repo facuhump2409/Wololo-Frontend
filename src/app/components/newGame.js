@@ -7,6 +7,8 @@ import { Link } from "react-router-dom";
 import { getUsers } from '../../services/users';
 import { createGame } from '../../services/games';
 import { GET_USERS, CREATE_GAME } from '../../redux/actionTypes';
+import {LoadingIndicator} from "../loadingIndicator";
+import ErrorMessage from "./errorMessage";
 
 const BOOTSTRAP_CLASSES = {
     filter: 'form-control',
@@ -15,8 +17,12 @@ const BOOTSTRAP_CLASSES = {
     buttonActive: 'btn btn btn-block btn-primary',
 }
 
-
-const mapStateToProps = (state) => ({ ...state.users });
+const mapStateToProps = state => {
+    return {
+        users: state.users.users,
+        errors: state.users.errors,
+        inProgress: state.games.inProgress
+    }};
 
 const mapDispatchToProps = dispatch => ({
     getParticipants: () => dispatch({ type: GET_USERS, payload: getUsers }),
@@ -60,6 +66,7 @@ class NewGame extends React.Component {
 
     render() {
         const selectedUsers = this.state.selectedUsers;
+        console.log("in progress:",this.props.inProgress)
         return (
             <div>
                 <div className="container page">
@@ -157,6 +164,8 @@ class NewGame extends React.Component {
                                 }
                             }
                             </Formik>
+                            <LoadingIndicator display={this.props.inProgress}/>
+                            <ErrorMessage errors={this.props.errors} />
                         </div>
                     </div>
                 </div>
