@@ -5,6 +5,7 @@ import {
     LOGOUT,
     SIGNUP
 } from './actionTypes';
+import { saveToLocal, removeFromLocal } from '../services/localStorage'
 
 const promiseMiddleware = store => next => action => {
     if (isPromise(action.payload)) {
@@ -47,9 +48,11 @@ const promiseMiddleware = store => next => action => {
 
 const localStorageMiddleware = store => next => action => {
     if ((action.type === SIGNUP || action.type === LOGIN) && !action.error) {
-        localStorage.setItem('isAuthorized', 'true');
+        saveToLocal('isAuthorized', 'true');
+        saveToLocal('currentUser', action.payload);
     } else if (action.type === LOGOUT && !action.error) {
-        localStorage.setItem('isAuthorized', 'false');
+        saveToLocal('isAuthorized', 'false');
+        removeFromLocal('currentUser');
     }
     next(action);
 };

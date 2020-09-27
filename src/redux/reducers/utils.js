@@ -1,5 +1,7 @@
+import { getFromLocal } from '../../services/localStorage'
+
 export const initialState = {
-    isAuthorized: (localStorage.getItem('isAuthorized') === 'true') || false,
+    isAuthorized: (getFromLocal('isAuthorized') === 'true') || false,
     inProgress: false,
     user: null,
     games: [],
