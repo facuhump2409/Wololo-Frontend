@@ -23,7 +23,7 @@ const Game = (props) => {
     if(!activeGame && !inProgress) { 
       dispatch({ type: GET_GAME, payload: getGame(props.match.params.id) })
     } 
-    if(gameChanged) {
+    if(gameChanged && isActive(activeGame)) {
       setCircles(updateAreas(circles, activeGame.province.towns, currentUser))
       setTown(town ? activeGame.province.towns.find(aTown => aTown.id === town.id) : null)
       dispatch({ type: 'MAP_UPDATED' })
