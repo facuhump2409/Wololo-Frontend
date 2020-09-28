@@ -47,7 +47,7 @@ function TownInfo({ activeGame, town, currentUserTowns, clicked, onReturn, curre
       <div className='d-flex justify-content-around'>
       <Button color='danger' onClick={handleReturn}>return</Button>
       { isTownFromUser ? (
-        <>
+        <div>
         <Button 
           color='info' 
           onClick={() => handleChangeSpecialization(getChangeSpecialization[town.specialization])}
@@ -57,7 +57,7 @@ function TownInfo({ activeGame, town, currentUserTowns, clicked, onReturn, curre
 
         {!town.isLocked ?
           <Button color='info' onClick={handleMoveGauchos}>add gauchos</Button> : null}
-        </>)
+        </div>)
         : <Button color='primary' onClick={handleAttack}>attack</Button> 
         }
       </div>
