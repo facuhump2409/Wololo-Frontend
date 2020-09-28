@@ -32,7 +32,7 @@
     "yup": "^0.29.3"
   },
   "scripts": {
-    "start": "webpack-dev-server --mode development --open --config webpack.examples.config.js",
+    "start": "webpack-dev-server --mode development --open --config webpack.config.js",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
