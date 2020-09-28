@@ -17,7 +17,7 @@
     "react-dom": "^16.13.1",
     "react-filtered-multiselect": "^0.5.1",
     "react-google-login": "^5.1.21",
-    "react-image-mapper": "0.0.15",
+    "react-image-mapper": "github:Maxi-F/react-image-mapper#master",
     "react-loader-spinner": "^3.1.14",
     "react-promise-tracker": "^2.1.0",
     "react-redux": "^7.2.1",

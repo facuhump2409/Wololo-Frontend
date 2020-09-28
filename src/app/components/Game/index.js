@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useCallback } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { GET_GAME, PASS_TURN, SURRENDER } from '../../../redux/actionTypes';
 import { getGame, finishTurn, surrender } from '../../../services/games';
@@ -22,8 +22,13 @@ const Game = (props) => {
   useEffect(() => {
     if(!activeGame && !inProgress) { 
       dispatch({ type: GET_GAME, payload: getGame(props.match.params.id) })
+    } 
+    if(gameChanged) {
+      setCircles(updateAreas(circles, activeGame.province.towns, currentUser))
+      setTown(town ? activeGame.province.towns.find(aTown => aTown.id === town.id) : null)
+      dispatch({ type: 'MAP_UPDATED' })
     }
-  }, [dispatch, props.match.params.id, activeGame, dimensions, currentUser, inProgress, gameChanged, circles])
+  }, [dispatch, props.match.params.id, activeGame, dimensions, currentUser, inProgress, gameChanged, circles, town])
 
   const handleHover = (area) => {
     if(!clicked) {
@@ -35,12 +40,6 @@ const Game = (props) => {
     if(!circles) {
       setCircles(createAreas(dimensions, activeGame.province.towns, currentUser))
     }
-  }
-
-  const updateCircles = () => {
-    setCircles(updateAreas(circles, activeGame.province.towns, currentUser))
-    debugger;
-    dispatch({ type: 'MAP_UPDATED' })
   }
 
   const handleClick = () => {
@@ -66,8 +65,8 @@ const Game = (props) => {
         <div className='d-flex justify-content-center col-6'>
           <Map name='gameMap' 
           dimensions={dimensions} 
-          circles={circles ? (gameChanged ? updateCircles() : circles) : initializeCircles() } 
-          imageUrl={activeGame.province.imageUrl} 
+          circles={ circles ? circles : initializeCircles() } 
+          imageUrl={ activeGame.province.imageUrl } 
           handleHover={handleHover} 
           handleClick={handleClick} 
           currentUser={currentUser.id} />  
@@ -91,7 +90,7 @@ const Game = (props) => {
           <Button color='danger' onClick={handleSurrender}>Surrender</Button>  
         </div>
         <div className='d-flex justify-content-center col-6'>
-          <Button color='primary' onClick={passTurn}>Pass Turn</Button>  
+          <Button color='primary' onClick={passTurn} disabled={!isMyTurn(activeGame, currentUser.id)}>Pass Turn</Button>  
         </div>
       </div>
     </div>
