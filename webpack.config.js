@@ -24,7 +24,10 @@ module.exports = (env, options) => {
 		module: {
 			rules: [{
 				test: /\.jsx?/,
-				exclude: /node_modules/,
+				include: [
+					path.resolve(__dirname, "./src"),
+					path.resolve(__dirname, "node_modules/react-svg-map")
+				],
 				use: [
 					'babel-loader',
 					{
@@ -36,7 +39,9 @@ module.exports = (env, options) => {
 				],
 			}, {
 				test: /\.scss$/,
-				exclude: /node_modules/,
+				include: [
+					path.resolve(__dirname, "node_modules/react-svg-map")
+				],
 				use: [{
 					loader: 'style-loader'
 				}, {

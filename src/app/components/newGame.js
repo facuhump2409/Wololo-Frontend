@@ -4,10 +4,10 @@ import FilteredMultiSelect from 'react-filtered-multiselect'
 import {Formik} from "formik";
 import * as Yup from "yup";
 import {getUsers} from '../../services/users';
-import {createGame} from '../../services/games';
-import {CREATE_GAME, GET_USERS} from '../../redux/actionTypes';
-import Australia from '@svg-maps/australia';
-import RadioSVGMap from "react-svg-map";
+import {createGame, getProvinces} from '../../services/games';
+import {CREATE_GAME, GET_PROVINCES, GET_USERS} from '../../redux/actionTypes';
+import Argentina from '../../svg/argentina';
+import {RadioSVGMap} from "react-svg-map/src/";
 
 
 const BOOTSTRAP_CLASSES = {
@@ -18,11 +18,12 @@ const BOOTSTRAP_CLASSES = {
 }
 
 
-const mapStateToProps = (state) => ({...state.users});
+const mapStateToProps = (state) => ({...state.users, ...state.provinces});
 
 const mapDispatchToProps = dispatch => ({
     getParticipants: () => dispatch({type: GET_USERS, payload: getUsers}),
-    createGame: (gameData) => dispatch({type: CREATE_GAME, payload: createGame(gameData)})
+    createGame: (gameData) => dispatch({type: CREATE_GAME, payload: createGame(gameData)}),
+    getStates: () => dispatch({type: GET_PROVINCES, payload: getProvinces})
 })
 
 class NewGame extends React.Component {
@@ -41,7 +42,7 @@ class NewGame extends React.Component {
         this.handleLocationFocus = this.handleLocationFocus.bind(this);
         this.handleLocationBlur = this.handleLocationBlur.bind(this);
         this.handleOnChange = this.handleOnChange.bind(this);
-
+        this.handleSelectionChange = this.handleSelectionChange.bind(this);
 
     }
 
@@ -78,9 +79,10 @@ class NewGame extends React.Component {
 
     componentDidMount() {
         this.props.getParticipants();
+        this.props.getStates();
     }
 
-    getInitialState () {
+    getInitialState() {
         return {
             value: 'select'
         }
@@ -90,14 +92,34 @@ class NewGame extends React.Component {
         return !this.props.errors ? this.props.users.map((user, index) => ({value: user.id, text: user.username})) : []
     }
 
-    handleSelectionChange (selectedUsers)  {
-        this.setState({selectedUsers})
+    provinces(){
+        return !this.props.errors ? this.props.provinces : []
+    }
+
+    handleSelectionChange(selectedUsers) {
+        this.setState({selectedUsers: selectedUsers});
     }
 
     handleDeselect(index) {
         const selectedUsers = this.state.selectedUsers.slice();
         selectedUsers.splice(index, 1)
-        this.setState({selectedUsers})
+        this.setState({selectedUsers: selectedUsers})
+    }
+
+/*     confirmProvince(){
+        console.log(provinces)
+
+    }*/
+
+    validateForm(){
+        const provinces =  this.provinces();
+        if(provinces.includes(this.state.selectedLocation)){
+            console.log(this.state.selectedLocation + "Included")
+            return true
+        } else{
+            return false
+        }
+
     }
 
 
@@ -109,38 +131,13 @@ class NewGame extends React.Component {
                     <div className="row">
                         <div className="col-md-10 offset-md-1 col-xs-12">
                             <label>Create New Game</label>
-                            <article className="examples__block">
-                                <h2 className="examples__block__title">
-                                    Australia SVG map as radio buttons
-                                </h2>
-                                <div className="examples__block__info">
-                                    <div className="examples__block__info__item">
-                                        Pointed location: {this.state.pointedLocation}
-                                    </div>
-                                    <div className="examples__block__info__item">
-                                        Focused location: {this.state.focusedLocation}
-                                    </div>
-                                    <div className="examples__block__info__item">
-                                        Selected location: {this.state.selectedLocation}
-                                    </div>
-                                </div>
-                                <div
-                                    className="examples__block__map examples__block__map--australia">
-                                    <RadioSVGMap
-                                        map={Australia}
-                                        onLocationMouseOver={this.handleLocationMouseOver}
-                                        onLocationMouseOut={this.handleLocationMouseOut}
-                                        onLocationFocus={this.handleLocationFocus}
-                                        onLocationBlur={this.handleLocationBlur}
-                                        onChange={this.handleOnChange}/>
-                                </div>
-                            </article>
+
 
                             <Formik
                                 initialValues={{selectProvince: "", towns: ""}}
                                 onSubmit={(values, {setSubmitting}) => {
                                     this.props.createGame({
-                                        provinceName: values.selectProvince,
+                                        provinceName: this.state.selectedLocation,
                                         townAmount: parseInt(values.towns),
                                         participantsIds: this.state.selectedUsers.map(user => user.value),
                                     })
@@ -160,6 +157,33 @@ class NewGame extends React.Component {
                                         } = props;
                                         return (<form onSubmit={handleSubmit}>
                                             <fieldset>
+                                                <fieldset width="300px">
+                                                    <article className="examples__block" width="300px">
+                                                        <h2 className="examples__block__title">
+                                                            Select province
+                                                        </h2>
+                                                        <div className="examples__block__info">
+                                                            <div className="examples__block__info__item">
+                                                                Selected Province: {this.state.selectedLocation}
+                                                            </div>
+                                                        </div>
+                                                        <div style={{width: "300px"}}>
+                                                            <RadioSVGMap
+                                                                map={Argentina}
+                                                                onLocationMouseOver={this.handleLocationMouseOver}
+                                                                onLocationMouseOut={this.handleLocationMouseOut}
+                                                                onLocationFocus={this.handleLocationFocus}
+                                                                onLocationBlur={this.handleLocationBlur}
+                                                                onChange={this.handleOnChange}
+                                                            />
+
+                                                        </div>
+                                                        <button type="button"
+                                                                >
+                                                            &times;
+                                                        </button>
+                                                    </article>
+                                                </fieldset>
 
                                                 {/*<fieldset className="form-group">*/}
                                                 {/*    <div>*/}
@@ -217,7 +241,7 @@ class NewGame extends React.Component {
                                                 </fieldset>
 
                                                 <button
-                                                    className="btn btn-lg pull-xs-right btn-primary"
+                                                    className="btn btn-lg pull-xs-right btn-primary" onClick={() => this.validateForm()}
                                                     type="submit"
                                                 >
                                                     Create New Game
@@ -238,83 +262,5 @@ class NewGame extends React.Component {
 }
 
 
-class ArgentinaMap extends React.Component {
-    constructor(props) {
-        super(props);
-
-        this.state = {
-            pointedLocation: null,
-            focusedLocation: null,
-            selectedLocation: null
-        };
-
-        this.handleLocationMouseOver = this.handleLocationMouseOver.bind(this);
-        this.handleLocationMouseOut = this.handleLocationMouseOut.bind(this);
-        this.handleLocationFocus = this.handleLocationFocus.bind(this);
-        this.handleLocationBlur = this.handleLocationBlur.bind(this);
-        this.handleOnChange = this.handleOnChange.bind(this);
-    }
-
-    getLocationName(event) {
-        return event.target.attributes.name.value;
-    }
-
-    handleLocationMouseOver(event) {
-        const pointedLocation = this.getLocationName(event);
-        this.setState({pointedLocation: pointedLocation});
-    }
-
-    handleLocationMouseOut() {
-        this.setState({pointedLocation: null});
-    }
-
-    handleLocationFocus(event) {
-        const focusedLocation = this.getLocationName(event);
-        this.setState({focusedLocation: focusedLocation});
-    }
-
-    handleLocationBlur() {
-        this.setState({focusedLocation: null});
-    }
-
-    handleOnChange(selectedNode) {
-        this.setState(prevState => {
-            return {
-                ...prevState,
-                selectedLocation: selectedNode.attributes.name.value
-            };
-        });
-    }
-
-    render() {
-        return (
-            <article className="examples__block">
-                <h2 className="examples__block__title">
-                    Australia SVG map as radio buttons
-                </h2>
-                <div className="examples__block__info">
-                    <div className="examples__block__info__item">
-                        Pointed location: {this.state.pointedLocation}
-                    </div>
-                    <div className="examples__block__info__item">
-                        Focused location: {this.state.focusedLocation}
-                    </div>
-                    <div className="examples__block__info__item">
-                        Selected location: {this.state.selectedLocation}
-                    </div>
-                </div>
-                <div className="examples__block__map examples__block__map--australia">
-                    <RadioSVGMap
-                        map={Australia}
-                        onLocationMouseOver={this.handleLocationMouseOver}
-                        onLocationMouseOut={this.handleLocationMouseOut}
-                        onLocationFocus={this.handleLocationFocus}
-                        onLocationBlur={this.handleLocationBlur}
-                        onChange={this.handleOnChange}/>
-                </div>
-            </article>
-        );
-    }
-}
 
 export default connect(mapStateToProps, mapDispatchToProps)(NewGame);

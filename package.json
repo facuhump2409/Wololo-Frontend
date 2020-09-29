@@ -2,6 +2,7 @@
   "name": "wololo",
   "version": "0.1.0",
   "private": true,
+  "main": "./build/index.js",
   "dependencies": {
     "@svg-maps/australia": "^1.1.1",
     "@testing-library/jest-dom": "^4.2.4",
@@ -9,6 +10,7 @@
     "@testing-library/user-event": "^7.1.2",
     "apisauce": "^1.1.2",
     "axios": "^0.20.0",
+    "babel-core": "^6.26.3",
     "bootstrap": "^4.5.2",
     "email-validator": "^2.0.4",
     "formik": "^2.1.5",
@@ -56,7 +58,6 @@
     "@svg-maps/australia": "^1.1.0",
     "@svg-maps/france.regions": "^1.1.0",
     "@svg-maps/taiwan.main": "^1.0.0",
-    "babel-core": "^6.26.3",
     "babel-loader": "^7.1.5",
     "babel-preset-env": "^1.7.0",
     "babel-preset-react": "^6.24.1",
@@ -75,5 +76,5 @@
     "webpack-cli": "^3.3.12",
     "webpack-dev-server": "^3.10.1"
   },
-  "proxy": "http://127.0.0.1:8080/"
+  "proxy": "http://127.0.0.1:8081/"
 }
