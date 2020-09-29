@@ -62,11 +62,11 @@ const storageActions = {
         saveToLocal('isAuthorized', 'false');
         removeFromLocal('currentUser');
     },
-    authorizedAction: (action) => { if(action.error) saveToLocal('isAuthorized', 'false') }
+    authorizedAction: (action, store) => { if(action.error) store.dispatch({type: LOGOUT}) }
 }
 
 const localStorageMiddleware = store => next => action => {
-    storageActions[action.type] ? storageActions[action.type](action) : storageActions.authorizedAction(action);
+    storageActions[action.type] ? storageActions[action.type](action) : storageActions.authorizedAction(action, store);
     next(action);
 };
 
