@@ -4,7 +4,7 @@ import { Formik } from "formik"
 import * as Yup from "yup"
 import GoogleBtn from './GoogleBtn';
 import {trackPromise} from "react-promise-tracker";
-import {LoadingIndicator} from "./loadingIndicator";
+import {LoadingIndicator} from "../../loadingIndicator";
 import ErrorMessage from "../errorMessage";
 import {LOGIN, LOGIN_PAGE_LOADED, LOGIN_PAGE_UNLOADED} from "../../../redux/actionTypes";
 import {login} from "../../../services/auth";
@@ -39,20 +39,7 @@ class ValidatedLoginForm extends React.Component {
                     <Formik
                 initialValues={{mail: "", password:""}}
                 onSubmit={(values) => {
-                    // trackPromise(this.props.loginUser(values))
-                    // trackPromise(this.props.onSubmit(values))
                     this.props.onSubmit(values)
-                    // this.props.history.push(`/`)
-                    // this.handleLogin(values)
-                    // trackPromise(this.props.loginUser(values).then(()=> { //TODO cambiar por then catch cuando hagamos con back
-                    //     localStorage.setItem('isAuthorized', true);
-                    //     return this.props.history.push(`/`)
-                    // }).catch(error=>{
-                    //     return <p>Couldn't sign in correctly, please try again later</p>}))
-                    // if (this.props.isAuthorized) {
-                    //     localStorage.setItem('isAuthorized', true);
-                    //     this.props.history.push(`/`)
-                    // }
                 }}
                 validationSchema = {Yup.object().shape({
                     mail: Yup.string()

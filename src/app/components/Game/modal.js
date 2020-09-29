@@ -1,5 +1,6 @@
 import React from 'react';
 import {connect} from 'react-redux';
+import TownModal from "../Modals/townModal";
 
 const Modal = ({modal, closeModal}) => {
     if(!modal) {

@@ -12,7 +12,10 @@ export default function(state = initialState, action) {
         isAuthorized: false,
       };
     case ASYNC_START:
-      return { ...state, inProgress: true, errors: null };
+      if (action.subtype === LOGIN || action.subtype === SIGNUP) {
+        return { ...state, inProgress: true, errors: null };
+      }
+      break;
     case LOGIN:
     case SIGNUP:
       return {

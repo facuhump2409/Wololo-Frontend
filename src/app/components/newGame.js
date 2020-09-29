@@ -107,10 +107,6 @@ class NewGame extends React.Component {
         this.setState({selectedUsers: selectedUsers})
     }
 
-/*     confirmProvince(){
-        console.log(provinces)
-
-    }*/
 
     validateForm(){
         const provinces =  this.provinces();
@@ -123,16 +119,19 @@ class NewGame extends React.Component {
 
     }
 
+    onGameCreated() {
+        return this.props.finishedCreation? this.props.redirectGame() : null
+    }
 
     render() {
         const selectedUsers = this.state.selectedUsers;
+        console.log("in progress:",this.props.inProgress)
         return (
             <div>
                 <div className="container page">
                     <div className="row">
                         <div className="col-md-10 offset-md-1 col-xs-12">
                             <label>Create New Game</label>
-
 
                             <Formik
                                 initialValues={{selectProvince: "", towns: ""}}
@@ -182,19 +181,6 @@ class NewGame extends React.Component {
                                                     </article>
                                                 </fieldset>
 
-                                                {/*<fieldset className="form-group">*/}
-                                                {/*    <div>*/}
-                                                {/*        <select name="selectProvince" className="form-control"*/}
-                                                {/*                onChange={handleChange}*/}
-                                                {/*                value={this.state.value}>*/}
-                                                {/*            <option value="">Select Province</option>*/}
-                                                {/*            <option value="Buenos Aires">Buenos Aires</option>*/}
-                                                {/*            <option value="CABA">CABA</option>*/}
-                                                {/*            <option value="Cordoba">Cordoba</option>*/}
-                                                {/*        </select>*/}
-                                                {/*    </div>*/}
-
-                                                {/*</fieldset>*/}
 
 
                                                 <fieldset className="form-group">
@@ -257,7 +243,5 @@ class NewGame extends React.Component {
     }
 
 }
-
-
 
 export default connect(mapStateToProps, mapDispatchToProps)(NewGame);

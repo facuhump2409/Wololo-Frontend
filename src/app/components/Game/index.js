@@ -8,6 +8,7 @@ import { townsFrom, isMyTurn, isActive } from './utils'
 import { Button } from 'reactstrap'
 import Map from './components/Map'
 import TownInfo from './components/TownInfo'
+import SweetAlert from "react-bootstrap-sweetalert";
 
 const Game = (props) => {
   const dispatch = useDispatch();
@@ -15,6 +16,8 @@ const Game = (props) => {
   const { activeGame, errors, inProgress, gameChanged } = useSelector(state => state.games)
   const [town, setTown] = useState(null);
   const [clicked, setClicked] = useState(false);
+  const [showSurrenderModal, setSurrenderModal] = useState(false);
+  const [showTurnModal, setTurnModal] = useState(false);
 
   const dimensions = { width: 500, height: 500 }
   const [circles, setCircles] = useState(null);
@@ -50,12 +53,26 @@ const Game = (props) => {
     setClicked(false);
   }
 
-  const handleSurrender = () => {
-    dispatch({ type: SURRENDER, payload: surrender(activeGame.id) })
+  const handleSurrender = (showSurrenderModal) => {
+    if (showSurrenderModal) {
+      console.log("Entre")
+      dispatch({ type: SURRENDER, payload: surrender(activeGame.id) })
+    }
+    setSurrenderModal(false)
+  }
+
+  const showModal = () => {
+    setSurrenderModal(true)
+  }
+
+  const showPassModal = () => {
+    setTurnModal(true)
   }
 
   const passTurn = () => {
+    console.log("entre a pass")
     dispatch({ type: PASS_TURN, payload: finishTurn(activeGame.id) })
+    setTurnModal(false)
   }
 
   return (
@@ -87,11 +104,38 @@ const Game = (props) => {
       </div>
       <div className='row' style={{marginTop: '20px'}}>
         <div className='d-flex justify-content-center col-6'>
-          <Button color='danger' onClick={handleSurrender}>Surrender</Button>  
+          <Button color='danger' onClick={showModal}>Surrender</Button>
         </div>
+        <SweetAlert
+            // warning
+            custom
+            showCancel
+            confirmBtnText="Yes, I forfeit"
+            confirmBtnBsStyle="danger"
+            title="Are you sure you want to surrender?"
+            onConfirm={() => handleSurrender(showSurrenderModal)}
+            onCancel={() => setSurrenderModal(false)}
+            timeout={1000}
+            customIcon={process.env.PUBLIC_URL + "/carryOn.jpeg"}
+            show={showSurrenderModal}
+            focusCancelBtn
+        >
+          Your opponent will win the battle
+        </SweetAlert>
         <div className='d-flex justify-content-center col-6'>
-          <Button color='primary' onClick={passTurn} disabled={!isMyTurn(activeGame, currentUser.id)}>Pass Turn</Button>  
+          <Button color='primary' onClick={showPassModal} disabled={!isMyTurn(activeGame, currentUser.id)}>Pass Turn</Button>  
         </div>
+        <SweetAlert
+            info
+            title="It's your opponents turn now"
+            onConfirm={() => passTurn()}
+            onCancel={() => passTurn()}
+            // timeout={2000}
+            show={showTurnModal}
+        >
+          Wait until they play to attack again
+        </SweetAlert>
+
       </div>
     </div>
     ) :
