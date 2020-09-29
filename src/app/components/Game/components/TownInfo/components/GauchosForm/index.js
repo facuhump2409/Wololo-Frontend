@@ -7,7 +7,7 @@ import { moveGauchos } from '../../../../../../../services/games'
 function GauchosForm({ currentGame, currentTown, currentUserTowns, onBack, onMoveGauchos }) {
   const dispatch = useDispatch();
 
-  const [selectedTown, setSelectedTown] = useState(null);
+  const [selectedTown, setSelectedTown] = useState(currentUserTowns ? (currentUserTowns.filter(town => town.id !== currentTown.id)[0]) : null);
   const [selectedQuantity, setSelectedQuantity] = useState(0);
   const [invalidQuantity, setInvalidQuantity] = useState(false);
 
