@@ -123,11 +123,7 @@ const Game = (props) => {
           Your opponent will win the battle
         </SweetAlert>
         <div className='d-flex justify-content-center col-6'>
-<<<<<<< HEAD
-          <Button color='primary' onClick={showPassModal}>Pass Turn</Button>
-=======
-          <Button color='primary' onClick={passTurn} disabled={!isMyTurn(activeGame, currentUser.id)}>Pass Turn</Button>  
->>>>>>> 1b5a15904751bab2ddcc140632ea3f4a505f7c3a
+          <Button color='primary' onClick={showPassModal} disabled={!isMyTurn(activeGame, currentUser.id)}>Pass Turn</Button>  
         </div>
         <SweetAlert
             info
