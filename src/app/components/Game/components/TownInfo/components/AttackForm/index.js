@@ -7,7 +7,7 @@ import { attackTown } from '../../../../../../../services/games'
 function AttackForm({ currentGame, currentTown, currentUserTowns, onBack, onAttack }) {
   const dispatch = useDispatch();
 
-  const [selectedTown, setSelectedTown] = useState(null);
+  const [selectedTown, setSelectedTown] = useState(currentUserTowns[0] ? currentUserTowns[0] : null);
 
   const handleSelectTown = (event) => {
     setSelectedTown(currentUserTowns.find(town => town.id === parseInt(event.target.value)))

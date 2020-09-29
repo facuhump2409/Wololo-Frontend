@@ -43,6 +43,7 @@ class NewGame extends React.Component {
         this.handleLocationBlur = this.handleLocationBlur.bind(this);
         this.handleOnChange = this.handleOnChange.bind(this);
         this.handleSelectionChange = this.handleSelectionChange.bind(this);
+        this.handleDeselect = this.handleDeselect.bind(this);
 
     }
 
@@ -178,10 +179,6 @@ class NewGame extends React.Component {
                                                             />
 
                                                         </div>
-                                                        <button type="button"
-                                                                >
-                                                            &times;
-                                                        </button>
                                                     </article>
                                                 </fieldset>
 

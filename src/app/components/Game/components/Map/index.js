@@ -1,16 +1,13 @@
-import React, { useState } from 'react';
-import { createAreas } from './utils';
+import React, { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux'
 import ImageMapper from 'react-image-mapper';
 import './index.css'
 
 
-function Map({ name, game, handleHover, handleClick, currentUser }) {
-  const dimensions = { width: 500, height: 500 }
-
-  const [circles, setCircles] = useState(createAreas(dimensions, game.province.towns, currentUser));
+function Map({ dimensions, circles, name, imageUrl, handleHover, handleClick }) {
   return (
     <ImageMapper
-      src={game.province.imageUrl}
+      src={imageUrl}
       map={{
         name,
         areas: circles,
