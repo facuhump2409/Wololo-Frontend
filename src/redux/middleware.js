@@ -5,6 +5,7 @@ import {
     LOGOUT,
     SIGNUP
 } from './actionTypes';
+import { saveToLocal, removeFromLocal } from '../services/localStorage'
 
 const promiseMiddleware = store => next => action => {
     if (isPromise(action.payload)) {
@@ -45,12 +46,27 @@ const promiseMiddleware = store => next => action => {
     next(action);
 };
 
-const localStorageMiddleware = store => next => action => {
-    if ((action.type === SIGNUP || action.type === LOGIN) && !action.error) {
-        localStorage.setItem('isAuthorized', 'true');
-    } else if (action.type === LOGOUT && !action.error) {
-        localStorage.setItem('isAuthorized', 'false');
+const authLocalStorage = (action) => {
+    if(!action.error) {
+        saveToLocal('isAuthorized', 'true');
+        saveToLocal('currentUser', action.payload);
+    } else {
+        saveToLocal('isAuthorized', 'false');
     }
+}
+
+const storageActions = {
+    [SIGNUP]: (action) => authLocalStorage(action),
+    [LOGIN]: (action) => authLocalStorage(action),
+    [LOGOUT]: () => {        
+        saveToLocal('isAuthorized', 'false');
+        removeFromLocal('currentUser');
+    },
+    authorizedAction: (action) => { if(action.error) saveToLocal('isAuthorized', 'false') }
+}
+
+const localStorageMiddleware = store => next => action => {
+    storageActions[action.type] ? storageActions[action.type](action) : storageActions.authorizedAction(action);
     next(action);
 };
 

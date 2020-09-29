@@ -76,7 +76,7 @@ function GamesList(props) {
                   <th scope='row'>{rowValue.id}</th>
                   {Object.keys(rowValue.data).map(key => <td key={rowValue.data[key]}>{rowValue.data[key]}</td>)}
                   <th>
-                    { rowValue.data.status !== 'FINISHED' ? 
+                    { ['FINISHED', 'CANCELED'].every(status => status !== rowValue.data.status) ? 
                     <Link to={`/game/${rowValue.id}`}>
                       <button className='btn btn-primary' value={rowValue.id} onClick={handlePlayClick}>Play</button>
                     </Link>

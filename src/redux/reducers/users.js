@@ -1,7 +1,8 @@
 import { GET_USERS } from '../actionTypes';
 
 const initialState = {
-  users: []
+  users: [],
+  inProgress: false
 }
 
 export default function(state = initialState, action) {
@@ -17,4 +18,5 @@ export default function(state = initialState, action) {
       default: 
         return state;
   }
+  return state;
 }

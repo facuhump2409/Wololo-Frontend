@@ -1,3 +1,11 @@
+const colors = {
+  unOwned: 'rgba(0, 0, 0, 0.5)',
+  current: 'rgba(29, 237, 29, 0.75)',
+  otherPlayers: ['rgba(199, 0, 0, 0.7)', 'rgba(23, 0, 199, 0.7)', 'rgba(199, 149, 0, 0.7)']
+}
+
+const colorFor = (ownerId) => colors.otherPlayers[ownerId % 3];
+
 const randomNumber = (to) => Math.floor(Math.random() * to);
 
 const circle = (factor, { factMultX, factMultY }, { width, height }) =>
@@ -16,8 +24,6 @@ const getFactor = (townsQuantity) => {
 
 const isTownFrom = (aTown, currentUser) => aTown.ownerId === currentUser
 
-const randomColorBy = (id) => `rgba(${255 % id},${255 % id},${255 % id},0.5)`
-
 const createCircles = (factor, towns, dimensions, currentUser) => {
   let usedPoints = [];
 
@@ -33,14 +39,21 @@ const createCircles = (factor, towns, dimensions, currentUser) => {
   }
 
   const isSamePoint = (aPoint, anotherPoint) => aPoint.factMultX === anotherPoint.factMultX && aPoint.factMultY === anotherPoint.factMultY
-  
+
   return towns.map(aTown => ({
     name: aTown.name, 
     shape: 'circle', 
     coords: circle(factor, randomPoint(factor), dimensions),
     strokeColor: 'rgba(0,0,0,0.3)', 
-    preFillColor: isTownFrom(aTown, currentUser) ? 'rgba(255,255,255,0.5)' : randomColorBy(aTown.ownerId) 
+    preFillColor: isTownFrom(aTown, currentUser.id) ? colors.current : (!aTown.ownerId ? colors.unOwned : colorFor(aTown.ownerId)),
+    town: aTown
   }));
 }
 
 export const createAreas = (dimensions, towns, currentUser) => createCircles(getFactor(towns.length), towns, dimensions, currentUser);
+
+export const updateAreas = (circles, towns, currentUser) => circles.map((circle, index) => ({
+  ...circle,
+  preFillColor:  isTownFrom(towns[index], currentUser.id) ? colors.current : (!towns[index].ownerId ? colors.unOwned : colorFor(towns[index].ownerId)),
+  town: towns[index],
+}))
