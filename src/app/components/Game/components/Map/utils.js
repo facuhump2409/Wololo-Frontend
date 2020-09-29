@@ -45,9 +45,15 @@ const createCircles = (factor, towns, dimensions, currentUser) => {
     shape: 'circle', 
     coords: circle(factor, randomPoint(factor), dimensions),
     strokeColor: 'rgba(0,0,0,0.3)', 
-    preFillColor: isTownFrom(aTown, currentUser) ? colors.current : (!aTown.ownerId ? colors.unOwned : colorFor(aTown.ownerId)),
-    test: 'test'
+    preFillColor: isTownFrom(aTown, currentUser.id) ? colors.current : (!aTown.ownerId ? colors.unOwned : colorFor(aTown.ownerId)),
+    town: aTown
   }));
 }
 
 export const createAreas = (dimensions, towns, currentUser) => createCircles(getFactor(towns.length), towns, dimensions, currentUser);
+
+export const updateAreas = (circles, towns, currentUser) => circles.map((circle, index) => ({
+  ...circle,
+  preFillColor:  isTownFrom(towns[index], currentUser.id) ? colors.current : (!towns[index].ownerId ? colors.unOwned : colorFor(towns[index].ownerId)),
+  town: towns[index],
+}))
