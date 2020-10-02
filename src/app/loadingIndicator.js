@@ -1,7 +1,7 @@
 import React from 'react'
 import Loader from 'react-loader-spinner';
 
-export const LoadingIndicator = (props) => {
+const LoadingIndicator = (props) => {
     // const { promiseInProgress } = usePromiseTracker();
         return (
             props.display &&
@@ -16,3 +16,5 @@ export const LoadingIndicator = (props) => {
             </div>
         );
 }
+
+export default LoadingIndicator;
