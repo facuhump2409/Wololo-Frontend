@@ -8,11 +8,13 @@ module.exports = (env, options) => {
 		output: {
 			path: path.resolve(__dirname, './'),
 			filename: 'index.js',
+			publicPath: '/',
 		},
 		performance: {
 			hints: false // Disable assets limit
 		},
 		devServer: {
+
 			historyApiFallback: true,
 			proxy: {
       '/api': {
