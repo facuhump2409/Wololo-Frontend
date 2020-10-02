@@ -62,7 +62,7 @@ const storageActions = {
         saveToLocal('isAuthorized', 'false');
         removeFromLocal('currentUser');
     },
-    authorizedAction: (action) => { if(action.error) saveToLocal('isAuthorized', 'false') }
+    authorizedAction: (action) => { }
 }
 
 const localStorageMiddleware = store => next => action => {
