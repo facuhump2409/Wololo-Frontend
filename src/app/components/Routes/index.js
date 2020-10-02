@@ -1,6 +1,6 @@
 import React, {useEffect} from 'react';
 
-import {connect} from 'react-redux'
+import {connect, useDispatch} from 'react-redux'
 import {BrowserRouter as Router, Route, Switch} from "react-router-dom";
 import AuthenticatedRoute from './components/AuthenticatedRoute';
 import Home from '../home';
@@ -14,6 +14,7 @@ import {LOGOUT, REDIRECT} from "../../../redux/actionTypes";
 import {signOut} from "../../../services/auth";
 import SignOutComponent from "../Login/SignOut";
 import {withRouter} from 'react-router'
+import api, { apiSetup } from '../../../api';
 
 const mapStateToProps = state => {
     return {
@@ -31,13 +32,13 @@ const mapDispatchToProps = dispatch => ({
 });
 
 function RoutesContainer(props) {
-
+    const dispatch = useDispatch()
     useEffect(() => {
-        console.log("Props que estan updateadas", props.redirectTo)
         if (props.redirectTo) {
             props.history.push(props.redirectTo)
             props.onRedirect();
         }
+        apiSetup(dispatch)
     })
 
     return (
