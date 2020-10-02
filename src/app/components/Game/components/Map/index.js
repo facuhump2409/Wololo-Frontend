@@ -13,7 +13,7 @@ function Map({ dimensions, circles, name, imageUrl, handleHover, handleClick }) 
         areas: circles,
       }}
       onClick={area => handleClick(area)}
-      onMouseEnter={area => handleHover(area)}
+      onMouseEnter={(area, index, event) => handleHover(area, index, event)}
       width={dimensions.width}
       height={dimensions.height} />
   )
