@@ -8,7 +8,7 @@ import {createGame, getProvinces} from '../../services/games';
 import {CREATE_GAME, GET_PROVINCES, GET_USERS, REDIRECT_GAME} from '../../redux/actionTypes';
 import Argentina from '../../svg/argentina';
 import {RadioSVGMap} from "react-svg-map/src/";
-import {LoadingIndicator} from "../loadingIndicator";
+import LoadingIndicator from "../loadingIndicator"
 import ErrorMessage from "./errorMessage";
 import SweetAlert from "react-bootstrap-sweetalert";
 

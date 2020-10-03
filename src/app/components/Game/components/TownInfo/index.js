@@ -4,14 +4,16 @@ import { Card, CardImg, CardText, CardBody, CardTitle, Button } from 'reactstrap
 import GauchosForm from './components/GauchosForm'
 import AttackForm from './components/AttackForm'
 import { getChangeSpecialization } from './utils'
-import { updateSpecialization, attackTown } from '../../../../../services/games'
-import { CHANGE_SPECIALIZATION, ATTACK_TOWN } from '../../../../../redux/actionTypes'
+import {updateSpecialization, attackTown, getTownStats} from '../../../../../services/games'
+import {CHANGE_SPECIALIZATION, ATTACK_TOWN, TOWN_STATS} from '../../../../../redux/actionTypes'
+import TownModal from "../../../Modals/townModal";
 
 function TownInfo({ activeGame, town, currentUserTowns, clicked, onReturn, currentUser }) {
   const dispatch = useDispatch();
   
   const [movingGauchos, setMovingGauchos] = useState(false);
   const [attacking, setAttacking] = useState(false);
+  const [showStats,setShowStats ] = useState(false);
 
   const isTownFromUser = currentUser === town.ownerId;
 
@@ -23,6 +25,14 @@ function TownInfo({ activeGame, town, currentUserTowns, clicked, onReturn, curre
 
   const handleMoveGauchos = () => {
     setMovingGauchos(!movingGauchos);
+  }
+
+  const onOpenStats = () => {
+    setShowStats(true)
+  }
+
+  const onCloseStats = () => {
+    setShowStats(false)
   }
 
   const handleChangeSpecialization = (specialization) => {
@@ -39,10 +49,12 @@ function TownInfo({ activeGame, town, currentUserTowns, clicked, onReturn, curre
     <CardImg top width='100%' src={town.imageUrl} alt='Town Image' />
     <CardBody>
       <CardTitle>{town.name}</CardTitle>
-      <CardText>Owner: {town.ownerId}</CardText>
-      <CardText>Coordinates: LATITUDE {town.coordinates.lat}, LONGITUDE {town.coordinates.lon}</CardText>
-      <CardText>gauchos quantity: {town.gauchos}</CardText>
+      {/*<CardText>Owner: {town.ownerId}</CardText>*/}
+      {/*<CardText>Coordinates: LATITUDE {town.coordinates.lat}, LONGITUDE {town.coordinates.lon}</CardText>*/}
+      {/*<CardText>gauchos quantity: {town.gauchos}</CardText>*/}
+      {<Button onClick={onOpenStats}> Show Stats </Button>}
       {isTownFromUser ? <CardText>is locked: {town.isLocked.toString()}</CardText> : null}
+      {<TownModal display={showStats} town={town} close={onCloseStats}/>}
       { clicked ? 
       <div className='d-flex justify-content-around'>
       <Button color='danger' onClick={handleReturn}>return</Button>

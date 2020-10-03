@@ -101,7 +101,7 @@ class SignUpComponent extends Component{
 
                                         <button type="submit" className="btn btn-primary btn-block" disabled={this.props.inProgress}>Sign Up</button>
                                         <p className="forgot-password text-right">
-                                            Already registered <a href="/sign-in">Sign In</a>
+                                            Already registered <a href="/sign_in">Sign In</a>
                                         </p>
                                     </form>
                                 )

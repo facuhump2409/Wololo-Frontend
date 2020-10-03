@@ -121,7 +121,7 @@ class ValidatedLoginForm extends React.Component {
                     <ErrorMessage errors={this.props.errors} />
                     <GoogleBtn/>
                     <p className="forgot-password text-right">
-                        Not a member yet? <a href="/sign-up">Sign up for free</a>
+                        Not a member yet? <a href="/sign_up">Sign up for free</a>
                     </p>
                 </div>
                     </div>
