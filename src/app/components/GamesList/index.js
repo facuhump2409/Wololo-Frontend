@@ -9,7 +9,8 @@ import {GET_GAME, GET_GAMES, LOGIN, LOGIN_PAGE_LOADED, LOGIN_PAGE_UNLOADED} from
 import {login} from "../../../services/auth";
 import { getGames } from "../../../services/games";
 import {connect, useDispatch} from "react-redux";
-import games from '../../../redux/reducers/games';
+import ErrorMessage from '../errorMessage';
+import LoadingIndicator from '../../loadingIndicator';
 
 const mapDispatchToProps = dispatch => ({
   onSubmit: (values) =>
@@ -50,7 +51,8 @@ function GamesList(props) {
 
   return (
     <div className='games-container'>
-      <div className='games-inner'>
+      {props.inProgress ? (<LoadingIndicator display={true}/>) : (props.errors ? (<ErrorMessage errors={props.errors} />) : (
+        <div className='games-inner'>
         <input 
           style={{margin: '5px 0'}} 
           className="form-control col-4" 
@@ -91,6 +93,7 @@ function GamesList(props) {
           <button className='btn btn-primary float-right'>Create new Game</button>
         </Link>
       </div>
+      ))}
     </div>
   );
 }

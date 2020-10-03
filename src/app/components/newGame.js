@@ -5,10 +5,12 @@ import {Formik} from "formik";
 import * as Yup from "yup";
 import {getUsers} from '../../services/users';
 import {createGame, getProvinces} from '../../services/games';
-import {CREATE_GAME, GET_PROVINCES, GET_USERS} from '../../redux/actionTypes';
+import {CREATE_GAME, GET_PROVINCES, GET_USERS, REDIRECT_GAME} from '../../redux/actionTypes';
 import Argentina from '../../svg/argentina';
 import {RadioSVGMap} from "react-svg-map/src/";
-
+import {LoadingIndicator} from "../loadingIndicator";
+import ErrorMessage from "./errorMessage";
+import SweetAlert from "react-bootstrap-sweetalert";
 
 const BOOTSTRAP_CLASSES = {
     filter: 'form-control',
@@ -18,12 +20,22 @@ const BOOTSTRAP_CLASSES = {
 }
 
 
-const mapStateToProps = (state) => ({...state.users, ...state.provinces});
+const mapStateToProps = state => {
+    return {
+        users: state.users.users,
+        errors: state.users.errors,
+        inProgress: state.games.inProgress,
+        finishedCreation: state.games.finishedCreation,
+        gamesErrors: state.games.errors,
+        provinces: state.provinces.provinces
+    }
+};
 
 const mapDispatchToProps = dispatch => ({
     getParticipants: () => dispatch({type: GET_USERS, payload: getUsers}),
     createGame: (gameData) => dispatch({type: CREATE_GAME, payload: createGame(gameData)}),
-    getStates: () => dispatch({type: GET_PROVINCES, payload: getProvinces})
+    getStates: () => dispatch({type: GET_PROVINCES, payload: getProvinces}),
+    redirectGame: () => dispatch({type: REDIRECT_GAME})
 })
 
 class NewGame extends React.Component {
@@ -90,10 +102,10 @@ class NewGame extends React.Component {
     };
 
     users() {
-        return !this.props.errors ? this.props.users.map((user, index) => ({value: user.id, text: user.username})) : []
+        return !this.props.errors ? this.props.users.map((user) => ({value: user.id, text: user.username})) : []
     }
 
-    provinces(){
+    provinces() {
         return !this.props.errors ? this.props.provinces : []
     }
 
@@ -108,24 +120,24 @@ class NewGame extends React.Component {
     }
 
 
-    validateForm(){
-        const provinces =  this.provinces();
-        if(provinces.includes(this.state.selectedLocation)){
+    validateForm() {
+        const provinces = this.provinces();
+        if (provinces.includes(this.state.selectedLocation)) {
             console.log(this.state.selectedLocation + "Included")
             return true
-        } else{
+        } else {
             return false
         }
 
     }
 
     onGameCreated() {
-        return this.props.finishedCreation? this.props.redirectGame() : null
+        return this.props.finishedCreation ? this.props.redirectGame() : null
     }
 
     render() {
         const selectedUsers = this.state.selectedUsers;
-        console.log("in progress:",this.props.inProgress)
+        console.log("in progress:", this.props.inProgress)
         return (
             <div>
                 <div className="container page">
@@ -135,7 +147,7 @@ class NewGame extends React.Component {
 
                             <Formik
                                 initialValues={{selectProvince: "", towns: ""}}
-                                onSubmit={(values, {setSubmitting}) => {
+                                onSubmit={(values) => {
                                     this.props.createGame({
                                         provinceName: this.state.selectedLocation,
                                         townAmount: parseInt(values.towns),
@@ -153,7 +165,9 @@ class NewGame extends React.Component {
                                     props => {
                                         const {
                                             handleSubmit,
-                                            handleChange
+                                            handleChange,
+                                            errors,
+                                            touched
                                         } = props;
                                         return (<form onSubmit={handleSubmit}>
                                             <fieldset>
@@ -169,6 +183,7 @@ class NewGame extends React.Component {
                                                         </div>
                                                         <div style={{width: "300px"}}>
                                                             <RadioSVGMap
+                                                                name="selectProvince"
                                                                 map={Argentina}
                                                                 onLocationMouseOver={this.handleLocationMouseOver}
                                                                 onLocationMouseOut={this.handleLocationMouseOut}
@@ -180,7 +195,9 @@ class NewGame extends React.Component {
                                                         </div>
                                                     </article>
                                                 </fieldset>
-
+                                                {errors.selectProvince && touched.selectProvince && (
+                                                    <div className="input-feedback">{errors.selectProvince}</div>
+                                                )}
 
 
                                                 <fieldset className="form-group">
@@ -192,6 +209,9 @@ class NewGame extends React.Component {
                                                         placeholder="Number of towns"
                                                     />
                                                 </fieldset>
+                                                {errors.towns && touched.towns && (
+                                                    <div className="input-feedback">{errors.towns}</div>
+                                                )}
 
 
                                                 <fieldset className="form-group">
@@ -224,7 +244,8 @@ class NewGame extends React.Component {
                                                 </fieldset>
 
                                                 <button
-                                                    className="btn btn-lg pull-xs-right btn-primary" onClick={() => this.validateForm()}
+                                                    className="btn btn-lg pull-xs-right btn-primary"
+                                                    onClick={() => this.validateForm()}
                                                     type="submit"
                                                 >
                                                     Create New Game
@@ -235,6 +256,18 @@ class NewGame extends React.Component {
                                     }
                                 }
                             </Formik>
+                            <LoadingIndicator display={this.props.inProgress}/>
+                            <ErrorMessage errors={this.props.gamesErrors}/>
+                            <SweetAlert
+                                success
+                                title="Game Created Succesfully!"
+                                onConfirm={() => this.onGameCreated()}
+                                onCancel={() => this.onGameCreated()}
+                                timeout={2000}
+                                show={this.props.finishedCreation}
+                            >
+                                Redirecting to all your games
+                            </SweetAlert>
                         </div>
                     </div>
                 </div>
