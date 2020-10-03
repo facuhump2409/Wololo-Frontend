@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
-import { GET_GAME, PASS_TURN, SURRENDER } from '../../../redux/actionTypes';
-import { getGame, finishTurn, surrender } from '../../../services/games';
+import {GET_GAME, PASS_TURN, SURRENDER, TOWN_STATS} from '../../../redux/actionTypes';
+import {getGame, finishTurn, surrender, getTownStats} from '../../../services/games';
 import { createAreas, updateAreas } from './components/Map/utils';
 import { getFromLocal } from '../../../services/localStorage'
 import { townsFrom, isMyTurn, isActive } from './utils'
@@ -9,11 +9,12 @@ import { Button } from 'reactstrap'
 import Map from './components/Map'
 import TownInfo from './components/TownInfo'
 import SweetAlert from "react-bootstrap-sweetalert";
+import TownModal from "../Modals/townModal";
 
 const Game = (props) => {
   const dispatch = useDispatch();
   const currentUser = getFromLocal('currentUser');
-  const { activeGame, errors, inProgress, gameChanged } = useSelector(state => state.games)
+  const { activeGame, errors, inProgress, gameChanged,showStats,stats } = useSelector(state => state.games)
   const [town, setTown] = useState(null);
   const [clicked, setClicked] = useState(false);
   const [showSurrenderModal, setSurrenderModal] = useState(false);
@@ -69,8 +70,13 @@ const Game = (props) => {
     setTurnModal(true)
   }
 
+  const townStats = () => {
+    dispatch({ type: TOWN_STATS, payload: getTownStats(activeGame.id,town) })
+    setTurnModal(false)
+  }
+
+
   const passTurn = () => {
-    console.log("entre a pass")
     dispatch({ type: PASS_TURN, payload: finishTurn(activeGame.id) })
     setTurnModal(false)
   }
@@ -135,7 +141,7 @@ const Game = (props) => {
         >
           Wait until they play to attack again
         </SweetAlert>
-
+        <TownModal display={showStats} stats={stats}/>
       </div>
     </div>
     ) :

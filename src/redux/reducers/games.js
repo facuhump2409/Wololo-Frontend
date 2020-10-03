@@ -1,6 +1,8 @@
-import { ASYNC_START, GAMES_PAGE_LOADED, GAMES_PAGE_UNLOADED, 
+import {
+    ASYNC_START, GAMES_PAGE_LOADED, GAMES_PAGE_UNLOADED,
     GET_GAMES, CREATE_GAME, GET_GAME, MOVE_GAUCHOS, CHANGE_SPECIALIZATION, ATTACK_TOWN,
-    PASS_TURN, SURRENDER,REDIRECT_GAME }
+    PASS_TURN, SURRENDER, REDIRECT_GAME, TOWN_STATS
+}
     from '../actionTypes';
 import {initialState} from "./utils";
 
@@ -29,6 +31,13 @@ export default function(state = initialState, action) {
             return{
                 ...state,
                 finishedCreation: false
+            }
+        case TOWN_STATS:
+            return {
+                ...state,
+                showStats: !action.error,
+                errors: action.error ? action.payload.message : null,
+                stats: action.payload
             }
         case GET_GAMES:
             return {
