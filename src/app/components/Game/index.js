@@ -14,7 +14,7 @@ import TownModal from "../Modals/townModal";
 const Game = (props) => {
   const dispatch = useDispatch();
   const currentUser = getFromLocal('currentUser');
-  const { activeGame, errors, inProgress, gameChanged,showStats,stats } = useSelector(state => state.games)
+  const { activeGame, errors, inProgress, gameChanged } = useSelector(state => state.games)
   const [town, setTown] = useState(null);
   const [clicked, setClicked] = useState(false);
   const [showSurrenderModal, setSurrenderModal] = useState(false);
@@ -69,12 +69,6 @@ const Game = (props) => {
   const showPassModal = () => {
     setTurnModal(true)
   }
-
-  const townStats = () => {
-    dispatch({ type: TOWN_STATS, payload: getTownStats(activeGame.id,town) })
-    setTurnModal(false)
-  }
-
 
   const passTurn = () => {
     dispatch({ type: PASS_TURN, payload: finishTurn(activeGame.id) })
@@ -141,7 +135,6 @@ const Game = (props) => {
         >
           Wait until they play to attack again
         </SweetAlert>
-        <TownModal display={showStats} stats={stats}/>
       </div>
     </div>
     ) :
