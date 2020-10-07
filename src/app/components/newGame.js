@@ -11,6 +11,7 @@ import {RadioSVGMap} from "react-svg-map/src/";
 import LoadingIndicator from "../loadingIndicator"
 import ErrorMessage from "./errorMessage";
 import SweetAlert from "react-bootstrap-sweetalert";
+import {StepsNewGame} from "./stepsNewGame";
 
 const BOOTSTRAP_CLASSES = {
     filter: 'form-control',
@@ -145,7 +146,7 @@ class NewGame extends React.Component {
                         <div className="col-md-10 offset-md-1 col-xs-12">
                             <label>Create New Game</label>
 
-                            <Formik
+                            <StepsNewGame
                                 initialValues={{selectProvince: "", towns: ""}}
                                 onSubmit={(values) => {
                                     this.props.createGame({
@@ -169,7 +170,7 @@ class NewGame extends React.Component {
                                             errors,
                                             touched
                                         } = props;
-                                        return (<form onSubmit={handleSubmit}>
+                                        return (
                                             <fieldset>
                                                 <fieldset width="300px">
                                                     <article className="examples__block" width="300px">
@@ -252,10 +253,10 @@ class NewGame extends React.Component {
                                                 </button>
 
                                             </fieldset>
-                                        </form>)
+                                        )
                                     }
                                 }
-                            </Formik>
+                            </StepsNewGame>
                             <LoadingIndicator display={this.props.inProgress}/>
                             <ErrorMessage errors={this.props.gamesErrors}/>
                             <SweetAlert
