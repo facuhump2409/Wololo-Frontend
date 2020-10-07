@@ -1,7 +1,7 @@
 import React from 'react';
 import {connect} from 'react-redux';
 import FilteredMultiSelect from 'react-filtered-multiselect'
-import {Formik} from "formik";
+import {Form, Formik} from "formik";
 import * as Yup from "yup";
 import {getUsers} from '../../services/users';
 import {createGame, getProvinces} from '../../services/games';
@@ -162,100 +162,74 @@ class NewGame extends React.Component {
                                     towns: Yup.number().required("Please enter the number of towns")
                                 })
                                 }>
-                                {
-                                    props => {
-                                        const {
-                                            handleSubmit,
-                                            handleChange,
-                                            errors,
-                                            touched
-                                        } = props;
-                                        return (
-                                            <fieldset>
-                                                <fieldset width="300px">
-                                                    <article className="examples__block" width="300px">
-                                                        <h2 className="examples__block__title">
-                                                            Select province
-                                                        </h2>
-                                                        <div className="examples__block__info">
-                                                            <div className="examples__block__info__item">
-                                                                Selected Province: {this.state.selectedLocation}
-                                                            </div>
-                                                        </div>
-                                                        <div style={{width: "300px"}}>
-                                                            <RadioSVGMap
-                                                                name="selectProvince"
-                                                                map={Argentina}
-                                                                onLocationMouseOver={this.handleLocationMouseOver}
-                                                                onLocationMouseOut={this.handleLocationMouseOut}
-                                                                onLocationFocus={this.handleLocationFocus}
-                                                                onLocationBlur={this.handleLocationBlur}
-                                                                onChange={this.handleOnChange}
-                                                            />
+                                    <fieldset width="300px">
+                                        <article className="examples__block" width="300px">
+                                            <h2 className="examples__block__title">
+                                                Select province
+                                            </h2>
+                                            <div className="examples__block__info">
+                                                <div className="examples__block__info__item">
+                                                    Selected Province: {this.state.selectedLocation}
+                                                </div>
+                                            </div>
+                                            <div style={{width: "300px"}}>
+                                                <RadioSVGMap
+                                                    name="selectProvince"
+                                                    map={Argentina}
+                                                    onLocationMouseOver={this.handleLocationMouseOver}
+                                                    onLocationMouseOut={this.handleLocationMouseOut}
+                                                    onLocationFocus={this.handleLocationFocus}
+                                                    onLocationBlur={this.handleLocationBlur}
+                                                    onChange={this.handleOnChange}
+                                                />
 
-                                                        </div>
-                                                    </article>
-                                                </fieldset>
-                                                {errors.selectProvince && touched.selectProvince && (
-                                                    <div className="input-feedback">{errors.selectProvince}</div>
-                                                )}
+                                            </div>
+                                        </article>
+                                    </fieldset>
+                                    <fieldset className="form-group">
+                                        <input
+                                            name="towns"
+                                            className="form-control"
+                                            type="text"
+                                            // onChange={handleChange}
+                                            placeholder="Number of towns"
+                                        />
+                                    </fieldset>
+                                    <fieldset className="form-group">
+                                        <label>Select Users</label>
 
-
-                                                <fieldset className="form-group">
-                                                    <input
-                                                        name="towns"
-                                                        className="form-control"
-                                                        type="text"
-                                                        onChange={handleChange}
-                                                        placeholder="Number of towns"
-                                                    />
-                                                </fieldset>
-                                                {errors.towns && touched.towns && (
-                                                    <div className="input-feedback">{errors.towns}</div>
-                                                )}
+                                        <div>
+                                            <FilteredMultiSelect
+                                                name="users"
+                                                classNames={BOOTSTRAP_CLASSES}
+                                                onChange={this.handleSelectionChange}
+                                                options={this.users()}
+                                                selectedOptions={selectedUsers}
+                                            />
 
 
-                                                <fieldset className="form-group">
-                                                    <label>Select Users</label>
+                                            {selectedUsers.length === 0 && <p>(nothing selected yet)</p>}
+                                            {selectedUsers.length > 0 && <ul>
+                                                {selectedUsers.map((user, i) => <li key={user.id}>
+                                                    {`${user.text} `}
 
-                                                    <div>
-                                                        <FilteredMultiSelect
-                                                            name="users"
-                                                            classNames={BOOTSTRAP_CLASSES}
-                                                            onChange={this.handleSelectionChange}
-                                                            options={this.users()}
-                                                            selectedOptions={selectedUsers}
-                                                        />
-
-
-                                                        {selectedUsers.length === 0 && <p>(nothing selected yet)</p>}
-                                                        {selectedUsers.length > 0 && <ul>
-                                                            {selectedUsers.map((user, i) => <li key={user.id}>
-                                                                {`${user.text} `}
-
-                                                                <button type="button"
-                                                                        onClick={() => this.handleDeselect(i)}>
-                                                                    &times;
-                                                                </button>
-                                                            </li>)}
-                                                        </ul>}
-                                                    </div>
+                                                    <button type="button"
+                                                            onClick={() => this.handleDeselect(i)}>
+                                                        &times;
+                                                    </button>
+                                                </li>)}
+                                            </ul>}
+                                        </div>
 
 
-                                                </fieldset>
-
-                                                <button
-                                                    className="btn btn-lg pull-xs-right btn-primary"
-                                                    onClick={() => this.validateForm()}
-                                                    type="submit"
-                                                >
-                                                    Create New Game
-                                                </button>
-
-                                            </fieldset>
-                                        )
-                                    }
-                                }
+                                    </fieldset>
+                                    {/*<button*/}
+                                    {/*    className="btn btn-lg pull-xs-right btn-primary"*/}
+                                    {/*    onClick={() => this.validateForm()}*/}
+                                    {/*    type="submit"*/}
+                                    {/*>*/}
+                                    {/*    Create New Game*/}
+                                    {/*</button>*/}
                             </StepsNewGame>
                             <LoadingIndicator display={this.props.inProgress}/>
                             <ErrorMessage errors={this.props.gamesErrors}/>
