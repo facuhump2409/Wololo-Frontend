@@ -1,7 +1,7 @@
 import React from 'react';
 import {connect} from 'react-redux';
 import FilteredMultiSelect from 'react-filtered-multiselect'
-import {Form, Formik} from "formik";
+import {Field, Form, Formik} from "formik";
 import * as Yup from "yup";
 import {getUsers} from '../../services/users';
 import {createGame, getProvinces} from '../../services/games';
@@ -12,6 +12,8 @@ import LoadingIndicator from "../loadingIndicator"
 import ErrorMessage from "./errorMessage";
 import SweetAlert from "react-bootstrap-sweetalert";
 import {StepsNewGame} from "./stepsNewGame";
+import Box from "@material-ui/core/Box";
+import {TextField} from "formik-material-ui";
 
 const BOOTSTRAP_CLASSES = {
     filter: 'form-control',
@@ -47,7 +49,7 @@ class NewGame extends React.Component {
             selectedUsers: [],
             pointedLocation: null,
             focusedLocation: null,
-            selectedLocation: null
+            selectedLocation: null,
         }
 
         this.handleLocationMouseOver = this.handleLocationMouseOver.bind(this);
@@ -57,7 +59,6 @@ class NewGame extends React.Component {
         this.handleOnChange = this.handleOnChange.bind(this);
         this.handleSelectionChange = this.handleSelectionChange.bind(this);
         this.handleDeselect = this.handleDeselect.bind(this);
-
     }
 
     getLocationName(event) {
@@ -123,12 +124,13 @@ class NewGame extends React.Component {
 
     validateForm() {
         const provinces = this.provinces();
-        if (provinces.includes(this.state.selectedLocation)) {
-            console.log(this.state.selectedLocation + "Included")
-            return true
-        } else {
-            return false
-        }
+        return provinces.includes(this.state.selectedLocation)
+        // if (provinces.includes(this.state.selectedLocation)) {
+        //     console.log(this.state.selectedLocation + "Included")
+        //     return true
+        // } else {
+        //     return false
+        // }
 
     }
 
@@ -138,7 +140,6 @@ class NewGame extends React.Component {
 
     render() {
         const selectedUsers = this.state.selectedUsers;
-        console.log("in progress:", this.props.inProgress)
         return (
             <div>
                 <div className="container page">
@@ -149,6 +150,7 @@ class NewGame extends React.Component {
                             <StepsNewGame
                                 initialValues={{selectProvince: "", towns: ""}}
                                 onSubmit={(values) => {
+                                    console.log("state:",this.state)
                                     this.props.createGame({
                                         provinceName: this.state.selectedLocation,
                                         townAmount: parseInt(values.towns),
@@ -161,7 +163,8 @@ class NewGame extends React.Component {
                                         .required("Please select a state"),
                                     towns: Yup.number().required("Please enter the number of towns")
                                 })
-                                }>
+                                }
+                            >
                                     <fieldset width="300px">
                                         <article className="examples__block" width="300px">
                                             <h2 className="examples__block__title">
@@ -186,15 +189,24 @@ class NewGame extends React.Component {
                                             </div>
                                         </article>
                                     </fieldset>
-                                    <fieldset className="form-group">
-                                        <input
+                                    <Box paddingBottom={2}>
+                                        <Field
+                                            fullWidth
                                             name="towns"
-                                            className="form-control"
-                                            type="text"
-                                            // onChange={handleChange}
+                                            type="number"
+                                            component={TextField}
                                             placeholder="Number of towns"
                                         />
-                                    </fieldset>
+                                    </Box>
+                                    {/*<div className="form-group">*/}
+                                    {/*    <input*/}
+                                    {/*        name="towns"*/}
+                                    {/*        // className="form-control"*/}
+                                    {/*        type="number"*/}
+                                    {/*        onChange={this.handleTownsChange}*/}
+                                    {/*        placeholder="Number of towns"*/}
+                                    {/*    />*/}
+                                    {/*</div>*/}
                                     <fieldset className="form-group">
                                         <label>Select Users</label>
 
@@ -249,7 +261,6 @@ class NewGame extends React.Component {
             </div>
         );
     }
-
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(NewGame);

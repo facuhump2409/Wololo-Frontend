@@ -10,12 +10,13 @@ export function StepsNewGame({children, ...props}) {
     const childrenArray = React.Children.toArray(children)
     const [step,setStep] = useState(0)
     const currentChild = childrenArray[step]
-    console.log("CHILDREN:",childrenArray)
     function isLastStep() {
         return step === childrenArray.length - 1
     }
     return (
         <Formik {...props} onSubmit={async (values,helpers) => {
+            console.log("Values inside steps", values)
+            console.log(props.selectProvince)
             if(isLastStep()) {
                 await props.onSubmit(values, helpers)
             }
