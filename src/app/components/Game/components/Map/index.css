@@ -2,7 +2,9 @@ area {
   display: block;
 }
 .mapContainer {
-  position: absolute;
+  position: relative;
+  width: 100vw;
+  height: 80vh;
   top: 0;
   right: 0;
   left: 0;

@@ -77,29 +77,15 @@ const Game = (props) => {
 
   return (
     activeGame && isActive(activeGame) && !errors ? (
-    <div className='container'>
+    <div>
       <div className='row'>
-        <div className='d-flex justify-content-center col-6'>
+        <div>
           <Map name='gameMap' 
           dimensions={dimensions} 
-          circles={ circles ? circles : initializeCircles() } 
-          imageUrl={ activeGame.province.imageUrl } 
+          areas={ circles ? circles : initializeCircles() } 
           handleHover={handleHover} 
           handleClick={handleClick} 
           currentUser={currentUser.id} />  
-        </div>
-
-        <div className='d-flex justify-content-center col-6'>
-          { town ? 
-            <TownInfo 
-            activeGame={activeGame} 
-            town={town} 
-            clicked={clicked} 
-            onReturn={handleReturn} 
-            currentUser={currentUser.id} 
-            currentUserTowns={townsFrom(currentUser.id, activeGame.province.towns)}/>
-            : null 
-          }
         </div>
       </div>
       <div className='row' style={{marginTop: '20px'}}>
