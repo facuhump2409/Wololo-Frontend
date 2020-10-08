@@ -14,7 +14,9 @@ export function StepsNewGame({children, ...props}) {
         return step === childrenArray.length - 1
     }
     return (
-        <Formik {...props} onSubmit={async (values,helpers) => {
+        <Formik {...props}
+            validationSchema={currentChild.props.validationSchema}
+                onSubmit={async (values,helpers) => {
             console.log("Values inside steps", values)
             console.log(props.selectProvince)
             if(isLastStep()) {

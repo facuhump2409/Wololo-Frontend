@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {connect} from 'react-redux';
 import FilteredMultiSelect from 'react-filtered-multiselect'
 import {Field, Form, Formik} from "formik";
@@ -11,9 +11,13 @@ import {RadioSVGMap} from "react-svg-map/src/";
 import LoadingIndicator from "../loadingIndicator"
 import ErrorMessage from "./errorMessage";
 import SweetAlert from "react-bootstrap-sweetalert";
-import {StepsNewGame} from "./stepsNewGame";
+import {StepGame, StepsNewGame} from "./stepsNewGame";
 import Box from "@material-ui/core/Box";
 import {TextField} from "formik-material-ui";
+import {object} from "yup";
+import {CardContent, Slider} from "@material-ui/core";
+import DiscreteSlider from "./slider";
+import Card from "@material-ui/core/Card";
 
 const BOOTSTRAP_CLASSES = {
     filter: 'form-control',
@@ -140,125 +144,126 @@ class NewGame extends React.Component {
 
     render() {
         const selectedUsers = this.state.selectedUsers;
+        // const validator= Yup.object().shape({
+        //     // selectProvince: Yup.string()
+        //     //     .required("Please select a state"),
+        //     towns: Yup.number().required("Please enter the number of towns")
+        // })
         return (
-            <div>
-                <div className="container page">
-                    <div className="row">
-                        <div className="col-md-10 offset-md-1 col-xs-12">
-                            <label>Create New Game</label>
+            <Card>
+                <CardContent>
+                    <label>Create New Game</label>
 
-                            <StepsNewGame
-                                initialValues={{selectProvince: "", towns: ""}}
-                                onSubmit={(values) => {
-                                    console.log("state:",this.state)
-                                    this.props.createGame({
-                                        provinceName: this.state.selectedLocation,
-                                        townAmount: parseInt(values.towns),
-                                        participantsIds: this.state.selectedUsers.map(user => user.value),
-                                    })
-                                        .setSubmitting(false);
-                                }}
-                                validator={() => Yup.object().shape({
-                                    selectProvince: Yup.string()
-                                        .required("Please select a state"),
-                                    towns: Yup.number().required("Please enter the number of towns")
-                                })
-                                }
-                            >
-                                    <fieldset width="300px">
-                                        <article className="examples__block" width="300px">
-                                            <h2 className="examples__block__title">
-                                                Select province
-                                            </h2>
-                                            <div className="examples__block__info">
-                                                <div className="examples__block__info__item">
-                                                    Selected Province: {this.state.selectedLocation}
-                                                </div>
-                                            </div>
-                                            <div style={{width: "300px"}}>
-                                                <RadioSVGMap
-                                                    name="selectProvince"
-                                                    map={Argentina}
-                                                    onLocationMouseOver={this.handleLocationMouseOver}
-                                                    onLocationMouseOut={this.handleLocationMouseOut}
-                                                    onLocationFocus={this.handleLocationFocus}
-                                                    onLocationBlur={this.handleLocationBlur}
-                                                    onChange={this.handleOnChange}
-                                                />
+                    <StepsNewGame
+                        initialValues={{selectProvince: "", towns: ""}}
+                        // validationSchema = {validator}
+                        onSubmit={(values) => {
+                            console.log("state:",this.state)
+                            this.props.createGame({
+                                provinceName: this.state.selectedLocation,
+                                townAmount: parseInt(values.towns),
+                                participantsIds: this.state.selectedUsers.map(user => user.value),
+                            })
+                                .setSubmitting(false);
+                        }}
+                    >
+                        <fieldset width="300px">
+                            <article className="examples__block" width="300px">
+                                <h2 className="examples__block__title">
+                                    Select province
+                                </h2>
+                                <div className="examples__block__info">
+                                    <div className="examples__block__info__item">
+                                        Selected Province: {this.state.selectedLocation}
+                                    </div>
+                                </div>
+                                <div style={{width: "250px"}}>
+                                    <RadioSVGMap
+                                        name="selectProvince"
+                                        map={Argentina}
+                                        onLocationMouseOver={this.handleLocationMouseOver}
+                                        onLocationMouseOut={this.handleLocationMouseOut}
+                                        onLocationFocus={this.handleLocationFocus}
+                                        onLocationBlur={this.handleLocationBlur}
+                                        onChange={this.handleOnChange}
+                                    />
 
-                                            </div>
-                                        </article>
-                                    </fieldset>
-                                    <Box paddingBottom={2}>
-                                        <Field
-                                            fullWidth
-                                            name="towns"
-                                            type="number"
-                                            component={TextField}
-                                            placeholder="Number of towns"
-                                        />
-                                    </Box>
-                                    {/*<div className="form-group">*/}
-                                    {/*    <input*/}
-                                    {/*        name="towns"*/}
-                                    {/*        // className="form-control"*/}
-                                    {/*        type="number"*/}
-                                    {/*        onChange={this.handleTownsChange}*/}
-                                    {/*        placeholder="Number of towns"*/}
-                                    {/*    />*/}
-                                    {/*</div>*/}
-                                    <fieldset className="form-group">
-                                        <label>Select Users</label>
+                                </div>
+                            </article>
+                        </fieldset>
+                        <StepGame
+                            validationSchema={object({
+                                towns: Yup.number().required("Please enter the number of towns")
+                            })}>
+                            <Box paddingBottom={2}>
+                                <Field
+                                    fullWidth
+                                    name="towns"
+                                    type="number"
+                                    component={DiscreteSlider}
+                                    placeholder="Number of towns"
+                                />
+                            </Box>
+                        </StepGame>
+                        {/*<div className="form-group">*/}
+                        {/*    <input*/}
+                        {/*        name="towns"*/}
+                        {/*        // className="form-control"*/}
+                        {/*        type="number"*/}
+                        {/*        onChange={this.handleTownsChange}*/}
+                        {/*        placeholder="Number of towns"*/}
+                        {/*    />*/}
+                        {/*</div>*/}
+                        <fieldset className="form-group">
+                            <label>Select Users</label>
 
-                                        <div>
-                                            <FilteredMultiSelect
-                                                name="users"
-                                                classNames={BOOTSTRAP_CLASSES}
-                                                onChange={this.handleSelectionChange}
-                                                options={this.users()}
-                                                selectedOptions={selectedUsers}
-                                            />
+                            <div>
+                                <FilteredMultiSelect
+                                    name="users"
+                                    classNames={BOOTSTRAP_CLASSES}
+                                    onChange={this.handleSelectionChange}
+                                    options={this.users()}
+                                    selectedOptions={selectedUsers}
+                                />
 
 
-                                            {selectedUsers.length === 0 && <p>(nothing selected yet)</p>}
-                                            {selectedUsers.length > 0 && <ul>
-                                                {selectedUsers.map((user, i) => <li key={user.id}>
-                                                    {`${user.text} `}
+                                {selectedUsers.length === 0 && <p>(nothing selected yet)</p>}
+                                {selectedUsers.length > 0 && <ul>
+                                    {selectedUsers.map((user, i) => <li key={user.id}>
+                                        {`${user.text} `}
 
-                                                    <button type="button"
-                                                            onClick={() => this.handleDeselect(i)}>
-                                                        &times;
-                                                    </button>
-                                                </li>)}
-                                            </ul>}
-                                        </div>
+                                        <button type="button"
+                                                onClick={() => this.handleDeselect(i)}>
+                                            &times;
+                                        </button>
+                                    </li>)}
+                                </ul>}
+                            </div>
 
 
-                                    </fieldset>
-                                    {/*<button*/}
-                                    {/*    className="btn btn-lg pull-xs-right btn-primary"*/}
-                                    {/*    onClick={() => this.validateForm()}*/}
-                                    {/*    type="submit"*/}
-                                    {/*>*/}
-                                    {/*    Create New Game*/}
-                                    {/*</button>*/}
-                            </StepsNewGame>
-                            <LoadingIndicator display={this.props.inProgress}/>
-                            <ErrorMessage errors={this.props.gamesErrors}/>
-                            <SweetAlert
-                                success
-                                title="Game Created Succesfully!"
-                                onConfirm={() => this.onGameCreated()}
-                                onCancel={() => this.onGameCreated()}
-                                timeout={2000}
-                                show={this.props.finishedCreation}
-                            >
-                                Redirecting to all your games
-                            </SweetAlert>
-                        </div>
-                    </div>
-                </div>
-            </div>
+                        </fieldset>
+                        {/*<button*/}
+                        {/*    className="btn btn-lg pull-xs-right btn-primary"*/}
+                        {/*    onClick={() => this.validateForm()}*/}
+                        {/*    type="submit"*/}
+                        {/*>*/}
+                        {/*    Create New Game*/}
+                        {/*</button>*/}
+                    </StepsNewGame>
+                    <LoadingIndicator display={this.props.inProgress}/>
+                    <ErrorMessage errors={this.props.gamesErrors}/>
+                    <SweetAlert
+                        success
+                        title="Game Created Succesfully!"
+                        onConfirm={() => this.onGameCreated()}
+                        onCancel={() => this.onGameCreated()}
+                        timeout={2000}
+                        show={this.props.finishedCreation}
+                    >
+                        Redirecting to all your games
+                    </SweetAlert>
+                </CardContent>
+            </Card>
         );
     }
 }
