@@ -9,7 +9,19 @@ const styles = {
   height: "100%"
 };
 
-function Map({ dimensions, circles, name, imageUrl, handleHover, handleClick }) {
+const accentsMap = {
+  a: 'á|à|ã|â|À|Á|Ã|Â',
+  e: 'é|è|ê|É|È|Ê',
+  i: 'í|ì|î|Í|Ì|Î',
+  o: 'ó|ò|ô|õ|Ó|Ò|Ô|Õ',
+  u: 'ú|ù|û|ü|Ú|Ù|Û|Ü',
+  c: 'ç|Ç',
+  n: 'ñ|Ñ',
+};
+
+export const slugify = text => Object.keys(accentsMap).reduce((acc, cur) => acc.replace(new RegExp(accentsMap[cur], 'g'), cur), text);
+
+function Map({ dimensions, areas, name, imageUrl, handleHover, handleClick }) {
   const [map, setMap] = useState(null);
   const container = useRef(null);
 
@@ -21,11 +33,16 @@ function Map({ dimensions, circles, name, imageUrl, handleHover, handleClick }) 
           style: "mapbox://styles/mapbox/light-v8", // stylesheet location
           center: [-54.6516966230371, -26.8753965086829],
           zoom: 7,
-
+          boxZoom: false,
+          doubleClickZoom: false,
+          scrollZoom: false,
+          dragPan: false,
+          dragRotate: false,
         });
   
         map.on("load", () => {
-          map.addSource('misiones', {type: 'geojson', data: test});
+          const circles = areas.map(area => ({...area, name: slugify(area.name)}));
+          map.addSource('misiones', {type: 'geojson', data: {...test, features: test.features.filter(feature => circles.some(circle => circle.name.toUpperCase() === feature.properties.departamento))}});
           map.addLayer({
             'id': 'misiones',
             'type': 'fill',
@@ -36,13 +53,40 @@ function Map({ dimensions, circles, name, imageUrl, handleHover, handleClick }) 
             'fill-opacity': 0.8
             }
             });
+            map.addLayer({
+              'id': 'misiones2',
+              'type': 'symbol',
+              'source': 'misiones',
+              'layout': {},
+              'layout': {
+                'text-field': 'test',
+                'text-variable-anchor': ['top', 'bottom', 'left', 'right'],
+                'text-radial-offset': 0.5,
+                'text-justify': 'auto',
+                }
+              });
             map.resize();
           setMap(map);
         });
+
+        map.on('click', 'misiones', (e) => {
+          console.log(e)
+        })
+
+        map.on('mouseenter', 'misiones', () => {
+          console.log(map.getCanvas())
+          map.getCanvas().style.cursor = 'pointer';
+          });
+           
+          // Change it back to a pointer when it leaves.
+          map.on('mouseleave', 'misiones', () => {
+          map.getCanvas().style.cursor = '';
+          });
       };
 
+      debugger;
         if (!map && container.current) initializeMap({ setMap, container });
-    }, [map])
+    }, [areas, map])
 
     return (
       <div className='mapContainer'>
