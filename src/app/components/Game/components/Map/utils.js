@@ -30,5 +30,7 @@ export const getGeoJsonAreas = (geojson, towns) => {
   const slugifiedTowns = towns.map(town => slugify(town.name).toUpperCase());
 
   return { ...geojson, features: geojson.features
-    .filter(feature => slugifiedTowns.some(townName => townName === feature.properties.departamento) )}
+    .filter(feature => slugifiedTowns.some(townName => townName === feature.properties.departamento))
+    .map(feature => ({...feature, properties: {...feature.properties, town: towns.find(town => upperSlugify(town.name) === feature.properties.departamento)}}))
+  }
 }

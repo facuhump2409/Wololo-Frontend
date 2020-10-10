@@ -21,7 +21,7 @@ const MapboxMap = ReactMapboxGl({
 // setPaintProperty(layerId)
 
 function Map({ center, province, currentUser }) {
-  const [selectedTowns, setSelectedTowns] = useState(null);
+  const [hoveredTown, setHoveredTown] = useState(null);
 
   const geoJsonAreas = getGeoJsonAreas(test, province.towns)
     return (
@@ -48,8 +48,13 @@ function Map({ center, province, currentUser }) {
               sourceId={town.name} 
               paint={paintBy(town, currentUser)}
               onClick={(e) => console.log(e.features)}
-              onMouseEnter={(e) => e.target.getCanvas().style.cursor = 'pointer'}
-              onMouseLeave={(e) => e.target.getCanvas().style.cursor = 'default'}
+              onMouseEnter={(e) => {
+                e.target.getCanvas().style.cursor = 'pointer'
+                setHoveredTown(JSON.parse(e.features[0].properties.town))
+              }}
+              onMouseLeave={(e) => {
+                e.target.getCanvas().style.cursor = 'default'
+              }}
               />
           ))}
           
