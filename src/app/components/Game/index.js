@@ -1,15 +1,12 @@
-import React, { useState, useEffect, useCallback } from 'react'
+import React, { useState, useEffect} from 'react'
 import { useSelector, useDispatch } from 'react-redux'
-import {GET_GAME, PASS_TURN, SURRENDER, TOWN_STATS} from '../../../redux/actionTypes';
-import {getGame, finishTurn, surrender, getTownStats} from '../../../services/games';
-import { createAreas, updateAreas } from './components/Map/utils';
+import {GET_GAME, PASS_TURN, SURRENDER} from '../../../redux/actionTypes';
+import {getGame, finishTurn, surrender} from '../../../services/games';
 import { getFromLocal } from '../../../services/localStorage'
-import { townsFrom, isMyTurn, isActive } from './utils'
+import { isMyTurn, isActive } from './utils'
 import { Button } from 'reactstrap'
 import Map from './components/Map'
-import TownInfo from './components/TownInfo'
 import SweetAlert from "react-bootstrap-sweetalert";
-import TownModal from "../Modals/townModal";
 
 const Game = (props) => {
   const dispatch = useDispatch();
@@ -20,19 +17,14 @@ const Game = (props) => {
   const [showSurrenderModal, setSurrenderModal] = useState(false);
   const [showTurnModal, setTurnModal] = useState(false);
 
-  const dimensions = { width: 500, height: 500 }
-  const [circles, setCircles] = useState(null);
-
   useEffect(() => {
     if(!activeGame && !inProgress) { 
       dispatch({ type: GET_GAME, payload: getGame(props.match.params.id) })
     } 
     if(gameChanged && isActive(activeGame)) {
-      setCircles(updateAreas(circles, activeGame.province.towns, currentUser))
       setTown(town ? activeGame.province.towns.find(aTown => aTown.id === town.id) : null)
-      dispatch({ type: 'MAP_UPDATED' })
     }
-  }, [dispatch, props.match.params.id, activeGame, dimensions, currentUser, inProgress, gameChanged, circles, town])
+  }, [dispatch, props.match.params.id, activeGame, currentUser, inProgress, gameChanged, town])
 
   const handleHover = (area) => {
     if(!clicked) {
@@ -40,18 +32,9 @@ const Game = (props) => {
     }
   }
 
-  const initializeCircles = () => {
-    if(!circles) {
-      setCircles(createAreas(dimensions, activeGame.province.towns, currentUser))
-    }
-  }
 
   const handleClick = () => {
     if(isMyTurn(activeGame, currentUser.id)) setClicked(true)
-  }
-
-  const handleReturn = () => {
-    setClicked(false);
   }
 
   const handleSurrender = (showSurrenderModal) => {
@@ -80,9 +63,8 @@ const Game = (props) => {
     <div>
       <div className='row'>
         <div>
-          <Map name='gameMap' 
-          dimensions={dimensions} 
-          areas={ circles ? circles : initializeCircles() } 
+          <Map center={[-54.6516966230371, -26.8753965086829]}
+          province={activeGame.province}
           handleHover={handleHover} 
           handleClick={handleClick} 
           currentUser={currentUser.id} />  

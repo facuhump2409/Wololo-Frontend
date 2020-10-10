@@ -8,52 +8,25 @@ const colorFor = (ownerId) => colors.otherPlayers[ownerId % 3];
 
 const randomNumber = (to) => Math.floor(Math.random() * to);
 
-const circle = (factor, { factMultX, factMultY }, { width, height }) =>
-    [(width * (1 + (2 * factMultX))) / (2 ** (factor + 1)),
-     (height * (1 + (2 * factMultY))) / (2 ** (factor + 1)),
-      width / (2 ** (factor + 1))
-    ]
 
-const getFactor = (townsQuantity) => {
-  let factor = 0;
-  while (4 ** factor < townsQuantity) {
-    factor++;
-  }
-  return factor;
+
+const accentsMap = {
+  a: 'á|à|ã|â|À|Á|Ã|Â',
+  e: 'é|è|ê|É|È|Ê',
+  i: 'í|ì|î|Í|Ì|Î',
+  o: 'ó|ò|ô|õ|Ó|Ò|Ô|Õ',
+  u: 'ú|ù|û|ü|Ú|Ù|Û|Ü',
+  c: 'ç|Ç',
+  n: 'ñ|Ñ',
+};
+
+export const slugify = text => Object.keys(accentsMap).reduce((acc, cur) => acc.replace(new RegExp(accentsMap[cur], 'g'), cur), text);
+
+export const upperSlugify = text => slugify(text).toUpperCase()
+
+export const getGeoJsonAreas = (geojson, towns) => {
+  const slugifiedTowns = towns.map(town => slugify(town.name).toUpperCase());
+
+  return { ...geojson, features: geojson.features
+    .filter(feature => slugifiedTowns.some(townName => townName === feature.properties.departamento) )}
 }
-
-const isTownFrom = (aTown, currentUser) => aTown.ownerId === currentUser
-
-const createCircles = (factor, towns, dimensions, currentUser) => {
-  let usedPoints = [];
-
-  const randomPoint = (factor) => {
-    let point = { factMultX: randomNumber(2**factor), factMultY: randomNumber(2**factor) };
-    
-    while(usedPoints.some(aPoint => isSamePoint(aPoint, point))) {
-      point = { factMultX: randomNumber(2**factor), factMultY: randomNumber(2**factor) }
-    }
-    
-    usedPoints.push(point);
-    return point;
-  }
-
-  const isSamePoint = (aPoint, anotherPoint) => aPoint.factMultX === anotherPoint.factMultX && aPoint.factMultY === anotherPoint.factMultY
-
-  return towns.map(aTown => ({
-    name: aTown.name, 
-    shape: 'circle', 
-    coords: circle(factor, randomPoint(factor), dimensions),
-    strokeColor: 'rgba(0,0,0,0.3)', 
-    preFillColor: isTownFrom(aTown, currentUser.id) ? colors.current : (!aTown.ownerId ? colors.unOwned : colorFor(aTown.ownerId)),
-    town: aTown
-  }));
-}
-
-export const createAreas = (dimensions, towns, currentUser) => createCircles(getFactor(towns.length), towns, dimensions, currentUser);
-
-export const updateAreas = (circles, towns, currentUser) => circles.map((circle, index) => ({
-  ...circle,
-  preFillColor:  isTownFrom(towns[index], currentUser.id) ? colors.current : (!towns[index].ownerId ? colors.unOwned : colorFor(towns[index].ownerId)),
-  town: towns[index],
-}))
