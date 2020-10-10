@@ -7,12 +7,14 @@ import { isMyTurn, isActive } from './utils'
 import { Button } from 'reactstrap'
 import Map from './components/Map'
 import SweetAlert from "react-bootstrap-sweetalert";
+import './index.css'
 
 const Game = (props) => {
   const dispatch = useDispatch();
   const currentUser = getFromLocal('currentUser');
   const { activeGame, errors, inProgress, gameChanged } = useSelector(state => state.games)
   const [town, setTown] = useState(null);
+  const [selectedTowns, setSelectedTowns] = useState(null);
   const [clicked, setClicked] = useState(false);
   const [showSurrenderModal, setSurrenderModal] = useState(false);
   const [showTurnModal, setTurnModal] = useState(false);
@@ -61,18 +63,17 @@ const Game = (props) => {
   return (
     activeGame && isActive(activeGame) && !errors ? (
     <div>
-      <div className='row'>
         <div>
           <Map center={[-54.6516966230371, -26.8753965086829]}
           province={activeGame.province}
           handleHover={handleHover} 
           handleClick={handleClick} 
-          currentUser={currentUser.id} />  
-        </div>
-      </div>
-      <div className='row' style={{marginTop: '20px'}}>
-        <div className='d-flex justify-content-center col-6'>
-          <Button color='danger' onClick={showModal}>Surrender</Button>
+          currentUser={currentUser} />
+
+          <div className='test'>abcd</div>
+          
+          <div className=' d-flex justify-content-center col-6'>
+          <Button color='danger' className='surrender' onClick={showModal}>Surrender</Button>
         </div>
         <SweetAlert
             // warning
@@ -91,7 +92,7 @@ const Game = (props) => {
           Your opponent will win the battle
         </SweetAlert>
         <div className='d-flex justify-content-center col-6'>
-          <Button color='primary' onClick={showPassModal} disabled={!isMyTurn(activeGame, currentUser.id)}>Pass Turn</Button>  
+          <Button color='primary' className='pass' onClick={showPassModal} disabled={!isMyTurn(activeGame, currentUser.id)}>Pass Turn</Button>  
         </div>
         <SweetAlert
             info
@@ -104,7 +105,8 @@ const Game = (props) => {
           Wait until they play to attack again
         </SweetAlert>
       </div>
-    </div>
+        </div>
+        
     ) :
     <h1>No Active Game</h1>
   )

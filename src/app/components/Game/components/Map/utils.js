@@ -1,14 +1,16 @@
 const colors = {
-  unOwned: 'rgba(0, 0, 0, 0.5)',
-  current: 'rgba(29, 237, 29, 0.75)',
-  otherPlayers: ['rgba(199, 0, 0, 0.7)', 'rgba(23, 0, 199, 0.7)', 'rgba(199, 149, 0, 0.7)']
+  unOwned: '#000',
+  current: '#13FF00',
+  otherPlayers: ['#BF0000', '#1700C7', '#D5DE00']
 }
 
 const colorFor = (ownerId) => colors.otherPlayers[ownerId % 3];
+const isTownFrom = (aTown, currentUser) => aTown.ownerId === currentUser
 
-const randomNumber = (to) => Math.floor(Math.random() * to);
-
-
+export const paintBy = (town, currentUser) => ({
+  'fill-color':  isTownFrom(town, currentUser.id) ? colors.current : (!town.ownerId ? colors.unOwned : colorFor(town.ownerId)),
+  'fill-opacity': 0.5
+  })
 
 const accentsMap = {
   a: 'á|à|ã|â|À|Á|Ã|Â',

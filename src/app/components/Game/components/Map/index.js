@@ -1,8 +1,8 @@
-import React, { useState, useRef} from 'react';
-import ReactMapboxGl, { Source, Layer } from "react-mapbox-gl";
+import React, { useState } from 'react';
+import ReactMapboxGl, { Source, Layer, Popup } from "react-mapbox-gl";
 import './index.css'
 import { test } from '../../../../../departamentos-misiones'
-import { getGeoJsonAreas, upperSlugify } from './utils'
+import { getGeoJsonAreas, upperSlugify, paintBy } from './utils'
 
 const styles = {
   width: "100vw",
@@ -15,9 +15,14 @@ const MapboxMap = ReactMapboxGl({
   scrollZoom: false,
   dragPan: false,
   dragRotate: false,
+  logoPosition: 'top-left'
 });
 
-function Map({ center, province }) {
+// setPaintProperty(layerId)
+
+function Map({ center, province, currentUser }) {
+  const [selectedTowns, setSelectedTowns] = useState(null);
+
   const geoJsonAreas = getGeoJsonAreas(test, province.towns)
     return (
         <MapboxMap 
@@ -25,6 +30,7 @@ function Map({ center, province }) {
         style="mapbox://styles/mapbox/light-v8"
         center={center}
         zoom={[7]}
+        onStyleLoad={(map) => map.getCanvas().style.cursor = 'default'}
         >
           {province.towns.map(town => (
             <Source 
@@ -37,11 +43,16 @@ function Map({ center, province }) {
           ))}
           
           {province.towns.map(town => (
-            <Layer type='fill' sourceId={town.name} paint={{
-              'fill-color': '#088',
-              'fill-opacity': 0.8
-            }} />
+            <Layer 
+              type='fill' 
+              sourceId={town.name} 
+              paint={paintBy(town, currentUser)}
+              onClick={(e) => console.log(e.features)}
+              onMouseEnter={(e) => e.target.getCanvas().style.cursor = 'pointer'}
+              onMouseLeave={(e) => e.target.getCanvas().style.cursor = 'default'}
+              />
           ))}
+          
         </MapboxMap>
     )
 }
