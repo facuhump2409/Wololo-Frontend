@@ -1,6 +1,7 @@
 import {Form, Formik, FormikConfig, FormikValues} from "formik";
 import React, {useState} from "react";
 import {Button} from "rsuite";
+import {Grid} from '@material-ui/core';
 import {makeStyles} from "@material-ui/core/styles";
 
 const useStyles = makeStyles(theme => ({
@@ -12,17 +13,17 @@ export function StepButton(props) {
     const {step} = props;
     const classes = useStyles()
     return (
-        <div>
+        <Grid container justify="flex-end">
             {step > 1 ? <Button onClick={() => props.goBack()}> Back </Button> : null }
-            <Button
+            <Button //style={{ flex: 1 }}
                 variant="contained"
                 color="primary"
                 type="submit"
-                className={classes.button}
+                // className={classes.button}
                 // onClick={props.setStep(step + 1)}
             >
                 {props.isLastStep() ? 'Create New Game' : 'Next'}
             </Button>
-        </div>
+        </Grid>
     )
 }

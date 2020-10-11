@@ -1,14 +1,19 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
+import { Box } from '@material-ui/core';
 import Typography from '@material-ui/core/Typography';
 import Slider from '@material-ui/core/Slider';
 
 const useStyles = makeStyles((theme) => ({
     root: {
-        width: 400,
+        width: "auto",
     },
     margin: {
         height: theme.spacing(3),
+    },
+    alignItemsAndJustifyContent: {
+        alignItems: 'center',
+        justifyContent: 'center',
     },
 }));
 
@@ -39,12 +44,13 @@ export default function DiscreteSlider(props) {
     }
 
     return (
-        <div className={classes.root}>
-            <Typography id="discrete-slider-always" gutterBottom>
+        <Box className={classes.root} m="auto">
+            <Typography id="discrete-slider-always" m="auto" gutterBottom>
                 Amount of towns
             </Typography>
             <Slider
-                defaultValue={6}
+                className={classes.alignItemsAndJustifyContent}
+                defaultValue={2}
                 getAriaValueText={valuetext}
                 max={20}
                 aria-labelledby="discrete-slider-always"
@@ -53,6 +59,6 @@ export default function DiscreteSlider(props) {
                 valueLabelDisplay="auto"
                 onChange={props.onChange}
             />
-        </div>
+        </Box>
     );
 }

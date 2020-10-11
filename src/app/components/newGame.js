@@ -11,10 +11,11 @@ import LoadingIndicator from "../loadingIndicator"
 import ErrorMessage from "./errorMessage";
 import SweetAlert from "react-bootstrap-sweetalert";
 import {StepButton} from "./stepButton";
-import {CardContent} from "@material-ui/core";
+import {CardContent,Box} from "@material-ui/core";
 import DiscreteSlider from "./slider";
 import Card from "@material-ui/core/Card";
 import { makeStyles } from '@material-ui/core/styles';
+import HorizontalLabelPositionBelowStepper from "./stepper";
 
 const BOOTSTRAP_CLASSES = {
     filter: 'form-control',
@@ -75,16 +76,13 @@ class NewGame extends React.Component {
     }
 
     renderStep(step, values, errors, touched,setFieldValue) {
-        const firstStep = <article className="examples__block" width="300px">
-            <h2 className="examples__block__title">
-                Select province
-            </h2>
+        const firstStep = <Box width="300px" m="auto">
             <div className="examples__block__info">
                 <div className="examples__block__info__item">
                     Selected Province: {this.state.selectedLocation}
                 </div>
             </div>
-            <div style={{width: "250px"}}>
+            <div style={{width: "200px"}}>
                 <RadioSVGMap
                     name="selectProvince"
                     map={Argentina}
@@ -96,7 +94,7 @@ class NewGame extends React.Component {
                 />
 
             </div>
-        </article>;
+        </Box>;
         switch (step) {
             case 1:
                 return firstStep;
@@ -104,8 +102,6 @@ class NewGame extends React.Component {
                 return <DiscreteSlider onChange={(e,val) => setFieldValue("towns",val)}/>;
             case 3:
                 return <form>
-                    <label>Select Users</label>
-
                     <div>
                         <FilteredMultiSelect
                             name="users"
@@ -238,11 +234,9 @@ class NewGame extends React.Component {
         return (
             <Card>
                 <CardContent>
-                    <label>Create New Game</label>
-
                     <Formik
                         // innerRef={ref}
-                        initialValues={{selectProvince: "", towns: "",selectedUsers: ""}}
+                        initialValues={{towns: "2"}}
                         validate={validate}
                         // validationSchema = {validator}
                         onSubmit={(values) => {
@@ -261,6 +255,7 @@ class NewGame extends React.Component {
                         >
                         {({ values, errors, touched ,setFieldValue}) => (
                             <Form>
+                                <HorizontalLabelPositionBelowStepper step={this.state.step}/>
                                 {this.renderStep(this.state.step, values, errors, touched,setFieldValue)}
                                 <StepButton step={this.state.step} goBack={this.goBackStep} isLastStep={this.isLastStep}/>
                             </Form>
