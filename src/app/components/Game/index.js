@@ -29,12 +29,12 @@ const Game = (props) => {
   }, [dispatch, props.match.params.id, activeGame, currentUser, inProgress, gameChanged, town])
 
   const handleHover = (town) => {
-    setTown(town)
+    if(!Object.values(selectedTowns).some(aTown => aTown && (town.id === aTown.id))) setTown(town)
   }
-
 
   const handleClick = (town) => {
     if(isMyTurn(activeGame, currentUser.id)) {
+      setTown(null)
       setSelectedTowns(!selectedTowns.town1 ? 
         { town1: isMyTown(town, currentUser.id) ? town : null, town2: null } : 
         (!selectedTowns.town2 ? 
@@ -78,7 +78,7 @@ const Game = (props) => {
           currentUser={currentUser}
            />
 
-          { town && <TownInfo style={{  
+          { (town || selectedTowns.town1) && <TownInfo style={{  
             width: '25%',
             position: 'absolute',
             backgroundColor: 'rgba(255,255,255,0.8)',

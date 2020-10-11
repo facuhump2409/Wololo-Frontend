@@ -39,11 +39,13 @@ function TownInfo({ town, style, onSpecializationChange, selectedTowns, currentU
       </div>
       )
       }
+      {town && (<div>
       <CardTitle>{town.name}</CardTitle>
       <CardText>Owner: {town.ownerId}</CardText>
       <CardText>Coordinates: LATITUDE {town.coordinates.lat}, LONGITUDE {town.coordinates.lon}</CardText>
       <CardText>gauchos quantity: {town.gauchos}</CardText>
       {isMyTown(town, currentUser) && <CardText>is locked: {town.isLocked.toString()}</CardText>}
+      </div>)}
     </CardBody>
   </Card>
   )
