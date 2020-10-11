@@ -9,6 +9,7 @@ const isTownFrom = (aTown, currentUser) => aTown.ownerId === currentUser
 
 export const paintBy = (town, currentUser) => ({
   'fill-color':  isTownFrom(town, currentUser.id) ? colors.current : (!town.ownerId ? colors.unOwned : colorFor(town.ownerId)),
+  'fill-outline-color': '#000',
   'fill-opacity': 0.5
   })
 

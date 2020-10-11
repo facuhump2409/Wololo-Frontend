@@ -3,7 +3,7 @@ import { useSelector, useDispatch } from 'react-redux'
 import {GET_GAME, PASS_TURN, SURRENDER} from '../../../redux/actionTypes';
 import {getGame, finishTurn, surrender} from '../../../services/games';
 import { getFromLocal } from '../../../services/localStorage'
-import { isMyTurn, isActive, isMyTown } from './utils'
+import { isMyTurn, isActive, isMyTown, isValidSelection } from './utils'
 import { Button } from 'reactstrap'
 import Map from './components/Map'
 import SweetAlert from "react-bootstrap-sweetalert";
@@ -39,7 +39,7 @@ const Game = (props) => {
       setTown(null)
       setSelectedTowns(!selectedTowns.town1 ? 
         { town1: isMyTown(town, currentUser.id) ? town : null, town2: null } : 
-        (!selectedTowns.town2 ? 
+        (!selectedTowns.town2 && isValidSelection(selectedTowns.town1, town) ? 
           { town1: selectedTowns.town1, town2: town } : 
           selectedTowns
         )

@@ -2,7 +2,7 @@ import React from 'react';
 import { CardText, CardTitle } from 'reactstrap'
 import { isMyTown } from '../../../../utils'
 
-function TownInfo({ town, selectedTown, hide, currentUser }) {
+function TownInfo({ town, hide, currentUser }) {
   return town && !hide && (
   <div>
     <CardTitle>{town.name}</CardTitle>
