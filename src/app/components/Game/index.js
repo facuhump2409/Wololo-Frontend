@@ -3,19 +3,19 @@ import { useSelector, useDispatch } from 'react-redux'
 import {GET_GAME, PASS_TURN, SURRENDER} from '../../../redux/actionTypes';
 import {getGame, finishTurn, surrender} from '../../../services/games';
 import { getFromLocal } from '../../../services/localStorage'
-import { isMyTurn, isActive } from './utils'
+import { isMyTurn, isActive, isMyTown } from './utils'
 import { Button } from 'reactstrap'
 import Map from './components/Map'
 import SweetAlert from "react-bootstrap-sweetalert";
 import './index.css'
+import TownInfo from './components/TownInfo';
 
 const Game = (props) => {
   const dispatch = useDispatch();
   const currentUser = getFromLocal('currentUser');
   const { activeGame, errors, inProgress, gameChanged } = useSelector(state => state.games)
   const [town, setTown] = useState(null);
-  const [selectedTowns, setSelectedTowns] = useState(null);
-  const [clicked, setClicked] = useState(false);
+  const [selectedTowns, setSelectedTowns] = useState({town1: null, town2: null});
   const [showSurrenderModal, setSurrenderModal] = useState(false);
   const [showTurnModal, setTurnModal] = useState(false);
 
@@ -28,20 +28,27 @@ const Game = (props) => {
     }
   }, [dispatch, props.match.params.id, activeGame, currentUser, inProgress, gameChanged, town])
 
-  const handleHover = (area) => {
-    if(!clicked) {
-      setTown(area.town);
+  const handleHover = (town) => {
+    setTown(town)
+  }
+
+
+  const handleClick = (town) => {
+    if(isMyTurn(activeGame, currentUser.id)) {
+      setSelectedTowns(!selectedTowns.town1 ? 
+        { town1: isMyTown(town, currentUser.id) ? town : null, town2: null } : 
+        (!selectedTowns.town2 ? 
+          { town1: selectedTowns.town1, town2: town } : 
+          selectedTowns
+        )
+      )
     }
   }
 
-
-  const handleClick = () => {
-    if(isMyTurn(activeGame, currentUser.id)) setClicked(true)
-  }
+  const handleReturn = () => setSelectedTowns({town1: null, town2: null})
 
   const handleSurrender = (showSurrenderModal) => {
     if (showSurrenderModal) {
-      console.log("Entre")
       dispatch({ type: SURRENDER, payload: surrender(activeGame.id) })
     }
     setSurrenderModal(false)
@@ -66,11 +73,25 @@ const Game = (props) => {
         <div>
           <Map center={[-54.6516966230371, -26.8753965086829]}
           province={activeGame.province}
-          handleHover={handleHover} 
-          handleClick={handleClick} 
-          currentUser={currentUser} />
+          onTownHover={handleHover} 
+          onTownClick={handleClick} 
+          currentUser={currentUser}
+           />
 
-          <div className='test'>abcd</div>
+          { town && <TownInfo style={{  
+            width: '25%',
+            position: 'absolute',
+            backgroundColor: 'rgba(255,255,255,0.8)',
+            bottom: '22px',
+            right: '2px',
+            zIndex: 2,
+            }} 
+            town={town} 
+            selectedTowns={selectedTowns}
+            currentUser={currentUser.id}
+            onSpecializationChange={handleReturn}
+            ></TownInfo>
+          }
           
           <div className=' d-flex justify-content-center col-6'>
           <Button color='danger' className='surrender' onClick={showModal}>Surrender</Button>

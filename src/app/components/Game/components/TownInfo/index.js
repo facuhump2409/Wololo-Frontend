@@ -7,94 +7,43 @@ import { getChangeSpecialization } from './utils'
 import {updateSpecialization, attackTown, getTownStats} from '../../../../../services/games'
 import {CHANGE_SPECIALIZATION, ATTACK_TOWN, TOWN_STATS} from '../../../../../redux/actionTypes'
 import TownModal from "../../../Modals/townModal";
+import { isMyTown } from '../../utils'
 
-function TownInfo({ activeGame, town, currentUserTowns, clicked, onReturn, currentUser }) {
-  const dispatch = useDispatch();
-  
-  const [movingGauchos, setMovingGauchos] = useState(false);
-  const [attacking, setAttacking] = useState(false);
-  const [showStats,setShowStats ] = useState(false);
+function TownInfo({ town, style, onSpecializationChange, selectedTowns, currentUser }) {
+  const dispatch = useDispatch()
 
-  const isTownFromUser = currentUser === town.ownerId;
-
-  const handleReturn = () => {
-    setMovingGauchos(false);
-    setAttacking(false);
-    onReturn();
-  }
-
-  const handleMoveGauchos = () => {
-    setMovingGauchos(!movingGauchos);
-  }
-
-  const onOpenStats = () => {
-    setShowStats(true)
-  }
-
-  const onCloseStats = () => {
-    setShowStats(false)
-  }
-
-  const handleChangeSpecialization = (specialization) => {
-    dispatch({ type: CHANGE_SPECIALIZATION, payload: updateSpecialization(activeGame.id, town.id, specialization) })
-    onReturn();
-  }
-
-  const handleAttack = () => {
-    setAttacking(!attacking)
+  const handleChangeSpecialization = (aTown, specialization) => {
+    dispatch({ type: CHANGE_SPECIALIZATION, payload: updateSpecialization(1004, aTown.id, specialization) })
+    onSpecializationChange()
   }
 
   return (
-  <Card>
-    <CardImg top width='100%' src={town.imageUrl} alt='Town Image' />
+  <Card style={style}>
     <CardBody>
-      <CardTitle>{town.name}</CardTitle>
-      {/*<CardText>Owner: {town.ownerId}</CardText>*/}
-      {/*<CardText>Coordinates: LATITUDE {town.coordinates.lat}, LONGITUDE {town.coordinates.lon}</CardText>*/}
-      {/*<CardText>gauchos quantity: {town.gauchos}</CardText>*/}
-      {<Button onClick={onOpenStats}> Show Stats </Button>}
-      {isTownFromUser ? <CardText>is locked: {town.isLocked.toString()}</CardText> : null}
-      {<TownModal display={showStats} town={town} close={onCloseStats}/>}
-      { clicked ? 
-      <div className='d-flex justify-content-around'>
-      <Button color='danger' onClick={handleReturn}>return</Button>
-      { isTownFromUser ? (
-        <div>
-        <Button 
-          color='info' 
-          onClick={() => handleChangeSpecialization(getChangeSpecialization[town.specialization])}
-          >
-          Change Specialization to {getChangeSpecialization[town.specialization].toLowerCase()}
-          </Button>
-
-        {!town.isLocked ?
-          <Button color='info' onClick={handleMoveGauchos}>add gauchos</Button> : null}
-        </div>)
-        : <Button color='primary' onClick={handleAttack}>attack</Button> 
-        }
+      {selectedTowns.town1 && (
+      <div>
+      <CardTitle>{selectedTowns.town1.name}</CardTitle>
+      <CardText>Owner: {selectedTowns.town1.ownerId}</CardText>
+      <CardText>Coordinates: LATITUDE {selectedTowns.town1.coordinates.lat}, LONGITUDE {selectedTowns.town1.coordinates.lon}</CardText>
+      <CardText>gauchos quantity: {selectedTowns.town1.gauchos}</CardText>
+      { isMyTown(selectedTowns.town1, currentUser) && <CardText>is locked: {selectedTowns.town1.isLocked.toString()}</CardText>}
+      { isMyTown(selectedTowns.town1, currentUser) && (
+          <Button 
+            color='info' 
+            onClick={() => handleChangeSpecialization(selectedTowns.town1, getChangeSpecialization[selectedTowns.town1.specialization])}
+            >
+            Change Specialization to {getChangeSpecialization[selectedTowns.town1.specialization].toLowerCase()}
+            </Button>) 
+          }
+      <CardText>---------------------------</CardText>
       </div>
-      : null 
+      )
       }
-      {
-        movingGauchos ? (
-          <GauchosForm 
-            currentGame={activeGame} 
-            currentTown={town} 
-            currentUserTowns={currentUserTowns} 
-            onBack={handleMoveGauchos} 
-            onMoveGauchos={handleReturn}/>
-      ) : null
-      }
-            {
-        attacking ? (
-          <AttackForm 
-            currentGame={activeGame}
-            currentTown={town} 
-            currentUserTowns={currentUserTowns} 
-            onBack={handleAttack} 
-            onAttack={handleReturn}/>
-      ) : null
-      }
+      <CardTitle>{town.name}</CardTitle>
+      <CardText>Owner: {town.ownerId}</CardText>
+      <CardText>Coordinates: LATITUDE {town.coordinates.lat}, LONGITUDE {town.coordinates.lon}</CardText>
+      <CardText>gauchos quantity: {town.gauchos}</CardText>
+      {isMyTown(town, currentUser) && <CardText>is locked: {town.isLocked.toString()}</CardText>}
     </CardBody>
   </Card>
   )
