@@ -7,6 +7,7 @@ export function StepGame({children, ...props}: FormikConfig<FormikValues>) {
 }
 
 export function StepsNewGame({children, ...props}) {
+    console.log("PROPS:",props.render)
     const childrenArray = React.Children.toArray(children)
     const [step,setStep] = useState(0)
     const currentChild = childrenArray[step]
