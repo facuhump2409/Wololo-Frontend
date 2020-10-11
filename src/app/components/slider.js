@@ -51,6 +51,7 @@ export default function DiscreteSlider(props) {
                 step={2}
                 marks={marks}
                 valueLabelDisplay="auto"
+                onChange={props.onChange}
             />
         </div>
     );

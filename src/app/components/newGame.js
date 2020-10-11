@@ -1,8 +1,7 @@
-import React, {useRef, useState} from 'react';
+import React from 'react';
 import {connect} from 'react-redux';
 import FilteredMultiSelect from 'react-filtered-multiselect'
-import {Field, Form, Formik} from "formik";
-import * as Yup from "yup";
+import {Form, Formik} from "formik";
 import {getUsers} from '../../services/users';
 import {createGame, getProvinces} from '../../services/games';
 import {CREATE_GAME, GET_PROVINCES, GET_USERS, REDIRECT_GAME} from '../../redux/actionTypes';
@@ -11,43 +10,11 @@ import {RadioSVGMap} from "react-svg-map/src/";
 import LoadingIndicator from "../loadingIndicator"
 import ErrorMessage from "./errorMessage";
 import SweetAlert from "react-bootstrap-sweetalert";
-import {StepGame, StepsNewGame} from "./stepsNewGame";
-import Box from "@material-ui/core/Box";
-import {TextField} from "formik-material-ui";
-import {object} from "yup";
-import {CardContent, Slider} from "@material-ui/core";
+import {StepButton} from "./stepButton";
+import {CardContent} from "@material-ui/core";
 import DiscreteSlider from "./slider";
 import Card from "@material-ui/core/Card";
 import { makeStyles } from '@material-ui/core/styles';
-import Typography from '@material-ui/core/Typography';
-
-const useStyles = makeStyles((theme) => ({
-    root: {
-        width: 400,
-    },
-    margin: {
-        height: theme.spacing(3),
-    },
-}));
-
-const marks = [
-    {
-        value: 4,
-        label: '4',
-    },
-    {
-        value: 8,
-        label: '8',
-    },
-    {
-        value: 14,
-        label: '14',
-    },
-    {
-        value: 20,
-        label: '20',
-    },
-];
 
 const BOOTSTRAP_CLASSES = {
     filter: 'form-control',
@@ -55,7 +22,14 @@ const BOOTSTRAP_CLASSES = {
     button: 'btn btn btn-block btn-default',
     buttonActive: 'btn btn btn-block btn-primary',
 }
-
+const useStyles = makeStyles(theme => ({
+    form: {
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "center",
+        alignItems: "center"
+    }
+}));
 
 const mapStateToProps = state => {
     return {
@@ -84,7 +58,7 @@ class NewGame extends React.Component {
             pointedLocation: null,
             focusedLocation: null,
             selectedLocation: null,
-            towns: 0
+            step: 1
         }
 
         this.handleLocationMouseOver = this.handleLocationMouseOver.bind(this);
@@ -94,19 +68,71 @@ class NewGame extends React.Component {
         this.handleOnChange = this.handleOnChange.bind(this);
         this.handleSelectionChange = this.handleSelectionChange.bind(this);
         this.handleDeselect = this.handleDeselect.bind(this);
-        this.handleTownChange = this.handleTownChange.bind(this);
+        this.renderStep = this.renderStep.bind(this);
+        this.goBackStep = this.goBackStep.bind(this);
+        this.isLastStep = this.isLastStep.bind(this);
+        this.nextStep = this.nextStep.bind(this);
     }
 
-    renderStep = (step, values, errors, touched) => {
+    renderStep(step, values, errors, touched,setFieldValue) {
+        const firstStep = <article className="examples__block" width="300px">
+            <h2 className="examples__block__title">
+                Select province
+            </h2>
+            <div className="examples__block__info">
+                <div className="examples__block__info__item">
+                    Selected Province: {this.state.selectedLocation}
+                </div>
+            </div>
+            <div style={{width: "250px"}}>
+                <RadioSVGMap
+                    name="selectProvince"
+                    map={Argentina}
+                    onLocationMouseOver={this.handleLocationMouseOver}
+                    onLocationMouseOut={this.handleLocationMouseOut}
+                    onLocationFocus={this.handleLocationFocus}
+                    onLocationBlur={this.handleLocationBlur}
+                    onChange={this.handleOnChange}
+                />
+
+            </div>
+        </article>;
         switch (step) {
             case 1:
-                return <FormFirstStep errors={errors} touched={touched} />;
+                return firstStep;
             case 2:
-                return <FormSecondStep errors={errors} touched={touched} />;
+                return <DiscreteSlider onChange={(e,val) => setFieldValue("towns",val)}/>;
             case 3:
-                return <FormSuccess values={values} />;
+                return <form>
+                    <label>Select Users</label>
+
+                    <div>
+                        <FilteredMultiSelect
+                            name="users"
+                            classNames={BOOTSTRAP_CLASSES}
+                            onChange={this.handleSelectionChange}
+                            options={this.users()}
+                            selectedOptions={this.state.selectedUsers}
+                        />
+
+
+                        {this.state.selectedUsers.length === 0 && <p>(nothing selected yet)</p>}
+                        {this.state.selectedUsers.length > 0 && <ul>
+                            {this.state.selectedUsers.map((user, i) => <li key={user.id}>
+                                {`${user.text} `}
+
+                                <button type="button"
+                                        onClick={() => this.handleDeselect(i)}>
+                                    &times;
+                                </button>
+                            </li>)}
+                        </ul>}
+                    </div>
+
+
+                </form>;
             default:
-                return <FormFirstStep errors={errors} touched={touched} />;
+                return firstStep
         }
     };
 
@@ -183,32 +209,30 @@ class NewGame extends React.Component {
 
     }
 
+    isLastStep() {
+        return this.state.step === 3
+    }
+    nextStep() {
+        this.setState({step: this.state.step + 1});
+    }
+
+    goBackStep() {
+        this.setState({step: this.state.step - 1});
+    }
+
     onGameCreated() {
         return this.props.finishedCreation ? this.props.redirectGame() : null
     }
 
     render() {
-        function valuetext(value) {
-            // props.setformValues(value)
-            return `${value} towns`;
-        }
-        // const classes = useStyles();
-        const selectedUsers = this.state.selectedUsers;
-        // const validator= Yup.object().shape({
-        //     // selectProvince: Yup.string()
-        //     //     .required("Please select a state"),
-        //     towns: Yup.number().required("Please enter the number of towns")
-
-        // })
         const validate = values => {
             const errors = {};
-            if (!values.selectProvince) {
-                errors.selectProvince = "Required";
-            }
 
             if (values.towns === 0) {
                 errors.towns = "Please select at least two towns";
             }
+
+            // if(!values.selectedUsers)
 
             return errors;
         };
@@ -224,123 +248,25 @@ class NewGame extends React.Component {
                         validate={validate}
                         // validationSchema = {validator}
                         onSubmit={(values) => {
-                            console.log("state:",this.state)
+                            if (this.state.step < 3) {
+                                this.nextStep()
+                                return
+                            }
+                            console.log("VALUES:",values)
                             this.props.createGame({
-                                provinceName: values.selectProvince,//this.state.selectedLocation,
+                                provinceName: this.state.selectedLocation,
                                 townAmount: parseInt(values.towns),
-                                participantsIds: values.selectedUsers.map(user => user.value),//this.state.selectedUsers.map(user => user.value),
+                                participantsIds: this.state.selectedUsers.map(user => user.value),
                             })
                                 .setSubmitting(false);
                         }}
                         >
-                    {/*render={({*/}
-                    {/*             values,*/}
-                    {/*             errors,*/}
-                    {/*             handleSubmit,*/}
-                    {/*             handleChange,*/}
-                    {/*             isSubmitting,*/}
-                    {/*             setFieldValue*/}
-                    {/*         }) => (*/}
-                    <form>
-                        <article className="examples__block" width="300px">
-                            <h2 className="examples__block__title">
-                                Select province
-                            </h2>
-                            <div className="examples__block__info">
-                                <div className="examples__block__info__item">
-                                    Selected Province: {this.state.selectedLocation}
-                                </div>
-                            </div>
-                            <div style={{width: "250px"}}>
-                                <RadioSVGMap
-                                    name="selectProvince"
-                                    map={Argentina}
-                                    onLocationMouseOver={this.handleLocationMouseOver}
-                                    onLocationMouseOut={this.handleLocationMouseOut}
-                                    onLocationFocus={this.handleLocationFocus}
-                                    onLocationBlur={this.handleLocationBlur}
-                                    onChange={this.handleOnChange}
-                                />
-
-                            </div>
-                        </article>
-                        <StepGame
-                            validationSchema={object({
-                                towns: Yup.number().required("Please enter the number of towns")
-                            })}>
-                            <Box paddingBottom={2}>
-                                {/*<div className={useStyles().root}>*/}
-                                    <Typography id="discrete-slider-always" gutterBottom>
-                                        Amount of towns
-                                    </Typography>
-                                    <Slider
-                                        id="towns"
-                                        name="towns"
-                                        defaultValue={someFuncton()}
-                                        getAriaValueText={valuetext}
-                                        max={20}
-                                        aria-labelledby="discrete-slider-custom"
-                                        step={2}
-                                        marks={marks}
-                                        // onChange={this.handleTownChange}
-                                        valueLabelDisplay="auto"
-                                    />
-                                {/*</div>*/}
-                                {/*<Field*/}
-                                {/*    // fullWidth*/}
-                                {/*    name="towns"*/}
-                                {/*    type="slider"*/}
-                                {/*    component={DiscreteSlider}*/}
-                                {/*    placeholder="Number of towns"*/}
-                                {/*/>*/}
-                            </Box>
-                        </StepGame>
-                        {/*<div className="form-group">*/}
-                        {/*    <input*/}
-                        {/*        name="towns"*/}
-                        {/*        // className="form-control"*/}
-                        {/*        type="number"*/}
-                        {/*        onChange={this.handleTownsChange}*/}
-                        {/*        placeholder="Number of towns"*/}
-                        {/*    />*/}
-                        {/*</div>*/}
-                        <label>Select Users</label>
-
-                        <div>
-                            <FilteredMultiSelect
-                                name="users"
-                                classNames={BOOTSTRAP_CLASSES}
-                                onChange={this.handleSelectionChange}
-                                options={this.users()}
-                                selectedOptions={selectedUsers}
-                            />
-
-
-                            {selectedUsers.length === 0 && <p>(nothing selected yet)</p>}
-                            {selectedUsers.length > 0 && <ul>
-                                {selectedUsers.map((user, i) => <li key={user.id}>
-                                    {`${user.text} `}
-
-                                    <button type="button"
-                                            onClick={() => this.handleDeselect(i)}>
-                                        &times;
-                                    </button>
-                                </li>)}
-                            </ul>}
-                        </div>
-
-
-                    </form>
-
-                {/*)}*/}
-
-                        {/*<button*/}
-                        {/*    className="btn btn-lg pull-xs-right btn-primary"*/}
-                        {/*    onClick={() => this.validateForm()}*/}
-                        {/*    type="submit"*/}
-                        {/*>*/}
-                        {/*    Create New Game*/}
-                        {/*</button>*/}
+                        {({ values, errors, touched ,setFieldValue}) => (
+                            <Form>
+                                {this.renderStep(this.state.step, values, errors, touched,setFieldValue)}
+                                <StepButton step={this.state.step} goBack={this.goBackStep} isLastStep={this.isLastStep}/>
+                            </Form>
+                        )}
                     </Formik>
                     <LoadingIndicator display={this.props.inProgress}/>
                     <ErrorMessage errors={this.props.gamesErrors}/>
