@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
-import {GET_GAME, PASS_TURN, SURRENDER} from '../../../redux/actionTypes';
+import {GET_GAME, PASS_TURN, REDIRECT_GAME, SURRENDER} from '../../../redux/actionTypes';
 import {getGame, finishTurn, surrender} from '../../../services/games';
 import { getFromLocal } from '../../../services/localStorage'
 import { isMyTurn, isActive, isMyTown, isValidSelection } from './utils'
@@ -36,11 +36,12 @@ const Game = (props) => {
       socket.on('update', () => dispatch({ type: GET_GAME, payload: getGame(props.match.params.id) }));
 
       if(gameChanged) {
-        if(isActive(activeGame)) {
-          socket.emit('notifyGameUpdate');
-        } else {
-          console.log('ended');
-        }
+        socket.emit('notifyGameUpdate');
+      }
+      debugger;
+      if(!isActive(activeGame)) {
+        console.log('test')
+        dispatch({ type: REDIRECT_GAME })
       }
       return () => socket.disconnect();
     }
