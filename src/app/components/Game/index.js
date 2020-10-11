@@ -107,8 +107,8 @@ const Game = (props) => {
           <Button color='danger' onClick={showModal}>Surrender</Button>
         </div>
         <SweetAlert
-            // warning
-            custom
+            warning
+            // custom
             showCancel
             confirmBtnText="Yes, I forfeit"
             confirmBtnBsStyle="danger"
@@ -116,7 +116,7 @@ const Game = (props) => {
             onConfirm={() => handleSurrender(showSurrenderModal)}
             onCancel={() => setSurrenderModal(false)}
             timeout={1000}
-            customIcon={process.env.PUBLIC_URL + "/carryOn.jpeg"}
+            // customIcon={carryOnIcon}
             show={showSurrenderModal}
             focusCancelBtn
         >
