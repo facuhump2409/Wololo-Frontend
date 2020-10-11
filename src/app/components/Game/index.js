@@ -8,7 +8,7 @@ import { Button } from 'reactstrap'
 import Map from './components/Map'
 import SweetAlert from "react-bootstrap-sweetalert";
 import './index.css'
-import TownInfo from './components/TownInfo';
+import TownActions from './components/TownActions';
 
 const Game = (props) => {
   const dispatch = useDispatch();
@@ -29,7 +29,9 @@ const Game = (props) => {
   }, [dispatch, props.match.params.id, activeGame, currentUser, inProgress, gameChanged, town])
 
   const handleHover = (town) => {
-    if(!Object.values(selectedTowns).some(aTown => aTown && (town.id === aTown.id))) setTown(town)
+    if(!Object.values(selectedTowns).some(aTown => aTown && (town.id === aTown.id))) {
+      setTown(town)
+    }
   }
 
   const handleClick = (town) => {
@@ -78,7 +80,7 @@ const Game = (props) => {
           currentUser={currentUser}
            />
 
-          { (town || selectedTowns.town1) && <TownInfo style={{  
+          <TownActions style={{  
             width: '25%',
             position: 'absolute',
             backgroundColor: 'rgba(255,255,255,0.8)',
@@ -86,12 +88,12 @@ const Game = (props) => {
             right: '2px',
             zIndex: 2,
             }} 
-            town={town} 
+            hoveredTown={town} 
             selectedTowns={selectedTowns}
             currentUser={currentUser.id}
-            onSpecializationChange={handleReturn}
-            ></TownInfo>
-          }
+            currentGame={activeGame.id}
+            onChange={handleReturn}
+            ></TownActions>
           
           <div className=' d-flex justify-content-center col-6'>
           <Button color='danger' className='surrender' onClick={showModal}>Surrender</Button>

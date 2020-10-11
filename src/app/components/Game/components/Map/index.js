@@ -3,7 +3,7 @@ import ReactMapboxGl, { Source, Layer, Popup } from "react-mapbox-gl";
 import './index.css'
 import { test } from '../../../../../departamentos-misiones'
 import { getGeoJsonAreas, upperSlugify, paintBy } from './utils'
-import TownInfo from '../TownInfo'
+import TownActions from '../TownActions'
 
 const styles = {
   width: "100vw",
