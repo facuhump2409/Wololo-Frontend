@@ -11,14 +11,12 @@ const styles = {
 };
 
 const MapboxMap = ReactMapboxGl({
-  accessToken: 'pk.eyJ1IjoidGVvbm5uIiwiYSI6ImNrZzAwY3RoMjBqbHAydXBpMHFyeXQ2bjYifQ.aZZR74OETObsUi2tCtNbWg',
+  accessToken: process.env.REACT_APP_MAPS_KEY,
   doubleClickZoom: false,
   scrollZoom: false,
   dragRotate: false,
   logoPosition: 'top-left'
 });
-
-// setPaintProperty(layerId)
 
 function Map({ center, province, currentUser, onTownHover, onTownClick }) {
   const geoJsonAreas = getGeoJsonAreas(test, province.towns)
