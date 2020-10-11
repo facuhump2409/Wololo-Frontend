@@ -47,10 +47,18 @@ export default function(state = initialState, action) {
                 games: action.payload
             }
         case GET_GAME:
+            return {
+                ...state,
+                inProgress: false,
+                errors: action.error ? action.payload.message : null,
+                activeGame: action.payload,
+                gameChanged: false
+            }
         case MOVE_GAUCHOS:
         case CHANGE_SPECIALIZATION:
         case ATTACK_TOWN:
         case PASS_TURN:
+        case SURRENDER:
             return {
                 ...state,
                 inProgress: false,
@@ -69,13 +77,6 @@ export default function(state = initialState, action) {
                 inProgress: false,
                 errors: action.error ? action.payload.message : null,
                 finishedCreation: !action.error
-            }
-        case SURRENDER:
-            return {
-                ...state,
-                inProgress: false,
-                errors: action.error ? action.payload.message : null,
-                redirectTo: '/games'
             }
         default:
             return state;

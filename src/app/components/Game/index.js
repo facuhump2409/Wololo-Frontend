@@ -1,4 +1,4 @@
-import React, { useState, useEffect} from 'react'
+import React, { useState, useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import {GET_GAME, PASS_TURN, SURRENDER} from '../../../redux/actionTypes';
 import {getGame, finishTurn, surrender} from '../../../services/games';
@@ -7,6 +7,7 @@ import { isMyTurn, isActive, isMyTown, isValidSelection } from './utils'
 import { Button } from 'reactstrap'
 import Map from './components/Map'
 import SweetAlert from "react-bootstrap-sweetalert";
+import socketIOClient from 'socket.io-client';
 import './index.css'
 import TownActions from './components/TownActions';
 
@@ -27,6 +28,23 @@ const Game = (props) => {
       setTown(town ? activeGame.province.towns.find(aTown => aTown.id === town.id) : null)
     }
   }, [dispatch, props.match.params.id, activeGame, currentUser, inProgress, gameChanged, town])
+
+  useEffect(() => {
+    if(activeGame) {
+      const socket = socketIOClient(process.env.REACT_APP_SOCKET_URL);
+      socket.emit('joinGameRoom', activeGame.id)
+      socket.on('update', () => dispatch({ type: GET_GAME, payload: getGame(props.match.params.id) }));
+
+      if(gameChanged) {
+        if(isActive(activeGame)) {
+          socket.emit('notifyGameUpdate');
+        } else {
+          console.log('ended');
+        }
+      }
+      return () => socket.disconnect();
+    }
+  }, [activeGame, dispatch, gameChanged, props.match.params.id])
 
   const handleHover = (town) => {
     if(!Object.values(selectedTowns).some(aTown => aTown && (town.id === aTown.id))) {

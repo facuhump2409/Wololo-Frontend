@@ -17,7 +17,6 @@ const MapboxMap = ReactMapboxGl({
   dragRotate: false,
   logoPosition: 'top-left'
 });
-
 function Map({ center, province, currentUser, onTownHover, onTownClick }) {
   const geoJsonAreas = getGeoJsonAreas(test, province.towns)
     return (

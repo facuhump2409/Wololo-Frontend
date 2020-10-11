@@ -19,7 +19,6 @@ export default (state = initialState, action) => {
         case LOGIN:
         case SIGNUP:
         case REDIRECT_GAME:
-        case PASS_TURN:
             return {
                 ...state,
                 redirectTo: action.error ? null : '/games',
