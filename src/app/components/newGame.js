@@ -232,8 +232,6 @@ class NewGame extends React.Component {
                 errors.towns = "Please select at least two towns";
             }
 
-            // if(!values.selectedUsers)
-
             return errors;
         };
 
