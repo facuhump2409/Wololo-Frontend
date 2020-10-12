@@ -24,7 +24,7 @@ const accentsMap = {
 
 export const slugify = text => Object.keys(accentsMap).reduce((acc, cur) => acc.replace(new RegExp(accentsMap[cur], 'g'), cur), text);
 
-export const upperSlugify = text => slugify(text).toUpperCase()
+export const upperSlugify = text => slugify(text).toUpperCase().split('.').join('')
 
 export const getGeoJsonAreas = (geojson, towns) => geojson.map(feature => ({
   ...feature.features[0], 
