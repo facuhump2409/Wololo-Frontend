@@ -3,12 +3,8 @@ import rootReducer from './reducers'
 import {localStorageMiddleware, promiseMiddleware} from "./middleware";
 import { routerMiddleware } from 'react-router-redux'
 import { createBrowserHistory } from "history";
-// import {
-//     adminReducer,
-//     USER_LOGOUT,
-// } from 'react-admin';
 
-export const history =  createBrowserHistory()
+const history =  createBrowserHistory()
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 const myRouterMiddleware = routerMiddleware(history);
 // const resettableAppReducer = (state, action) =>
