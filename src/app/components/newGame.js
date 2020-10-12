@@ -16,6 +16,7 @@ import DiscreteSlider from "./slider";
 import Card from "@material-ui/core/Card";
 import { makeStyles } from '@material-ui/core/styles';
 import HorizontalLabelPositionBelowStepper from "./stepper";
+import {getFromLocal} from "../../services/localStorage";
 
 const BOOTSTRAP_CLASSES = {
     filter: 'form-control',
@@ -175,7 +176,8 @@ class NewGame extends React.Component {
     };
 
     users() {
-        return !this.props.errors ? this.props.users.map((user) => ({value: user.id, text: user.username})) : []
+        const currentUser = getFromLocal('currentUser').username;
+        return !this.props.errors ? this.props.users.filter((user) => user.username !== currentUser).map((user) => ({value: user.id, text: user.username})) : []
     }
 
     provinces() {
