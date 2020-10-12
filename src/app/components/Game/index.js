@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
-import {GET_GAME, PASS_TURN, REDIRECT_GAME, SURRENDER} from '../../../redux/actionTypes';
-import {getGame, finishTurn, surrender} from '../../../services/games';
+import {GET_GAME, GET_MAP, PASS_TURN, REDIRECT_GAME, SURRENDER} from '../../../redux/actionTypes';
+import {getGame, finishTurn, surrender, getMap} from '../../../services/games';
 import { getFromLocal } from '../../../services/localStorage'
-import { isMyTurn, isActive, isMyTown, isValidSelection } from './utils'
+import { isMyTurn, isActive, isMyTown, isValidSelection, mapTowns } from './utils'
 import { Button } from 'reactstrap'
 import Map from './components/Map'
 import SweetAlert from "react-bootstrap-sweetalert";
@@ -14,23 +14,28 @@ import TownActions from './components/TownActions';
 const Game = (props) => {
   const dispatch = useDispatch();
   const currentUser = getFromLocal('currentUser');
-  const { activeGame, errors, inProgress, gameChanged } = useSelector(state => state.games)
+  const { activeGame, map, errors, inProgress, gameChanged } = useSelector(state => state.games)
   const [town, setTown] = useState(null);
   const [selectedTowns, setSelectedTowns] = useState({town1: null, town2: null});
   const [showSurrenderModal, setSurrenderModal] = useState(false);
   const [showTurnModal, setTurnModal] = useState(false);
+  const [showFinishedModal, setFinishedModal] = useState(false);
 
   useEffect(() => {
     if(!activeGame && !inProgress) { 
       dispatch({ type: GET_GAME, payload: getGame(props.match.params.id) })
-    } 
+    } else if(!map && isActive(activeGame)) {
+        const mappedTowns = mapTowns(activeGame.province.towns);
+        debugger;
+        dispatch({ type: GET_MAP, payload: getMap(activeGame.province.name, mappedTowns) })
+    }
     if(gameChanged && isActive(activeGame)) {
       setTown(town ? activeGame.province.towns.find(aTown => aTown.id === town.id) : null)
     }
-  }, [dispatch, props.match.params.id, activeGame, currentUser, inProgress, gameChanged, town])
+  }, [dispatch, props.match.params.id, activeGame, currentUser, inProgress, gameChanged, town, map])
 
   useEffect(() => {
-    if(activeGame) {
+    if(activeGame && map) {
       const socket = socketIOClient(process.env.REACT_APP_SOCKET_URL);
       socket.emit('joinGameRoom', activeGame.id)
       socket.on('update', () => dispatch({ type: GET_GAME, payload: getGame(props.match.params.id) }));
@@ -38,14 +43,14 @@ const Game = (props) => {
       if(gameChanged) {
         socket.emit('notifyGameUpdate');
       }
-      debugger;
-      if(!isActive(activeGame)) {
-        console.log('test')
-        dispatch({ type: REDIRECT_GAME })
-      }
+
       return () => socket.disconnect();
     }
-  }, [activeGame, dispatch, gameChanged, props.match.params.id])
+  }, [activeGame, dispatch, gameChanged, map, props.match.params.id])
+
+  const redirect = () => {
+    dispatch({ type: REDIRECT_GAME })
+  }
 
   const handleHover = (town) => {
     if(!Object.values(selectedTowns).some(aTown => aTown && (town.id === aTown.id))) {
@@ -92,13 +97,13 @@ const Game = (props) => {
     activeGame && isActive(activeGame) && !errors ? (
     <div>
         <div>
-          <Map center={[-54.6516966230371, -26.8753965086829]}
+          {map && <Map
           province={activeGame.province}
+          geojson={map}
           onTownHover={handleHover} 
           onTownClick={handleClick} 
           currentUser={currentUser}
-           />
-
+           />}
           <TownActions style={{  
             width: '25%',
             position: 'absolute',
@@ -150,7 +155,14 @@ const Game = (props) => {
         </div>
         
     ) :
-    <h1>No Active Game</h1>
+    <SweetAlert
+    info
+    title="The game ended!"
+    onConfirm={() => redirect()}
+    onCancel={() => redirect()}
+    // timeout={2000}
+    show
+          ></SweetAlert>
   )
 }
 

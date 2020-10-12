@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
-import ReactMapboxGl, { Source, Layer, Popup } from "react-mapbox-gl";
+import ReactMapboxGl, { Source, Layer, ZoomControl } from "react-mapbox-gl";
 import './index.css'
-import { test } from '../../../../../departamentos-misiones'
 import { getGeoJsonAreas, upperSlugify, paintBy } from './utils'
 import TownActions from '../TownActions'
 
@@ -13,26 +12,40 @@ const styles = {
 const MapboxMap = ReactMapboxGl({
   accessToken: process.env.REACT_APP_MAPS_KEY,
   doubleClickZoom: false,
-  scrollZoom: false,
   dragRotate: false,
   logoPosition: 'top-left'
 });
-function Map({ center, province, currentUser, onTownHover, onTownClick }) {
-  const geoJsonAreas = getGeoJsonAreas(test, province.towns)
+function Map({ province, geojson, currentUser, onTownHover, onTownClick }) {
+  const [mapProperties, setMapProperties] = useState({
+    center: [province.centroid.lon, province.centroid.lat],
+    zoom: [5]
+  });
+
+  const geoJsonAreas = getGeoJsonAreas(geojson, province.towns)
+
+  const handleMouseEnter = (e) => {
+    e.target.getCanvas().style.cursor = 'pointer'
+    onTownHover(JSON.parse(e.features[0].properties.town))
+  }
+
+  const handleMouseLeave = (e) => {
+    e.target.getCanvas().style.cursor = 'default'
+  }
+
     return (
         <MapboxMap 
         containerStyle={styles} 
         style="mapbox://styles/mapbox/light-v8"
-        center={center}
-        zoom={[7]}
+        center={mapProperties.center}
+        zoom={mapProperties.zoom}
         >
           {province.towns.map(town => (
             <Source 
               id={town.name} 
               geoJsonSource={{
                 type: 'geojson', 
-                data: geoJsonAreas.features.find(feature => 
-                  feature.properties.departamento === upperSlugify(town.name))
+                data: geoJsonAreas.find(feature => 
+                  feature.properties.town.name === town.name)
             }} />
           ))}
           
@@ -42,15 +55,11 @@ function Map({ center, province, currentUser, onTownHover, onTownClick }) {
               sourceId={town.name} 
               paint={paintBy(town, currentUser)}
               onClick={(e) => onTownClick(JSON.parse(e.features[0].properties.town))}
-              onMouseEnter={(e) => {
-                e.target.getCanvas().style.cursor = 'pointer'
-                onTownHover(JSON.parse(e.features[0].properties.town))
-              }}
-              onMouseLeave={(e) => {
-                e.target.getCanvas().style.cursor = 'default'
-              }}
+              onMouseEnter={handleMouseEnter}
+              onMouseLeave={handleMouseLeave}
               />
           ))}
+        <ZoomControl/>
         </MapboxMap>
     )
 }

@@ -27,11 +27,9 @@ export const slugify = text => Object.keys(accentsMap).reduce((acc, cur) => acc.
 
 export const upperSlugify = text => slugify(text).toUpperCase()
 
-export const getGeoJsonAreas = (geojson, towns) => {
-  const slugifiedTowns = towns.map(town => slugify(town.name).toUpperCase());
-
-  return { ...geojson, features: geojson.features
-    .filter(feature => slugifiedTowns.some(townName => townName === feature.properties.departamento))
-    .map(feature => ({...feature, properties: {...feature.properties, town: towns.find(town => upperSlugify(town.name) === feature.properties.departamento)}}))
-  }
-}
+export const getGeoJsonAreas = (geojson, towns) => geojson.map(feature => ({
+  ...feature.features[0], 
+  properties: {
+    ...feature.features[0].properties, 
+    town: towns.find(aTown => upperSlugify(aTown.name) === feature.features[0].properties.town)
+  }}))

@@ -8,6 +8,8 @@ export const getProvinces = api.get('/games/provinces');
 
 export const getGame = (gameId) => api.get(`/games/${gameId}`);
 
+export const getMap = (province, towns) => api.get(`/games/provinces/towns-geojsons?province=${province}&towns=${towns}`)
+
 export const surrender = (gameId) => api.put(`/games/${gameId}`);
 
 export const attackTown = (gameId,from,to) => api.post(`/games/${gameId}/actions/attack`,JSON.stringify({from: from, to: to}));
