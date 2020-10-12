@@ -4,7 +4,7 @@ export const getGames = () => api.get('/games')
 
 export const createGame = (provinceTownAndParticipants) => api.post('/games',provinceTownAndParticipants);
 
-export const getProvinces = api.get('/games/provinces');
+export const getProvinces = () => api.get('/games/provinces');
 
 export const getGame = (gameId) => api.get(`/games/${gameId}`);
 
