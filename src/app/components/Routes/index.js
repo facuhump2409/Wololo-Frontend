@@ -56,7 +56,7 @@ function RoutesContainer(props) {
                     <AuthenticatedRoute path='/games' component={Games} isAuthenticated={props.isAuthorized}/>
                     <AuthenticatedRoute path='/newGame' component={NewGame} isAuthenticated={props.isAuthorized}/>
                     <AuthenticatedRoute path='/game/:id' component={Game} isAuthenticated={props.isAuthorized}/>
-                    <Route path="/admin" component={AdminView}/>
+                    {/*<Route path="/admin" component={AdminView}/>*/}
                 </Switch>
             </div>
         </Router>
