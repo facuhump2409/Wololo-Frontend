@@ -19,7 +19,6 @@ const Game = (props) => {
   const [selectedTowns, setSelectedTowns] = useState({town1: null, town2: null});
   const [showSurrenderModal, setSurrenderModal] = useState(false);
   const [showTurnModal, setTurnModal] = useState(false);
-  const [showFinishedModal, setFinishedModal] = useState(false);
 
   useEffect(() => {
     if(!activeGame && !inProgress) { 
