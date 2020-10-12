@@ -15,6 +15,7 @@ import {signOut} from "../../../services/auth";
 import SignOutComponent from "../Login/SignOut";
 import {withRouter} from 'react-router'
 import api, { apiSetup } from '../../../api';
+import AdminView from "../Admin/adminView";
 
 const mapStateToProps = state => {
     return {
@@ -55,6 +56,7 @@ function RoutesContainer(props) {
                     <AuthenticatedRoute path='/games' component={Games} isAuthenticated={props.isAuthorized}/>
                     <AuthenticatedRoute path='/newGame' component={NewGame} isAuthenticated={props.isAuthorized}/>
                     <AuthenticatedRoute path='/game/:id' component={Game} isAuthenticated={props.isAuthorized}/>
+                    <Route path="/admin" component={AdminView}/>
                 </Switch>
             </div>
         </Router>
