@@ -1,8 +1,7 @@
 import React from 'react';
 import {connect} from 'react-redux';
 import FilteredMultiSelect from 'react-filtered-multiselect'
-import {Formik} from "formik";
-import * as Yup from "yup";
+import {Form, Formik} from "formik";
 import {getUsers} from '../../services/users';
 import {createGame, getProvinces} from '../../services/games';
 import {CREATE_GAME, GET_PROVINCES, GET_USERS, REDIRECT_GAME} from '../../redux/actionTypes';
@@ -11,6 +10,12 @@ import {RadioSVGMap} from "react-svg-map/src/";
 import LoadingIndicator from "../loadingIndicator"
 import ErrorMessage from "./errorMessage";
 import SweetAlert from "react-bootstrap-sweetalert";
+import {StepButton} from "./stepButton";
+import {CardContent,Box} from "@material-ui/core";
+import DiscreteSlider from "./slider";
+import Card from "@material-ui/core/Card";
+import { makeStyles } from '@material-ui/core/styles';
+import HorizontalLabelPositionBelowStepper from "./stepper";
 
 const BOOTSTRAP_CLASSES = {
     filter: 'form-control',
@@ -18,7 +23,14 @@ const BOOTSTRAP_CLASSES = {
     button: 'btn btn btn-block btn-default',
     buttonActive: 'btn btn btn-block btn-primary',
 }
-
+const useStyles = makeStyles(theme => ({
+    form: {
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "center",
+        alignItems: "center"
+    }
+}));
 
 const mapStateToProps = state => {
     return {
@@ -46,7 +58,8 @@ class NewGame extends React.Component {
             selectedUsers: [],
             pointedLocation: null,
             focusedLocation: null,
-            selectedLocation: null
+            selectedLocation: null,
+            step: 1
         }
 
         this.handleLocationMouseOver = this.handleLocationMouseOver.bind(this);
@@ -56,8 +69,68 @@ class NewGame extends React.Component {
         this.handleOnChange = this.handleOnChange.bind(this);
         this.handleSelectionChange = this.handleSelectionChange.bind(this);
         this.handleDeselect = this.handleDeselect.bind(this);
-
+        this.renderStep = this.renderStep.bind(this);
+        this.goBackStep = this.goBackStep.bind(this);
+        this.isLastStep = this.isLastStep.bind(this);
+        this.nextStep = this.nextStep.bind(this);
     }
+
+    renderStep(step, values, errors, touched,setFieldValue) {
+        const firstStep = <Box width="300px" m="auto">
+            <div className="examples__block__info">
+                <div className="examples__block__info__item">
+                    Selected Province: {this.state.selectedLocation}
+                </div>
+            </div>
+            <div style={{width: "200px"}}>
+                <RadioSVGMap
+                    name="selectProvince"
+                    map={Argentina}
+                    onLocationMouseOver={this.handleLocationMouseOver}
+                    onLocationMouseOut={this.handleLocationMouseOut}
+                    onLocationFocus={this.handleLocationFocus}
+                    onLocationBlur={this.handleLocationBlur}
+                    onChange={this.handleOnChange}
+                />
+
+            </div>
+        </Box>;
+        switch (step) {
+            case 1:
+                return firstStep;
+            case 2:
+                return <DiscreteSlider onChange={(e,val) => setFieldValue("towns",val)}/>;
+            case 3:
+                return <form>
+                    <div>
+                        <FilteredMultiSelect
+                            name="users"
+                            classNames={BOOTSTRAP_CLASSES}
+                            onChange={this.handleSelectionChange}
+                            options={this.users()}
+                            selectedOptions={this.state.selectedUsers}
+                        />
+
+
+                        {this.state.selectedUsers.length === 0 && <p>(nothing selected yet)</p>}
+                        {this.state.selectedUsers.length > 0 && <ul>
+                            {this.state.selectedUsers.map((user, i) => <li key={user.id}>
+                                {`${user.text} `}
+
+                                <button type="button"
+                                        onClick={() => this.handleDeselect(i)}>
+                                    &times;
+                                </button>
+                            </li>)}
+                        </ul>}
+                    </div>
+
+
+                </form>;
+            default:
+                return firstStep
+        }
+    };
 
     getLocationName(event) {
         return event.target.attributes.name.value;
@@ -122,13 +195,25 @@ class NewGame extends React.Component {
 
     validateForm() {
         const provinces = this.provinces();
-        if (provinces.includes(this.state.selectedLocation)) {
-            console.log(this.state.selectedLocation + "Included")
-            return true
-        } else {
-            return false
-        }
+        return provinces.includes(this.state.selectedLocation)
+        // if (provinces.includes(this.state.selectedLocation)) {
+        //     console.log(this.state.selectedLocation + "Included")
+        //     return true
+        // } else {
+        //     return false
+        // }
 
+    }
+
+    isLastStep() {
+        return this.state.step === 3
+    }
+    nextStep() {
+        this.setState({step: this.state.step + 1});
+    }
+
+    goBackStep() {
+        this.setState({step: this.state.step - 1});
     }
 
     onGameCreated() {
@@ -136,145 +221,62 @@ class NewGame extends React.Component {
     }
 
     render() {
-        const selectedUsers = this.state.selectedUsers;
-        console.log("in progress:", this.props.inProgress)
+        const validate = values => {
+            const errors = {};
+
+            if (values.towns === 0) {
+                errors.towns = "Please select at least two towns";
+            }
+
+            return errors;
+        };
+
         return (
-            <div>
-                <div className="container page">
-                    <div className="row">
-                        <div className="col-md-10 offset-md-1 col-xs-12">
-                            <label>Create New Game</label>
-
-                            <Formik
-                                initialValues={{selectProvince: "", towns: ""}}
-                                onSubmit={(values) => {
-                                    this.props.createGame({
-                                        provinceName: this.state.selectedLocation,
-                                        townAmount: parseInt(values.towns),
-                                        participantsIds: this.state.selectedUsers.map(user => user.value),
-                                    })
-                                        .setSubmitting(false);
-                                }}
-                                validator={() => Yup.object().shape({
-                                    selectProvince: Yup.string()
-                                        .required("Please select a state"),
-                                    towns: Yup.number().required("Please enter the number of towns")
-                                })
-                                }>
-                                {
-                                    props => {
-                                        const {
-                                            handleSubmit,
-                                            handleChange,
-                                            errors,
-                                            touched
-                                        } = props;
-                                        return (<form onSubmit={handleSubmit}>
-                                            <fieldset>
-                                                <fieldset width="300px">
-                                                    <article className="examples__block" width="300px">
-                                                        <h2 className="examples__block__title">
-                                                            Select province
-                                                        </h2>
-                                                        <div className="examples__block__info">
-                                                            <div className="examples__block__info__item">
-                                                                Selected Province: {this.state.selectedLocation}
-                                                            </div>
-                                                        </div>
-                                                        <div style={{width: "300px"}}>
-                                                            <RadioSVGMap
-                                                                name="selectProvince"
-                                                                map={Argentina}
-                                                                onLocationMouseOver={this.handleLocationMouseOver}
-                                                                onLocationMouseOut={this.handleLocationMouseOut}
-                                                                onLocationFocus={this.handleLocationFocus}
-                                                                onLocationBlur={this.handleLocationBlur}
-                                                                onChange={this.handleOnChange}
-                                                            />
-
-                                                        </div>
-                                                    </article>
-                                                </fieldset>
-                                                {errors.selectProvince && touched.selectProvince && (
-                                                    <div className="input-feedback">{errors.selectProvince}</div>
-                                                )}
-
-
-                                                <fieldset className="form-group">
-                                                    <input
-                                                        name="towns"
-                                                        className="form-control"
-                                                        type="text"
-                                                        onChange={handleChange}
-                                                        placeholder="Number of towns"
-                                                    />
-                                                </fieldset>
-                                                {errors.towns && touched.towns && (
-                                                    <div className="input-feedback">{errors.towns}</div>
-                                                )}
-
-
-                                                <fieldset className="form-group">
-                                                    <label>Select Users</label>
-
-                                                    <div>
-                                                        <FilteredMultiSelect
-                                                            name="users"
-                                                            classNames={BOOTSTRAP_CLASSES}
-                                                            onChange={this.handleSelectionChange}
-                                                            options={this.users()}
-                                                            selectedOptions={selectedUsers}
-                                                        />
-
-
-                                                        {selectedUsers.length === 0 && <p>(nothing selected yet)</p>}
-                                                        {selectedUsers.length > 0 && <ul>
-                                                            {selectedUsers.map((user, i) => <li key={user.id}>
-                                                                {`${user.text} `}
-
-                                                                <button type="button"
-                                                                        onClick={() => this.handleDeselect(i)}>
-                                                                    &times;
-                                                                </button>
-                                                            </li>)}
-                                                        </ul>}
-                                                    </div>
-
-
-                                                </fieldset>
-
-                                                <button
-                                                    className="btn btn-lg pull-xs-right btn-primary"
-                                                    onClick={() => this.validateForm()}
-                                                    type="submit"
-                                                >
-                                                    Create New Game
-                                                </button>
-
-                                            </fieldset>
-                                        </form>)
-                                    }
-                                }
-                            </Formik>
-                            <LoadingIndicator display={this.props.inProgress}/>
-                            <ErrorMessage errors={this.props.gamesErrors}/>
-                            <SweetAlert
-                                success
-                                title="Game Created Succesfully!"
-                                onConfirm={() => this.onGameCreated()}
-                                onCancel={() => this.onGameCreated()}
-                                timeout={2000}
-                                show={this.props.finishedCreation}
-                            >
-                                Redirecting to all your games
-                            </SweetAlert>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            <Card>
+                <CardContent>
+                    <Formik
+                        // innerRef={ref}
+                        initialValues={{towns: "2"}}
+                        validate={validate}
+                        // validationSchema = {validator}
+                        onSubmit={(values) => {
+                            if (this.state.step < 3) {
+                                this.nextStep()
+                                return
+                            }
+                            console.log("VALUES:",values)
+                            this.props.createGame({
+                                provinceName: this.state.selectedLocation,
+                                townAmount: parseInt(values.towns),
+                                participantsIds: this.state.selectedUsers.map(user => user.value),
+                            })
+                                .setSubmitting(false);
+                        }}
+                        >
+                        {({ values, errors, touched ,setFieldValue}) => (
+                            <Form>
+                                <HorizontalLabelPositionBelowStepper step={this.state.step}/>
+                                {this.renderStep(this.state.step, values, errors, touched,setFieldValue)}
+                                <StepButton step={this.state.step} goBack={this.goBackStep} isLastStep={this.isLastStep}/>
+                            </Form>
+                        )}
+                    </Formik>
+                    <LoadingIndicator display={this.props.inProgress}/>
+                    <ErrorMessage errors={this.props.gamesErrors}/>
+                    <SweetAlert
+                        success
+                        title="Game Created Succesfully!"
+                        onConfirm={() => this.onGameCreated()}
+                        onCancel={() => this.onGameCreated()}
+                        timeout={2000}
+                        show={this.props.finishedCreation}
+                    >
+                        Redirecting to all your games
+                    </SweetAlert>
+                </CardContent>
+            </Card>
         );
     }
-
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(NewGame);
