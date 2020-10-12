@@ -1,8 +1,18 @@
 /*eslint-env node*/
 const path = require('path');
+const { DefinePlugin } = require('webpack')
+const dotenv = require('dotenv')
 const HtmlWebPackPlugin = require('html-webpack-plugin');
 
 module.exports = (env, options) => {
+
+	const envVariables = dotenv.config().parsed
+
+	const envKeys = Object.keys(envVariables).reduce((prev, next) => {
+    prev[`process.env.${next}`] = JSON.stringify(envVariables[next]);
+    return prev;
+  }, {});
+
 	return {
 		entry: './src/index.js',
 		output: {
@@ -73,6 +83,7 @@ module.exports = (env, options) => {
 			extensions: ['.json', '.js', '.jsx'],
 		},
 		plugins: [
+			new DefinePlugin(envKeys),
 			new HtmlWebPackPlugin({
 				template: './public/index.html',
 				filename: './index.html'

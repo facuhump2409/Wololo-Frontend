@@ -2,3 +2,15 @@
   display: flex;
   justify-content: center;
 }
+
+.surrender {
+  position: absolute;
+  bottom: 5px;
+  left: 5px;
+}
+
+.pass {
+  position: absolute;
+  bottom: 5px;
+  left: 110px;
+}

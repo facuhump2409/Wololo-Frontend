@@ -5,6 +5,7 @@
   "main": "./build/index.js",
   "dependencies": {
     "@material-ui/core": "^4.11.0",
+    "@material-ui/icons": "^4.9.1",
     "@svg-maps/australia": "^1.1.1",
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^9.3.2",
@@ -14,6 +15,7 @@
     "babel-core": "^6.26.3",
     "bootstrap": "^4.5.2",
     "email-validator": "^2.0.4",
+    "mapbox-gl": "^1.12.0",
     "formik": "^2.1.7",
     "formik-material-ui": "^3.0.0",
     "node-sass": "^4.14.1",
@@ -25,6 +27,7 @@
     "react-google-login": "^5.1.21",
     "react-image-mapper": "github:Maxi-F/react-image-mapper#master",
     "react-loader-spinner": "^3.1.14",
+    "react-mapbox-gl": "^4.8.6",
     "react-promise-tracker": "^2.1.0",
     "react-redux": "^7.2.1",
     "react-router-dom": "^5.2.0",
@@ -35,6 +38,7 @@
     "redux": "^4.0.5",
     "redux-thunk": "^2.3.0",
     "rsuite": "^4.8.2",
+    "socket.io-client": "^2.3.1",
     "yup": "^0.29.3"
   },
   "scripts": {

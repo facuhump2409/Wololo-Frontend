@@ -1,7 +1,15 @@
 area {
   display: block;
 }
-
+.mapContainer {
+  position: relative;
+  width: 100vw;
+  height: 80vh;
+  top: 0;
+  right: 0;
+  left: 0;
+  bottom: 0;
+}
 .test {
   border: 5px #000000 solid;
 }
