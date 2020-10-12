@@ -4,7 +4,6 @@ import common from "./common";
 import games from './games';
 import users from './users';
 import provinces from "./provinces";
-import {history} from "../store";
 
 export default combineReducers({
     auth,

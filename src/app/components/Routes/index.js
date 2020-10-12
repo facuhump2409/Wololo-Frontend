@@ -16,12 +16,13 @@ import SignOutComponent from "../Login/SignOut";
 import {withRouter} from 'react-router'
 import api, { apiSetup } from '../../../api';
 import AdminView from "../Admin/adminView";
-
+import AdminRoute from "./components/AuthenticatedRoute/adminRoute";
+import {getFromLocal} from "../../../services/localStorage";
 const mapStateToProps = state => {
     return {
         currentUser: state.common.currentUser,
         redirectTo: state.common.redirectTo,
-        isAuthorized: state.auth.isAuthorized
+        isAuthorized: state.auth.isAuthorized,
     }
 };
 
@@ -34,6 +35,8 @@ const mapDispatchToProps = dispatch => ({
 
 function RoutesContainer(props) {
     const dispatch = useDispatch()
+    const isAdmin = getFromLocal('isAdmin')
+    console.log("ADMIN:",isAdmin)
     useEffect(() => {
         if (props.redirectTo) {
             props.history.push(props.redirectTo)
@@ -56,6 +59,7 @@ function RoutesContainer(props) {
                     <AuthenticatedRoute path='/games' component={Games} isAuthenticated={props.isAuthorized}/>
                     <AuthenticatedRoute path='/newGame' component={NewGame} isAuthenticated={props.isAuthorized}/>
                     <AuthenticatedRoute path='/game/:id' component={Game} isAuthenticated={props.isAuthorized}/>
+                    <AdminRoute path='/admin' component={AdminView} isAdmin={isAdmin}/>
                     {/*<Route path="/admin" component={AdminView}/>*/}
                 </Switch>
             </div>
