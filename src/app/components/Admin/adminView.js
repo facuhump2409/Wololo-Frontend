@@ -5,7 +5,6 @@ import {trackPromise} from "react-promise-tracker";
 import {GAMES_STATS} from "../../../redux/actionTypes";
 import {gamesStats} from "../../../services/admin";
 import {connect,useDispatch} from "react-redux";
-// import { DateRangePicker, DateRange } from "materialui-daterange-picker";
 import { DateRangePicker } from 'rsuite' ;
 
 const mapStateToProps = state => ({ ...state.admin });
