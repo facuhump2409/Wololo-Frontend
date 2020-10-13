@@ -1,34 +1,55 @@
 import 'rsuite/dist/styles/rsuite-default.css';
-import React, {useEffect,useState} from 'react'
+import React, {useEffect, useState} from 'react'
 import GamesPieChart from "./gamesPieChart";
-import {trackPromise} from "react-promise-tracker";
 import {GAMES_STATS} from "../../../redux/actionTypes";
 import {gamesStats} from "../../../services/admin";
-import {connect,useDispatch} from "react-redux";
-import { DateRangePicker } from 'rsuite' ;
+import {connect, useDispatch} from "react-redux";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 
-const mapStateToProps = state => ({ ...state.admin });
-const { combine, allowedMaxDays, afterToday } = DateRangePicker;
-function AdminView (props){
+
+const mapStateToProps = state => ({...state.admin});
+const {combine, allowedMaxDays, afterToday, allowedDays} = DatePicker;
+
+function AdminView(props) {
     const [open, setOpen] = useState(false);
-    const [dateRange, setDateRange] = useState({});
     const toggle = () => setOpen(!open);
     const dispatch = useDispatch()
+    const [startDate, setStartDate] = useState(new Date());
+    const [endDate, setEndDate] = useState(null);
+    const onChange = dates => {
+        const [start, end] = dates;
+        setStartDate(start);
+        setEndDate(end);
+        dispatch({type: GAMES_STATS, payload: gamesStats(start, end)})
+    };
+
 
     useEffect(() => {
-        dispatch({ type: GAMES_STATS, payload: gamesStats() });
+        dispatch({type: GAMES_STATS, payload: gamesStats()});
     }, [dispatch])
 
-    function onChangeDate(to,from) {
-        dispatch({type: GAMES_STATS, payload: gamesStats(from,to)})
-    }
+
     return (
         <div>
+
             <h3>Games Statistics</h3>
-            <DateRangePicker defaultOpen= {true} placeholder="Select Date Range" disabledDate={combine(allowedMaxDays(100),afterToday())}/>
+            <div>
+                <DatePicker    selected={startDate}
+                               onChange={onChange}
+                               startDate={startDate}
+                               endDate={endDate}
+                               selectsRange
+                               inline
+                               />
+            </div>
             <GamesPieChart data={props.gamesStats}/>
+
         </div>
-    );
+
+
+    )
+        ;
 }
 
 export default connect(mapStateToProps, null)(AdminView);
