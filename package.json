@@ -14,7 +14,6 @@
     "axios": "^0.20.0",
     "babel-core": "^6.26.3",
     "bootstrap": "^4.5.2",
-    "canvasjs": "^1.8.3",
     "connected-react-router": "^6.8.0",
     "email-validator": "^2.0.4",
     "mapbox-gl": "^1.12.0",
@@ -43,6 +42,8 @@
     "redux-thunk": "^2.3.0",
     "rsuite": "^4.8.2",
     "socket.io-client": "^2.3.1",
+    "victory": "^35.2.0",
+    "victory-shared-events": "^35.2.0",
     "yup": "^0.29.3"
   },
   "scripts": {

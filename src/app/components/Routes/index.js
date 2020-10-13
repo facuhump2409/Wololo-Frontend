@@ -36,7 +36,6 @@ const mapDispatchToProps = dispatch => ({
 function RoutesContainer(props) {
     const dispatch = useDispatch()
     const isAdmin = getFromLocal('isAdmin')
-    console.log("ADMIN:",isAdmin)
     useEffect(() => {
         if (props.redirectTo) {
             props.history.push(props.redirectTo)
@@ -48,9 +47,7 @@ function RoutesContainer(props) {
     return (
         <Router>
             <div className="App">
-                <Header>
-
-                </Header>
+                <Header/>
                 <Switch>
                     <Route exact path='/' component={Home}/>
                     <Route path="/sign_in" component={ValidatedLoginForm}/>

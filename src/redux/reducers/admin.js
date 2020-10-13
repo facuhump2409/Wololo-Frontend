@@ -6,6 +6,10 @@ export default function(state = initialState, action) {
     switch(action.type) {
         case USER_STATS:
         case GAMES_STATS:
+            return {
+                ...state,
+                gamesStats: action.payload
+            }
         default:
             return state;
     }

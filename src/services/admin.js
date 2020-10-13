@@ -1,11 +1,13 @@
 import api from '../api'
-const today = new Date().toISOString().slice(0, 10)
-const monthBefore = today.setMonth(today.getMonth() - 1) //por default busque un mes para atras
+const today = new Date().toLocaleDateString()
+const monthBefore = new Date(
+    new Date().getFullYear(),
+    new Date().getMonth() - 1,
+    new Date().getDate()
+).toLocaleDateString(); //por default busque un mes para atras
 export const gamesStats = (from = today,to = monthBefore) => api.get('/games/stats', {
-        params: {
             from: from,
             to: to
-        }
 })
 
 export const userStats = (username) => api.get('/users/',username);

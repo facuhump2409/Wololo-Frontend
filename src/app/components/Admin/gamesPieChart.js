@@ -1,45 +1,69 @@
-/* App.js */
-import AdminView from "./adminView";
+import React from "react";
+import { VictoryPie,VictoryBar } from "victory";
+import {VictoryLabel} from "victory-core";
+import {VictorySharedEvents} from "victory-shared-events";
 
-var React = require('react');
-var Component = React.Component;
-var CanvasJSReact = require('./canvasjs.react');
-var CanvasJS = CanvasJSReact.CanvasJS;
-var CanvasJSChart = CanvasJSReact.CanvasJSChart;
-
-class GamesPieChart extends Component {
-    render() {
-        const options = {
-            animationEnabled: true,
-            exportEnabled: true,
-            theme: "dark2", // "light1", "dark1", "dark2"
-            title:{
-                text: "Trip Expenses"
-            },
-            data: [{
-                type: "pie",
-                indexLabel: "{label}: {y}%",
-                startAngle: -90,
-                dataPoints: [
-                    { y: 20, label: "Airfare" },
-                    { y: 24, label: "Food & Drinks" },
-                    { y: 20, label: "Accomodation" },
-                    { y: 14, label: "Transportation" },
-                    { y: 12, label: "Activities" },
-                    { y: 10, label: "Misc" }
-                ]
-            }]
-        }
-
-        return (
-            <div>
-                <CanvasJSChart options = {options}
-                    /* onRef={ref => this.chart = ref} */
-                />
-                {/*You can get reference to the chart instance as shown above using onRef. This allows you to access all chart properties and methods*/}
-            </div>
+function GamesPieChart(props) {
+    console.log("data dentro de pie",props.data)
+    return (
+        <div>
+            <svg viewBox="0 0 850 350">
+                <VictorySharedEvents
+                    events={[{
+                        childName: ["pie", "bar"],
+                        target: "data",
+                        eventHandlers: {
+                            onMouseOver: () => {
+                                return [{
+                                    childName: ["pie", "bar"],
+                                    mutation: (props) => {
+                                        return {
+                                            style: Object.assign({}, props.style, {fill: "gold"})
+                                        };
+                                    }
+                                }];
+                            },
+                            onMouseOut: () => {
+                                return [{
+                                    childName: ["pie", "bar"],
+                                    mutation: () => {
+                                        return null;
+                                    }
+                                }];
+                            }
+                        }
+                    }]}
+                >
+                    <g transform={"translate(150, 50)"}>
+                        <VictoryBar name="bar"
+                                    width={300}
+                                    standalone={false}
+                                    colorScale={"qualitative"}
+                                    style={{
+                                        data: { width: 20, fill: "navy"},
+                                        labels: {fontSize: 10}
+                                    }}
+                                    data={[
+                                        {x: "Cancelled", y: 2}, {x: "Finished", y: 3}, {x: "New Games", y: 5}, {x: "On Going", y: 4}
+                                    ]}
+                                    labels={["Cancelled", "Finished", "New Games", "On Going"]}
+                                    labelComponent={<VictoryLabel y={290}/>}
+                        />
+                    </g>
+                    <g transform={"translate(0, -75)"}>
+                        <VictoryPie name="pie"
+                                    width={250}
+                                    colorScale={"qualitative"}
+                                    standalone={false}
+                                    style={{ labels: {fontSize: 10, padding: 10}}}
+                                    data={[
+                                        {x: "Cancelled", y: 1}, {x: "Finished", y: 4}, {x: "New Games", y: 5}, {x: "On Going", y: 7}
+                                    ]}
+                        />
+                    </g>
+                </VictorySharedEvents>
+            </svg>
+        </div>
         );
-    }
-}
-
+};
 export default GamesPieChart;

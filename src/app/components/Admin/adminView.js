@@ -1,14 +1,35 @@
-import React, { useState, useEffect, useCallback } from 'react'
-import { Admin } from 'react-admin';
-import jsonServerProvider from 'ra-data-json-server';
-import NotFound from './notFound'
+import 'rsuite/dist/styles/rsuite-default.css';
+import React, {useEffect,useState} from 'react'
+import GamesPieChart from "./gamesPieChart";
+import {trackPromise} from "react-promise-tracker";
+import {GAMES_STATS} from "../../../redux/actionTypes";
+import {gamesStats} from "../../../services/admin";
+import {connect,useDispatch} from "react-redux";
+// import { DateRangePicker, DateRange } from "materialui-daterange-picker";
+import { DateRangePicker } from 'rsuite' ;
 
-const AdminView = (props) => {
+const mapStateToProps = state => ({ ...state.admin });
+const { combine, allowedMaxDays, afterToday } = DateRangePicker;
+function AdminView (props){
+    const [open, setOpen] = useState(false);
+    const [dateRange, setDateRange] = useState({});
+    const toggle = () => setOpen(!open);
+    const dispatch = useDispatch()
+
+    useEffect(() => {
+        dispatch({ type: GAMES_STATS, payload: gamesStats() });
+    }, [dispatch])
+
+    function onChangeDate(to,from) {
+        dispatch({type: GAMES_STATS, payload: gamesStats(from,to)})
+    }
     return (
         <div>
-            Admin View
+            <h3>Games Statistics</h3>
+            <DateRangePicker defaultOpen= {true} placeholder="Select Date Range" disabledDate={combine(allowedMaxDays(100),afterToday())}/>
+            <GamesPieChart data={props.gamesStats}/>
         </div>
-    )
+    );
 }
 
-export default AdminView;
+export default connect(mapStateToProps, null)(AdminView);
