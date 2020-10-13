@@ -25,7 +25,6 @@ const Game = (props) => {
       dispatch({ type: GET_GAME, payload: getGame(props.match.params.id) })
     } else if(!map && isActive(activeGame)) {
         const mappedTowns = mapTowns(activeGame.province.towns);
-        debugger;
         dispatch({ type: GET_MAP, payload: getMap(activeGame.province.name, mappedTowns) })
     }
     if(gameChanged && isActive(activeGame)) {
@@ -122,8 +121,8 @@ const Game = (props) => {
           <Button color='danger' className='surrender' onClick={showModal}>Surrender</Button>
         </div>
         <SweetAlert
-            // warning
-            custom
+            warning
+            // custom
             showCancel
             confirmBtnText="Yes, I forfeit"
             confirmBtnBsStyle="danger"
@@ -131,7 +130,7 @@ const Game = (props) => {
             onConfirm={() => handleSurrender(showSurrenderModal)}
             onCancel={() => setSurrenderModal(false)}
             timeout={1000}
-            customIcon={process.env.PUBLIC_URL + "/carryOn.jpeg"}
+            // customIcon={carryOnIcon}
             show={showSurrenderModal}
             focusCancelBtn
         >

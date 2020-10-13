@@ -6,6 +6,7 @@ export const initialState = {
     user: null,
     games: [],
     activeGame: null,
-    finishedCreation: false
+    finishedCreation: false,
+    // isAdmin: false
     // redirectTo: null
 }

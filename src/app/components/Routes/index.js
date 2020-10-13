@@ -15,12 +15,15 @@ import {signOut} from "../../../services/auth";
 import SignOutComponent from "../Login/SignOut";
 import {withRouter} from 'react-router'
 import api, { apiSetup } from '../../../api';
-
+import AdminView from "../Admin/adminView";
+import AdminRoute from "./components/AuthenticatedRoute/adminRoute";
+import {getFromLocal} from "../../../services/localStorage";
+import UserStats from "../Admin/userStats";
 const mapStateToProps = state => {
     return {
         currentUser: state.common.currentUser,
         redirectTo: state.common.redirectTo,
-        isAuthorized: state.auth.isAuthorized
+        isAuthorized: state.auth.isAuthorized,
     }
 };
 
@@ -33,6 +36,7 @@ const mapDispatchToProps = dispatch => ({
 
 function RoutesContainer(props) {
     const dispatch = useDispatch()
+    const isAdmin = getFromLocal('isAdmin')
     useEffect(() => {
         if (props.redirectTo) {
             props.history.push(props.redirectTo)
@@ -44,9 +48,7 @@ function RoutesContainer(props) {
     return (
         <Router>
             <div className="App">
-                <Header>
-
-                </Header>
+                <Header/>
                 <Switch>
                     <Route exact path='/' component={Home}/>
                     <Route path="/sign_in" component={ValidatedLoginForm}/>
@@ -55,6 +57,8 @@ function RoutesContainer(props) {
                     <AuthenticatedRoute path='/games' component={Games} isAuthenticated={props.isAuthorized}/>
                     <AuthenticatedRoute path='/newGame' component={NewGame} isAuthenticated={props.isAuthorized}/>
                     <AuthenticatedRoute path='/game/:id' component={Game} isAuthenticated={props.isAuthorized}/>
+                    <AdminRoute path='/admin/user_stats' component={UserStats} isAdmin={isAdmin}/>
+                    <AdminRoute path='/admin' component={AdminView} isAdmin={isAdmin}/>
                 </Switch>
             </div>
         </Router>

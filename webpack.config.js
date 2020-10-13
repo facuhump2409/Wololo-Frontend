@@ -28,7 +28,7 @@ module.exports = (env, options) => {
 			historyApiFallback: true,
 			proxy: {
       '/api': {
-        target: 'http://localhost:8081',
+        target: 'http://localhost:8080',
         pathRewrite: {'^/api' : ''}
       }
 		}
@@ -77,6 +77,15 @@ module.exports = (env, options) => {
 						'style-loader',
 						'css-loader'
 					]
+				},
+				{
+
+					test: /\.ts|tsx?$/,
+					use: ['babel-loader?babelrc'],
+					include: [
+						path.resolve(__dirname, "node_modules/rsuite")
+					],
+
 				}]
 		},
 		resolve: {
