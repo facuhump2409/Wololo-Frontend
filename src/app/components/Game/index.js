@@ -25,7 +25,6 @@ const Game = (props) => {
       dispatch({ type: GET_GAME, payload: getGame(props.match.params.id) })
     } else if(!map && isActive(activeGame)) {
         const mappedTowns = mapTowns(activeGame.province.towns);
-        debugger;
         dispatch({ type: GET_MAP, payload: getMap(activeGame.province.name, mappedTowns) })
     }
     if(gameChanged && isActive(activeGame)) {

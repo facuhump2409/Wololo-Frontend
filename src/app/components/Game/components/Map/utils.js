@@ -4,7 +4,7 @@ const colors = {
   otherPlayers: ['#BF0000', '#1700C7', '#D5DE00']
 }
 
-const colorFor = (ownerId) => colors.otherPlayers[ownerId % 3];
+const colorFor = (ownerId) => colors.otherPlayers[parseInt(ownerId,10) % 3];
 const isTownFrom = (aTown, currentUser) => aTown.ownerId === currentUser
 
 export const paintBy = (town, currentUser) => ({
