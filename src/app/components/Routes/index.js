@@ -18,6 +18,7 @@ import api, { apiSetup } from '../../../api';
 import AdminView from "../Admin/adminView";
 import AdminRoute from "./components/AuthenticatedRoute/adminRoute";
 import {getFromLocal} from "../../../services/localStorage";
+import UserStats from "../Admin/userStats";
 const mapStateToProps = state => {
     return {
         currentUser: state.common.currentUser,
@@ -56,8 +57,8 @@ function RoutesContainer(props) {
                     <AuthenticatedRoute path='/games' component={Games} isAuthenticated={props.isAuthorized}/>
                     <AuthenticatedRoute path='/newGame' component={NewGame} isAuthenticated={props.isAuthorized}/>
                     <AuthenticatedRoute path='/game/:id' component={Game} isAuthenticated={props.isAuthorized}/>
+                    <AdminRoute path='/admin/user_stats' component={UserStats} isAdmin={isAdmin}/>
                     <AdminRoute path='/admin' component={AdminView} isAdmin={isAdmin}/>
-                    <AdminRoute path="/admin/users_stats" component={AdminView}/>
                 </Switch>
             </div>
         </Router>

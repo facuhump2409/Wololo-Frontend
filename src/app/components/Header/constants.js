@@ -27,11 +27,16 @@ export const LOGGED_LINKS = [
 export const ADMIN_LINKS = [
   {
     id: 1,
-    to: '/admin/users_stats',
+    to: '/admin/user_stats',
     name: 'Users Stats'
   },
   {
     id: 2,
+    to: '/admin',
+    name: 'Games Stats'
+  },
+  {
+    id: 3,
     to: '/sign_out',
     name: 'Sign Out'
   }]

@@ -1,35 +1,39 @@
 import 'rsuite/dist/styles/rsuite-default.css';
 import React, {useEffect,useState} from 'react'
 import GamesPieChart from "./gamesPieChart";
-import {trackPromise} from "react-promise-tracker";
-import {GAMES_STATS} from "../../../redux/actionTypes";
-import {gamesStats} from "../../../services/admin";
+import { GET_USERS, USER_STATS} from "../../../redux/actionTypes";
+import {userStats} from "../../../services/admin";
 import {connect,useDispatch} from "react-redux";
-// import { DateRangePicker, DateRange } from "materialui-daterange-picker";
-import { DateRangePicker } from 'rsuite' ;
+import {getUsers} from "../../../services/users";
+import UserModal from "./userModal";
+import PieChart from "./pieChart";
 
-const mapStateToProps = state => ({ ...state.admin });
-const { combine, allowedMaxDays, afterToday } = DateRangePicker;
+const mapStateToProps = state => {
+    return {
+        users: state.users.users,
+        admin: state.admin,
+        selectedUser: state.admin.selectedUser
+    }
+};
+
 function UserStats (props){
-    const [open, setOpen] = useState(false);
-    const [dateRange, setDateRange] = useState({});
-    const toggle = () => setOpen(!open);
+    const [open, setOpen] = useState(true);
     const dispatch = useDispatch()
-
+    console.log("ENTRE A USERS")
     useEffect(() => {
-        dispatch({ type: GAMES_STATS, payload: gamesStats() });
+        dispatch({type: GET_USERS, payload: getUsers});
     }, [dispatch])
 
-    function onChangeDate(to,from) {
-        dispatch({type: GAMES_STATS, payload: gamesStats(from,to)})
-    }
+    // function onChangeUser(username) {
+    //     dispatch({type: USER_STATS, payload: userStats(username)})
+    // }
     return (
         <div>
-            <h3>Games Statistics</h3>
-            <DateRangePicker defaultOpen= {true} placeholder="Select Date Range" disabledDate={combine(allowedMaxDays(100),afterToday())}/>
-            <GamesPieChart data={props.gamesStats}/>
+            <h3>Users Stats</h3>
+            <UserModal users={props.users} display={open} onClose={() => setOpen(false)}/>
+            <PieChart selectedUser={props.selectedUser}/>
         </div>
     );
 }
 
-export default connect(mapStateToProps, null)(AdminView);
+export default connect(mapStateToProps, null)(UserStats);

@@ -4,7 +4,7 @@ import {VictoryLabel} from "victory-core";
 import {VictorySharedEvents} from "victory-shared-events";
 
 function GamesPieChart(props) {
-    console.log("data dentro de pie",props.data)
+    //TODO ver de reutilizar el piechart y que tenga distintos "ejes"
     const [cancelled,finished,newGames,onGoing] = props.data ? [props.data.gamesCanceled + 1, props.data.gamesFinished + 1,props.data.gamesNew + 1,props.data.gamesOnGoing + 1] : [1,1,1,1]
     //TODO sacar esos mas 1 estan hardcodeados porque sino back solo devuelve 0's
     return (
