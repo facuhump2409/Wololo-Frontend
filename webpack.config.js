@@ -77,6 +77,15 @@ module.exports = (env, options) => {
 						'style-loader',
 						'css-loader'
 					]
+				},
+				{
+
+					test: /\.ts|tsx?$/,
+					use: ['babel-loader?babelrc'],
+					include: [
+						path.resolve(__dirname, "node_modules/rsuite")
+					],
+
 				}]
 		},
 		resolve: {

@@ -50,6 +50,8 @@ const authLocalStorage = (action) => {
     if(!action.error) {
         saveToLocal('isAuthorized', 'true');
         saveToLocal('currentUser', action.payload);
+        saveToLocal('isAdmin',action.payload.username === 'admin') //esto es temporal hasta que back lo empiece a mandar
+        //TODO cambiar esto
     } else {
         saveToLocal('isAuthorized', 'false');
     }
@@ -60,6 +62,7 @@ const storageActions = {
     [LOGIN]: (action) => authLocalStorage(action),
     [LOGOUT]: () => {        
         saveToLocal('isAuthorized', 'false');
+        saveToLocal('isAdmin', 'false');
         removeFromLocal('currentUser');
     },
     authorizedAction: (action) => { }

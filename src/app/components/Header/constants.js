@@ -23,3 +23,20 @@ export const LOGGED_LINKS = [
     to: '/sign_out',
     name: 'Sign Out'
 }]
+
+export const ADMIN_LINKS = [
+  {
+    id: 1,
+    to: '/admin/user_stats',
+    name: 'Users Stats'
+  },
+  {
+    id: 2,
+    to: '/admin',
+    name: 'Games Stats'
+  },
+  {
+    id: 3,
+    to: '/sign_out',
+    name: 'Sign Out'
+  }]
