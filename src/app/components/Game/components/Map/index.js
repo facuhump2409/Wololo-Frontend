@@ -22,7 +22,6 @@ function Map({ province, geojson, currentUser, onTownHover, onTownClick }) {
   });
 
   const geoJsonAreas = getGeoJsonAreas(geojson, province.towns)
-
   const handleMouseEnter = (e) => {
     e.target.getCanvas().style.cursor = 'pointer'
     onTownHover(JSON.parse(e.features[0].properties.town))
