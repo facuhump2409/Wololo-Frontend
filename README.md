@@ -66,3 +66,15 @@ This section has moved here: https://facebook.github.io/create-react-app/docs/de
 ### `yarn build` fails to minify
 
 This section has moved here: https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify
+
+
+Para levantar la app se hace en dos simples pasos
+1- Bajar el start_app.sh
+2- Asignarle permisos de ejecucion al script 
+```
+$ chmod +x start_app.sh
+```
+3- Correr el script y listo :)
+```
+$ ./start_app.sh
+```
