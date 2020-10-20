@@ -1,0 +1,26 @@
+<html>
+    <head>
+        <script src="/socket.io/socket.io.js"></script>
+        <script>
+            var socket = io();
+            const gameId = "1234";
+            socket.emit("joinGameRoom", gameId);
+
+            socket.on("message", (msg) => {
+                console.log(msg);
+            });
+
+            socket.on("update", () => {
+                console.log("Game updated!");
+            });
+
+            function buttonClick() {
+                socket.emit("notifyGameUpdate");
+            }
+        </script>
+    </head>
+    <body>
+        <h1>Hello WololoSI!</h1>
+        <button onclick="buttonClick();">Update game</button>
+    </body>
+</html>
