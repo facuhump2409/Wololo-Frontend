@@ -4,6 +4,8 @@ WORKDIR /app
 
 COPY . /app
 # COPY package.json /app
+RUN ["chmod", "+x", "./set_variables.sh"]
+RUN ./set_variables.sh
 
 RUN npm rebuild node-sass
 RUN npm install
