@@ -67,6 +67,10 @@ This section has moved here: https://facebook.github.io/create-react-app/docs/de
 
 This section has moved here: https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify
 
+Correr docker
+```
+$ docker build -t wololo-frontend . && docker run -p 3000:3000  wololo-frontend
+```
 
 Para levantar la app se hace en dos simples pasos
 1- Bajar el start_app.sh

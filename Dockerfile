@@ -8,5 +8,4 @@ COPY . /app
 RUN npm rebuild node-sass
 RUN npm install
 
-
 CMD ["npm", "run", "start-prod"]
