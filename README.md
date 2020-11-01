@@ -82,3 +82,7 @@ $ chmod +x start_app.sh
 ```
 $ ./start_app.sh
 ```
+
+Back corre en el 8080
+Front en el 3000
+Servidor Intermedio en el 8082

@@ -28,7 +28,7 @@ module.exports = (env, options) => {
 			historyApiFallback: true,
 			proxy: {
       '/api': {
-        target: 'http://localhost:8080',
+        target: `http://${env.REACT_APP_API_URL}:${env.REACT_APP_API_PORT}`,
         pathRewrite: {'^/api' : ''}
       }
 		}
