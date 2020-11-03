@@ -2,13 +2,13 @@ version: '3'
 services:
 
   wololo-backend:
-    build: ../TP-TACS
+    image: facuhump2/wololo-react_wololo-backend
     container_name: wololo-backend
     ports:
       - 8080:8080
     depends_on:
       - mongodb
-    networks: 
+    networks:
       - back-end
       - db
     environment:
@@ -16,7 +16,7 @@ services:
       - SPRING_DATA_MONGODB_PORT=27017
       - SPRING_DATA_MONGODB_DATABASE=wololo-tacs
   wololo-frontend:
-    build: .
+    image: facuhump2/wololo-frontend
     container_name: wololo-frontend
     # volumes:
     #   - '.:/app'
@@ -28,36 +28,35 @@ services:
       - 80:80
     networks:
       - back-end
-      - web-socket
     environment:
       - CHOKIDAR_USEPOLLING=true
       - REACT_APP_ENV=production
       - REACT_APP_API_URL=wololo-backend
       - REACT_APP_API_PORT=8080
-      - REACT_APP_SOCKET_URL=localhost
+      - REACT_APP_SOCKET_URL=wololo-si
       - REACT_APP_SOCKET_PORT=8082
-      - REACT_APP_MAPS_KEY=pk.eyJ1IjoidGVvbm5uIiwiYSI6ImNrZzAwY3RoMjBqbHAydXBpMHFyeXQ2bjYifQ.aZZR74OETObsUi2tCtNbWg
+    logging:
+      driver: awslogs
+      options:
+        awslogs-group: tutorial
+        awslogs-region: us-west-2
+        awslogs-stream-prefix: web
   wololo-si:
-    build: ./WololoSI
+    image: facuhump2/wololo-si
     container_name: wololo-si
-    networks:
-      - back-end
-    ports: 
+    ports:
       - 8082:8082
-    networks: 
-      - web-socket
   mongodb:
     image: 'mongo'
     container_name: 'mongo-container'
-    environment: 
-        - MONGO_INITDB_DATABASE=wololo-tacs
-    ports: 
-        - '27017-27019:27017-27019'
-    networks: 
-        - db
+    environment:
+      - MONGO_INITDB_DATABASE=wololo-tacs
+    ports:
+      - '27017-27019:27017-27019'
+    networks:
+      - db
 
 networks:
-  web-socket:
   db:
   # front-end: quizas despues la necesitemos para la interaccion con el usuario
   back-end:
