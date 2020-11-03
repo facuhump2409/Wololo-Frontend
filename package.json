@@ -46,7 +46,7 @@
   },
   "scripts": {
     "start": "webpack-dev-server --mode development --open --config webpack.config.js",
-    "start-prod": "webpack-dev-server --env.production --env.REACT_APP_API_URL=wololo-backend --env.REACT_APP_API_PORT=8080 --host 0.0.0.0 --port 3000 --open --config webpack.config.js",
+    "start-prod": "webpack-dev-server --env.production --env.REACT_APP_API_URL=wololo-backend --env.REACT_APP_API_PORT=8080 --host 0.0.0.0 --port 80 --open --config webpack.config.js",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
