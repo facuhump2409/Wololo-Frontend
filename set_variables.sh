@@ -1,1 +1,0 @@
-printf "\nREACT_APP_SOCKET_URL=${wololo_si}\nREACT_APP_SOCKET_PORT=8082" >> .env
