@@ -7,10 +7,6 @@
     "@material-ui/core": "^4.11.0",
     "@material-ui/lab": "^4.0.0-alpha.56",
     "@material-ui/icons": "^4.9.1",
-    "@svg-maps/australia": "^1.1.1",
-    "@testing-library/jest-dom": "^4.2.4",
-    "@testing-library/react": "^9.3.2",
-    "@testing-library/user-event": "^7.1.2",
     "apisauce": "^1.1.2",
     "axios": "^0.20.0",
     "babel-core": "^6.26.3",
@@ -30,7 +26,6 @@
     "react-dom": "^16.13.1",
     "react-filtered-multiselect": "^0.5.1",
     "react-google-login": "^5.1.21",
-    "react-image-mapper": "github:Maxi-F/react-image-mapper#master",
     "react-loader-spinner": "^3.1.14",
     "react-mapbox-gl": "^4.8.6",
     "react-promise-tracker": "^2.1.0",
@@ -50,6 +45,7 @@
   },
   "scripts": {
     "start": "webpack-dev-server --mode development --open --config webpack.config.js",
+    "start-prod": "webpack-dev-server --env.production --env.REACT_APP_API_URL=wololo-backend --env.REACT_APP_API_PORT=8080 --host 0.0.0.0 --port 80 --open --config webpack.config.js",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
@@ -70,9 +66,6 @@
     ]
   },
   "devDependencies": {
-    "@svg-maps/australia": "^1.1.0",
-    "@svg-maps/france.regions": "^1.1.0",
-    "@svg-maps/taiwan.main": "^1.0.0",
     "babel-loader": "^7.1.5",
     "babel-preset-env": "^1.7.0",
     "babel-preset-react": "^6.24.1",

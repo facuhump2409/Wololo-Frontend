@@ -18,8 +18,3 @@ Docker
 ```
 $ docker build -t wololo-si . && docker run -it --rm -v ${PWD}:/app -v /app/node_modules -p 8082:8082 -e CHOKIDAR_USEPOLLING=true wololo-si
 ```
-
-Por default el servidor escucha en el 8082 si se quiere pasar otro puerto se tiene que hacer de la siguiente forma
-```
-$ docker run -it --rm -v ${PWD}:/app -v /app/node_modules -p 8082:8082 -e CHOKIDAR_USEPOLLING=true PORT=elPuertoDeseado wololo-si
-```
