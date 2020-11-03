@@ -5,9 +5,7 @@ const dotenv = require('dotenv')
 const HtmlWebPackPlugin = require('html-webpack-plugin');
 
 module.exports = (env, options) => {
-
-	const envVariables = dotenv.config().parsed
-
+	const envVariables = env.production ? process.env : dotenv.config().parsed
 	const envKeys = Object.keys(envVariables).reduce((prev, next) => {
     prev[`process.env.${next}`] = JSON.stringify(envVariables[next]);
     return prev;
@@ -28,7 +26,7 @@ module.exports = (env, options) => {
 			historyApiFallback: true,
 			proxy: {
       '/api': {
-        target: `http://${env.REACT_APP_API_URL}:${env.REACT_APP_API_PORT}`,
+        target: `http://${process.env.REACT_APP_API_URL}:${process.env.REACT_APP_API_PORT}`,
         pathRewrite: {'^/api' : ''}
       }
 		}

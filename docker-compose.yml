@@ -33,11 +33,14 @@ services:
       - REACT_APP_ENV=production
       - REACT_APP_API_URL=wololo-backend
       - REACT_APP_API_PORT=8080
-      - REACT_APP_SOCKET_URL=wololo-si
+      - REACT_APP_SOCKET_URL=localhost
       - REACT_APP_SOCKET_PORT=8082
+      - REACT_APP_MAPS_KEY=pk.eyJ1IjoidGVvbm5uIiwiYSI6ImNrZzAwY3RoMjBqbHAydXBpMHFyeXQ2bjYifQ.aZZR74OETObsUi2tCtNbWg
   wololo-si:
     build: ./WololoSI
     container_name: wololo-si
+    networks:
+      - back-end
     ports: 
       - 8082:8082
   mongodb:
