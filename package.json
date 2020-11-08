@@ -5,17 +5,17 @@
   "main": "./build/index.js",
   "dependencies": {
     "@material-ui/core": "^4.11.0",
-    "@material-ui/lab": "^4.0.0-alpha.56",
     "@material-ui/icons": "^4.9.1",
+    "@material-ui/lab": "^4.0.0-alpha.56",
     "apisauce": "^1.1.2",
     "axios": "^0.20.0",
     "babel-core": "^6.26.3",
     "bootstrap": "^4.5.2",
     "connected-react-router": "^6.8.0",
     "email-validator": "^2.0.4",
-    "mapbox-gl": "^1.12.0",
     "formik": "^2.1.7",
     "formik-material-ui": "^3.0.0",
+    "mapbox-gl": "^1.12.0",
     "node-sass": "^4.14.1",
     "ra-data-json-server": "^3.9.2",
     "react": "^16.13.1",
@@ -44,7 +44,7 @@
     "yup": "^0.29.3"
   },
   "scripts": {
-    "start": "webpack-dev-server --mode development --open --config webpack.config.js",
+    "start": "webpack-dev-server --env.development --mode development --open --config webpack.config.js",
     "start-prod": "webpack-dev-server --env.production --env.REACT_APP_API_URL=wololo-backend --env.REACT_APP_API_PORT=8080 --host 0.0.0.0 --port 80 --open --config webpack.config.js",
     "build": "react-scripts build",
     "test": "react-scripts test",

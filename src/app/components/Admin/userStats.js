@@ -19,7 +19,6 @@ const mapStateToProps = state => {
 function UserStats (props){
     const [open, setOpen] = useState(true);
     const dispatch = useDispatch()
-    console.log("ENTRE A USERS")
     useEffect(() => {
         dispatch({type: GET_USERS, payload: getUsers});
     }, [dispatch])
