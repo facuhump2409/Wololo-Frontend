@@ -3,7 +3,7 @@ import { useSelector, useDispatch } from 'react-redux'
 import {GET_GAME, GET_MAP, PASS_TURN, REDIRECT_GAME, SURRENDER} from '../../../redux/actionTypes';
 import {getGame, finishTurn, surrender, getMap} from '../../../services/games';
 import { getFromLocal } from '../../../services/localStorage'
-import { isMyTurn, isActive, isMyTown, isValidSelection, mapTowns } from './utils'
+import { isMyTurn, isActive, isMyTown, isValidSelection, mapTowns, townWithOwner } from './utils'
 import { Button } from 'reactstrap'
 import Map from './components/Map'
 import SweetAlert from "react-bootstrap-sweetalert";
@@ -60,9 +60,9 @@ const Game = (props) => {
     if(isMyTurn(activeGame, currentUser.id)) {
       setTown(null)
       setSelectedTowns(!selectedTowns.town1 ? 
-        { town1: isMyTown(town, currentUser.id) ? town : null, town2: null } : 
+        { town1: isMyTown(town, currentUser.id) ? townWithOwner(town, activeGame.playerIds) : null, town2: null } : 
         (!selectedTowns.town2 && isValidSelection(selectedTowns.town1, town) ? 
-          { town1: selectedTowns.town1, town2: town } : 
+          { town1: selectedTowns.town1, town2: townWithOwner(town, activeGame.playerIds) } : 
           selectedTowns
         )
       )
@@ -110,10 +110,10 @@ const Game = (props) => {
             right: '2px',
             zIndex: 2,
             }} 
-            hoveredTown={town} 
+            hoveredTown={town && townWithOwner(town, activeGame.playerIds)} 
             selectedTowns={selectedTowns}
             currentUser={currentUser.id}
-            currentGame={activeGame.id}
+            currentGame={activeGame}
             onChange={handleReturn}
             ></TownActions>
           

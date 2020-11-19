@@ -11,3 +11,5 @@ export const isValidSelection = (aTown, anotherTown) => aTown.id !== anotherTown
 || (!aTown.isLocked && !anotherTown.isLocked && aTown.gauchos))
 
 export const isActive = (game) => ['FINISHED', 'CANCELED'].every(status => status !== game.status)
+
+export const townWithOwner = (town, players) => ({...town, owner: town.ownerId !== 'null' && players.find(player => player.id === town.ownerId)})

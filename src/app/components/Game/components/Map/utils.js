@@ -7,11 +7,13 @@ const colors = {
 const colorFor = (ownerId) => colors.otherPlayers[parseInt(ownerId,10) % 3];
 const isTownFrom = (aTown, currentUser) => aTown.ownerId === currentUser
 
-export const paintBy = (town, currentUser) => ({
-  'fill-color':  isTownFrom(town, currentUser.id) ? colors.current : (!town.ownerId ? colors.unOwned : colorFor(town.ownerId)),
-  'fill-outline-color': '#000',
-  'fill-opacity': 0.5
-  })
+export const paintBy = (town, currentUser) => {
+  return ({
+    'fill-color':  isTownFrom(town, currentUser.id) ? colors.current : (town.ownerId == 'null' ? colors.unOwned : colorFor(town.ownerId)),
+    'fill-outline-color': '#000',
+    'fill-opacity': 0.5
+    })
+}
 
 const accentsMap = {
   a: 'á|à|ã|â|À|Á|Ã|Â',

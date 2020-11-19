@@ -14,17 +14,17 @@ function TownActions({ hoveredTown, currentGame, style, onChange, onAttack, sele
   const [selectedQuantity, setSelectedQuantity] = useState(1);
 
   const handleChangeSpecialization = (aTown, specialization) => {
-    dispatch({ type: CHANGE_SPECIALIZATION, payload: updateSpecialization(currentGame, aTown.id, specialization) })
+    dispatch({ type: CHANGE_SPECIALIZATION, payload: updateSpecialization(currentGame.id, aTown.id, specialization) })
     onChange()
   }
 
   const handleAttack = () => {
-    dispatch({ type: ATTACK_TOWN, payload: attackTown(currentGame, selectedTowns.town1.id, selectedTowns.town2.id) })
+    dispatch({ type: ATTACK_TOWN, payload: attackTown(currentGame.id, selectedTowns.town1.id, selectedTowns.town2.id) })
     onChange()
   }
 
   const handleTownMove = () => {
-    dispatch({ type: MOVE_GAUCHOS, payload: moveGauchos(currentGame, selectedTowns.town1.id, selectedTowns.town2.id, selectedQuantity) })
+    dispatch({ type: MOVE_GAUCHOS, payload: moveGauchos(currentGame.id, selectedTowns.town1.id, selectedTowns.town2.id, selectedQuantity) })
     onChange()
   }
 
