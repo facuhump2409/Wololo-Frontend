@@ -10,6 +10,7 @@ import SweetAlert from "react-bootstrap-sweetalert";
 import socketIOClient from 'socket.io-client';
 import './index.css'
 import TownActions from './components/TownActions';
+import ActionsInfo from './components/ActionsInfo';
 
 const Game = (props) => {
   const dispatch = useDispatch();
@@ -44,7 +45,7 @@ const Game = (props) => {
 
       return () => socket.disconnect();
     }
-  }, [activeGame, dispatch, gameChanged, map, props.match.params.id])
+  }, [activeGame, gameChanged, map])
 
   const redirect = () => {
     dispatch({ type: REDIRECT_GAME })
@@ -102,8 +103,26 @@ const Game = (props) => {
           onTownClick={handleClick} 
           currentUser={currentUser}
            />}
+
+           <ActionsInfo style={{  
+            width: '400px',
+            height: '25px',
+            position: 'absolute',
+            backgroundColor: 'rgba(255,255,255,0.8)',
+            top: '60px',
+            left: '5px',
+            zIndex: 2,
+            }}
+            isMyTurn={isMyTurn(activeGame, currentUser.id)}
+            isHoveringTown={town}
+            isMyTown={town && isMyTown(town, currentUser.id)}
+            hasSelectedTown={selectedTowns.town1}
+            isAttack={selectedTowns.town1 && town && !isMyTown(town, currentUser.id)}
+            />
+
           <TownActions style={{  
             width: '25%',
+            minWidth: '200px',
             position: 'absolute',
             backgroundColor: 'rgba(255,255,255,0.8)',
             bottom: '22px',
@@ -117,7 +136,7 @@ const Game = (props) => {
             onChange={handleReturn}
             ></TownActions>
           
-          <div className=' d-flex justify-content-center col-6'>
+        <div className=' d-flex justify-content-center col-6'>
           <Button color='danger' className='surrender' onClick={showModal}>Surrender</Button>
         </div>
         <SweetAlert
