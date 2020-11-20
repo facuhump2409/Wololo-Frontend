@@ -106,7 +106,6 @@ const Game = (props) => {
 
            <ActionsInfo style={{  
             width: '400px',
-            height: '25px',
             position: 'absolute',
             backgroundColor: 'rgba(255,255,255,0.8)',
             top: '60px',
