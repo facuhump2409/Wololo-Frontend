@@ -12,4 +12,4 @@ export const gamesStats = (from = today,to = monthBefore) => api.get('/games/sta
 
 export const userStats = (username) => api.get('/users/',username);
 
-// export const scoreBoard = (data) => api.post('/scoreBoard', data);
+export const scoreBoard = () => api.get('/users/scoreboard');

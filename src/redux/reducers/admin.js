@@ -1,4 +1,4 @@
-import {GAMES_STATS, USER_STATS} from '../actionTypes';
+import {GAMES_STATS, GET_SCOREBOARD, USER_STATS} from '../actionTypes';
 import {initialState} from "./utils";
 
 
@@ -13,6 +13,11 @@ export default function(state = initialState, action) {
             return {
                 ...state,
                 gamesStats: action.payload
+            }
+        case GET_SCOREBOARD:
+            return {
+                ...state,
+                topPlayers: action.payload
             }
         default:
             return state;
