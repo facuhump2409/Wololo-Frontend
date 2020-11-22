@@ -47,7 +47,7 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => ({
     getParticipants: () => dispatch({type: GET_USERS, payload: getUsers}),
     createGame: (gameData) => dispatch({type: CREATE_GAME, payload: createGame(gameData)}),
-    getStates: () => dispatch({type: GET_PROVINCES, payload: getProvinces}),
+    getStates: () => dispatch({type: GET_PROVINCES, payload: getProvinces()}),
     redirectGame: () => dispatch({type: REDIRECT_GAME})
 })
 
@@ -69,6 +69,7 @@ class NewGame extends React.Component {
         this.handleLocationBlur = this.handleLocationBlur.bind(this);
         this.handleOnChange = this.handleOnChange.bind(this);
         this.handleSelectionChange = this.handleSelectionChange.bind(this);
+        this.getProvinces = this.getProvinces.bind(this);
         this.handleDeselect = this.handleDeselect.bind(this);
         this.renderStep = this.renderStep.bind(this);
         this.goBackStep = this.goBackStep.bind(this);
@@ -100,8 +101,8 @@ class NewGame extends React.Component {
             case 1:
                 return firstStep;
             case 2:
-                const selectedTown = Argentina.locations.find(element => element.name ===  this.state.selectedLocation)
-                return <DiscreteSlider maxTowns={selectedTown.maxTowns} onChange={(e,val) => setFieldValue("towns",val)}/>;
+                const selectedTown = this.getProvinces().find(element => element.name ===  this.state.selectedLocation.toUpperCase())
+                return <DiscreteSlider maxTowns={selectedTown.qty} onChange={(e,val) => setFieldValue("towns",val)}/>;
             case 3:
                 return <form>
                     <div>
@@ -163,6 +164,9 @@ class NewGame extends React.Component {
                 selectedLocation: selectedNode.attributes.name.value,
             };
         });
+    }
+    getProvinces() {
+        return this.props.provinces ? this.props.provinces : this.props.getStates()
     }
 
     componentDidMount() {

@@ -16,25 +16,6 @@ const useStyles = makeStyles((theme) => ({
         justifyContent: 'center',
     },
 }));
-//
-// const marks = [
-//     {
-//         value: 4,
-//         label: '4',
-//     },
-//     {
-//         value: 8,
-//         label: '8',
-//     },
-//     {
-//         value: 14,
-//         label: '14',
-//     },
-//     {
-//         value: 20,
-//         label: '20',
-//     },
-// ];
 
 export default function DiscreteSlider(props) {
     const classes = useStyles();
