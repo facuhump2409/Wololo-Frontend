@@ -19,6 +19,7 @@ import AdminView from "../Admin/adminView";
 import AdminRoute from "./components/AuthenticatedRoute/adminRoute";
 import {getFromLocal} from "../../../services/localStorage";
 import UserStats from "../Admin/userStats";
+import Scoreboard from "../Admin/scoreboard";
 const mapStateToProps = state => {
     return {
         currentUser: state.common.currentUser,
@@ -59,6 +60,7 @@ function RoutesContainer(props) {
                     <AuthenticatedRoute path='/game/:id' component={Game} isAuthenticated={props.isAuthorized}/>
                     <AdminRoute path='/admin/user_stats' component={UserStats} isAdmin={isAdmin}/>
                     <AdminRoute path='/admin' component={AdminView} isAdmin={isAdmin}/>
+                    <AdminRoute path='/scoreboard' component={Scoreboard} isAdmin={isAdmin}/>
                 </Switch>
             </div>
         </Router>
