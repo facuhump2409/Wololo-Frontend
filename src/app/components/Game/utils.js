@@ -16,4 +16,11 @@ export const isActive = (game) => ['FINISHED', 'CANCELED'].every(status => statu
 
 export const townWithOwner = (town, players) => ({...town, owner: town.ownerId && players.find(player => player.id === town.ownerId)})
 
-export const colorFor = (ownerId) => COLORS.otherPlayers[parseInt(ownerId,10) % 3];
+const mapFromArrays = (array, otherArray) => {
+  let map = {}
+  array.forEach((item, index) => map[item] = otherArray[index])
+  return map;
+}
+
+export const playersAndColors = (players, colors, currentUser) => 
+  mapFromArrays(players.filter(player => player !== currentUser), colors);

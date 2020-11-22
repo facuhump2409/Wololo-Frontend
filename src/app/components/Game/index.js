@@ -3,7 +3,7 @@ import { useSelector, useDispatch } from 'react-redux'
 import {GET_GAME, GET_MAP, PASS_TURN, REDIRECT_GAME, SURRENDER} from '../../../redux/actionTypes';
 import {getGame, finishTurn, surrender, getMap} from '../../../services/games';
 import { getFromLocal } from '../../../services/localStorage'
-import { isMyTurn, isActive, isMyTown, isValidSelection, mapTowns, townWithOwner } from './utils'
+import { isMyTurn, isActive, isMyTown, isValidSelection, mapTowns, townWithOwner, playersAndColors } from './utils'
 import { Button } from 'reactstrap'
 import Map from './components/Map'
 import SweetAlert from "react-bootstrap-sweetalert";
@@ -12,6 +12,7 @@ import './index.css'
 import TownActions from './components/TownActions';
 import ActionsInfo from './components/ActionsInfo';
 import Players from './components/Players';
+import { COLORS } from '../../constants';
 
 const Game = (props) => {
   const dispatch = useDispatch();
@@ -23,6 +24,8 @@ const Game = (props) => {
   const [showTurnModal, setTurnModal] = useState(false);
 
   const getActualGame = useCallback(() => dispatch({ type: GET_GAME, payload: getGame(props.match.params.id) }));
+
+  const colors = activeGame && playersAndColors(activeGame.playerIds.map(player => player.id), COLORS.otherPlayers, currentUser.id);
 
   useEffect(() => {
     if(!activeGame && !inProgress) { 
@@ -105,6 +108,7 @@ const Game = (props) => {
           onTownHover={handleHover} 
           onTownClick={handleClick} 
           currentUser={currentUser}
+          colors={colors}
            />}
 
             <div className='actionsInfo'>
@@ -132,6 +136,7 @@ const Game = (props) => {
                 players={activeGame.playerIds}
                 currentUser={currentUser.id}
                 turn={activeGame.turnId}
+                colors={colors}
               />
             </div>
           

@@ -15,7 +15,7 @@ const MapboxMap = ReactMapboxGl({
   dragRotate: false,
   logoPosition: 'top-left'
 });
-function Map({ province, geojson, currentUser, onTownHover, onTownClick }) {
+function Map({ province, geojson, currentUser, onTownHover, onTownClick, colors }) {
   const [mapProperties, setMapProperties] = useState({
     center: [province.centroid.lon, province.centroid.lat],
     zoom: [5]
@@ -52,7 +52,7 @@ function Map({ province, geojson, currentUser, onTownHover, onTownClick }) {
             <Layer 
               type='fill' 
               sourceId={town.name} 
-              paint={paintBy(town, currentUser)}
+              paint={paintBy(town, currentUser, colors)}
               onClick={(e) => onTownClick(JSON.parse(e.features[0].properties.town))}
               onMouseEnter={handleMouseEnter}
               onMouseLeave={handleMouseLeave}

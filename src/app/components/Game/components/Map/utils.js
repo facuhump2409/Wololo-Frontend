@@ -1,11 +1,10 @@
 import { COLORS } from '../../../../constants';
-import { colorFor } from '../../utils';
 
 const isTownFrom = (aTown, currentUser) => aTown.ownerId === currentUser
 
-export const paintBy = (town, currentUser) => {
+export const paintBy = (town, currentUser, colors) => {
   return ({
-    'fill-color': isTownFrom(town, currentUser.id) ? COLORS.current : (!town.ownerId ? COLORS.unOwned : colorFor(town.ownerId)),
+    'fill-color': isTownFrom(town, currentUser.id) ? COLORS.current : (!town.ownerId ? COLORS.unOwned : colors[town.ownerId]),
     'fill-outline-color': '#000',
     'fill-opacity': 0.5
     })

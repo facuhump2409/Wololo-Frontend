@@ -1,11 +1,9 @@
 import React from 'react';
-import { ListGroup, ListGroupItem } from 'reactstrap';
 import { COLORS } from '../../../../constants';
-import { colorFor } from '../../utils';
 
 import './index.css'
 
-function Players({ turn, currentUser, players }) {
+function Players({ turn, currentUser, players, colors }) {
   return (
     <ul>
       {players.map(player => (
@@ -13,7 +11,7 @@ function Players({ turn, currentUser, players }) {
           <span 
             className='dot' 
             style={{
-              backgroundColor: currentUser === player.id ? COLORS.current : colorFor(player.id)
+              backgroundColor: currentUser === player.id ? COLORS.current : colors[player.id]
             }}
           />
           <li className={turn === player.id && 'itsTurn'}>{player.username}</li>
