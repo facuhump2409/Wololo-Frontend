@@ -100,7 +100,8 @@ class NewGame extends React.Component {
             case 1:
                 return firstStep;
             case 2:
-                return <DiscreteSlider onChange={(e,val) => setFieldValue("towns",val)}/>;
+                const selectedTown = Argentina.locations.find(element => element.name ===  this.state.selectedLocation)
+                return <DiscreteSlider maxTowns={selectedTown.maxTowns} onChange={(e,val) => setFieldValue("towns",val)}/>;
             case 3:
                 return <form>
                     <div>
@@ -159,7 +160,7 @@ class NewGame extends React.Component {
         this.setState(prevState => {
             return {
                 ...prevState,
-                selectedLocation: selectedNode.attributes.name.value
+                selectedLocation: selectedNode.attributes.name.value,
             };
         });
     }

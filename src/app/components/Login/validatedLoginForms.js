@@ -8,6 +8,7 @@ import LoadingIndicator from "../../loadingIndicator";
 import ErrorMessage from "../errorMessage";
 import {LOGIN, LOGIN_PAGE_LOADED, LOGIN_PAGE_UNLOADED} from "../../../redux/actionTypes";
 import {login} from "../../../services/auth";
+import CustomAutoComplete from "./customAutoComplete";
 
 const mapDispatchToProps = dispatch => ({
     onSubmit: (values) =>
@@ -73,6 +74,7 @@ class ValidatedLoginForm extends React.Component {
                                     type="email"
                                     className="form-control"
                                     placeholder="Enter email"
+                                    component={<CustomAutoComplete/>}
                                     value={values.email}
                                     onChange={handleChange}
                                     onBlur={handleBlur}
