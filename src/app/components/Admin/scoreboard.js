@@ -37,7 +37,7 @@ function Scoreboard (props){
                     <tr key={row.username}>
                         <td>{index + 1}</td>
                         <td>{row.username}</td>
-                        <td>{row.stats.gamesWon * 100 - row.stats.gamesLost * 10}</td>
+                        <td>{row.stats.gamesWon * 10 - row.stats.gamesLost}</td>
                     {/*    Revisar si les parece bien esta manera de hacer el score  */}
                     </tr>
                 )
