@@ -24,3 +24,4 @@ const mapFromArrays = (array, otherArray) => {
 
 export const playersAndColors = (players, colors, currentUser) => 
   mapFromArrays(players.filter(player => player !== currentUser), colors);
+

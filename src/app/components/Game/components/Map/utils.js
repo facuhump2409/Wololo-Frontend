@@ -2,11 +2,19 @@ import { COLORS } from '../../../../constants';
 
 const isTownFrom = (aTown, currentUser) => aTown.ownerId === currentUser
 
-export const paintBy = (town, currentUser, colors) => {
+const isSelectedTown = (townSelected, town) => townSelected && townSelected.name === town.name
+
+const calculateColor = (town, currentUser, colors, selectedTowns) => 
+  isSelectedTown(selectedTowns[0], town) ? (COLORS.selected) :
+  isSelectedTown(selectedTowns[1], town) ? (isTownFrom(town, currentUser.id) ? COLORS.selectedSecondary : COLORS.selectedSecondaryEnemy) :
+  (isTownFrom(town, currentUser.id) ? COLORS.current : (!town.ownerId ? COLORS.unOwned : colors[town.ownerId]))
+
+export const paintBy = (town, currentUser, colors, selectedTowns) => {
   return ({
-    'fill-color': isTownFrom(town, currentUser.id) ? COLORS.current : (!town.ownerId ? COLORS.unOwned : colors[town.ownerId]),
+    'fill-color': calculateColor(town, currentUser, colors, selectedTowns),
     'fill-outline-color': '#000',
-    'fill-opacity': 0.5
+    'fill-opacity': isSelectedTown(selectedTowns[0], town) || isSelectedTown(selectedTowns[1], town) ? 1 : 
+                    town.isBordered ? 0.5 : 0.1
     })
 }
 
@@ -29,3 +37,7 @@ export const getGeoJsonAreas = (geojson, towns) => geojson.map(feature => ({
     ...feature.features[0].properties, 
     town: towns.find(aTown => upperSlugify(aTown.name) === feature.features[0].properties.town)
   }}))
+
+export const paintedTowns = (towns, borderingTowns) => borderingTowns ? 
+  towns.map(town => ({...town, isBordered: borderingTowns.some(borderTown => borderTown === town.name)})) :
+  towns.map(town => ({...town, isBordered: true}))

@@ -105,6 +105,8 @@ const Game = (props) => {
         <div>
           {map && <Map
           province={activeGame.province}
+          borderingTowns={selectedTowns.town1 && [...selectedTowns.town1.borderingTowns, selectedTowns.town1.name]}
+          selectedTowns={[selectedTowns.town1, selectedTowns.town2]}
           geojson={map}
           onTownHover={handleHover} 
           onTownClick={handleClick} 
