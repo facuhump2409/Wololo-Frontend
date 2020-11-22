@@ -23,7 +23,6 @@ class UserModal extends React.Component {
     }
     render() {
         const { backdrop } = this.state;
-        const town = this.props.town
         return (
             <div className="modal-container">
 
