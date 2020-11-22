@@ -8,9 +8,11 @@ export const mapTowns = (towns) => towns.map(town => town.name).join('%7C')
 
 export const isMyTown = (town, user) => town.ownerId === user 
 
-export const isValidSelection = (aTown, anotherTown) => aTown.id !== anotherTown.id 
+export const isBordered = (aTown, anotherTown) => {debugger; return aTown.borderingTowns.some(town => town === anotherTown.name)}
+
+export const isValidSelection = (aTown, anotherTown) => isBordered(aTown, anotherTown) && (aTown.id !== anotherTown.id 
 && (aTown.ownerId !== anotherTown.ownerId 
-|| (!aTown.isLocked && !anotherTown.isLocked && aTown.gauchos))
+|| (!aTown.isLocked && !anotherTown.isLocked && aTown.gauchos)))
 
 export const isActive = (game) => ['FINISHED', 'CANCELED'].every(status => status !== game.status)
 

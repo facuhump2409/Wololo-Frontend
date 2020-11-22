@@ -117,9 +117,9 @@ const Game = (props) => {
             <div className='actionsInfo'>
               <ActionsInfo 
                 isMyTurn={isMyTurn(activeGame, currentUser.id)}
-                isHoveringTown={town}
+                hoveringTown={town}
                 isMyTown={town && isMyTown(town, currentUser.id)}
-                hasSelectedTown={selectedTowns.town1}
+                selectedTown={selectedTowns.town1}
                 isAttack={selectedTowns.town1 && town && !isMyTown(town, currentUser.id)}
                 />
             </div>

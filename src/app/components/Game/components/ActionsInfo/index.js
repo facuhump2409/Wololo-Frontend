@@ -1,17 +1,19 @@
 import React from 'react'
-import { Card, CardTitle, CardBody, CardText, Button } from 'reactstrap';
-
+import { Card, CardTitle } from 'reactstrap';
+import { isBordered } from '../../utils';
 import './index.css';
 
-function ActionsInfo({ style, isMyTurn, isHoveringTown, isMyTown, hasSelectedTown, isAttack }) {
+function ActionsInfo({ style, isMyTurn, hoveringTown, isMyTown, selectedTown, isAttack }) {
 
   return (
     <Card style={style}>
       <CardTitle className='text'>{!isMyTurn ? 'It is not your turn!' : 
-      isHoveringTown && (
-        hasSelectedTown ? (
+      hoveringTown && (
+        selectedTown ? (
+          isBordered(hoveringTown, selectedTown) ? (
           isAttack ? 'Click to configure your attack!' : 'Click to move gauchos.'
-        ) : isMyTown ? 'Click to change your specialization to Defense or Production, start configuring your attack or move gauchos.' :
+        ) : 'You should select a bordering town' ) :
+        isMyTown ? 'Click to change your specialization to Defense or Production, start configuring your attack or move gauchos.' : 
         'Before attacking, you should click one of your towns.'
       )}</CardTitle>
     </Card>
