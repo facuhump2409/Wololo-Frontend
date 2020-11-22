@@ -6,6 +6,7 @@ import {gamesStats} from "../../../services/admin";
 import {connect, useDispatch} from "react-redux";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
+import LoadingIndicator from "../../loadingIndicator";
 
 
 const mapStateToProps = state => ({...state.admin});
@@ -33,8 +34,8 @@ function AdminView(props) {
     return (
         <div>
 
-            <h3>Games Statistics</h3>
-            <div>
+            <h3 align="center">Games Statistics</h3>
+            <div className="box">
                 <DatePicker    selected={startDate}
                                onChange={onChange}
                                startDate={startDate}
@@ -43,8 +44,9 @@ function AdminView(props) {
                                inline
                                />
             </div>
-            <GamesPieChart data={props.gamesStats}/>
-
+            <div className="box2">
+                {props.gamesStats ? <GamesPieChart data={props.gamesStats}/> : <LoadingIndicator display={true}/>}
+            </div>
         </div>
 
 

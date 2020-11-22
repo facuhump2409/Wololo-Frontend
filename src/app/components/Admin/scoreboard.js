@@ -33,7 +33,9 @@ function Scoreboard (props){
             </thead>
             <tbody>
             {console.log("TOP PLAYERS: ",props.topPlayers)}
-            { props.topPlayers ? props.topPlayers.map((row, index) => (
+            { props.topPlayers ? props.topPlayers
+                .sort((user) => user.stats.gamesWon * 10 - user.stats.gamesLost)
+                .map((row, index) => (
                     <tr key={row.username}>
                         <td>{index + 1}</td>
                         <td>{row.username}</td>
@@ -42,14 +44,6 @@ function Scoreboard (props){
                     </tr>
                 )
             ) : <LoadingIndicator display={props.topPlayers === undefined}/> }
-            {/*{props.topPlayers.map((row, index) => (*/}
-            {/*    <tr key={row.username}>*/}
-            {/*        <td>{index + 1}</td>*/}
-            {/*        <td>{row.username}</td>*/}
-            {/*        <td>{row.score}</td>*/}
-            {/*    </tr>*/}
-            {/*)*/}
-            {/*)}*/}
             </tbody>
         </Table>
     );

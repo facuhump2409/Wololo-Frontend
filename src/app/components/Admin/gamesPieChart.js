@@ -9,7 +9,7 @@ function GamesPieChart(props) {
     //TODO sacar esos mas 1 estan hardcodeados porque sino back solo devuelve 0's
     return (
         <div>
-            <svg viewBox="0 0 850 350">
+            <svg viewBox="0 25 900 350">
                 <VictorySharedEvents
                     events={[{
                         childName: ["pie", "bar"],
@@ -46,7 +46,7 @@ function GamesPieChart(props) {
                                         labels: {fontSize: 10}
                                     }}
                                     data={[
-                                        {x: "Cancelled", y: cancelled}, {x: "Finished", y: finished}, {x: "New Games", y: newGames}, {x: "On Going", y: onGoing}
+                                        {x: "Cancelled: "+ cancelled, y: cancelled}, {x: "Finished: " + finished, y: finished}, {x: "New Games: " + newGames, y: newGames}, {x: "On Going: " + onGoing, y: onGoing}
                                     ]}
                                     labels={["Cancelled", "Finished", "New Games", "On Going"]}
                                     labelComponent={<VictoryLabel y={290}/>}
