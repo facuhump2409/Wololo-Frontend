@@ -28,7 +28,7 @@ class SignUpComponent extends Component{
             <div className="auth-wrapper">
                 <div className="auth-inner">
                     <Formik
-                        initialValues={{mail: "", password:"",username: ""}}
+                        initialValues={{mail: "", password:"",username: "", confirmPassword: ""}}
                         onSubmit={(values) => {
                             this.handleSubmit(values)
                         }}
@@ -39,7 +39,13 @@ class SignUpComponent extends Component{
                             password: Yup.string()
                                 .required("Enter a password")
                                 .min(8,"Password is too short - should be 8 characters minimum")
-                                .matches(/(?=.*[0-9])/,"Password must contain at least a number")
+                                .matches(/(?=.*[0-9])/,"Password must contain at least a number"),
+                            confirmPassword: Yup.string()
+                                .required("Confirm password")
+                                .label("Confirm password")
+                                .test("password-match", "Those passwords didn't match. Try Again",function (value) {
+                                    return this.parent.password === value;
+                                })
                         })
 
                         }>
@@ -97,7 +103,21 @@ class SignUpComponent extends Component{
                                         {errors.password && touched.password && (
                                             <div className="input-feedback">{errors.password}</div>
                                         )}
-                                        
+                                        <div className="form-group">
+                                            <label>Confirm password</label>
+                                            <input
+                                                name="confirmPassword"
+                                                type="password"
+                                                className="form-control"
+                                                placeholder="Enter password"
+                                                value={values.confirmPassword}
+                                                onChange={handleChange}
+                                                onBlur={handleBlur}
+                                            />
+                                        </div>
+                                        {errors.confirmPassword && touched.confirmPassword && (
+                                            <div className="input-feedback">{errors.confirmPassword}</div>
+                                        )}
 
                                         <button type="submit" className="btn btn-primary btn-block" disabled={this.props.inProgress}>Sign Up</button>
                                         <p className="forgot-password text-right">
