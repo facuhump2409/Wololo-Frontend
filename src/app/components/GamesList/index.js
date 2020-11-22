@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom'
 import { Table } from 'reactstrap';
-import { HEADERS, INITIAL_VALUES, CHANGE_ARROW } from './constants';
+import { HEADERS, CHANGE_ARROW } from './constants';
 import { compareValues, filterValues, mapGames } from './utils';
 import './Games.css'
 import {trackPromise} from "react-promise-tracker";
