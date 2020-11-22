@@ -25,23 +25,23 @@ const Game = (props) => {
 
   const getActualGame = useCallback(() => dispatch({ type: GET_GAME, payload: getGame(props.match.params.id) }));
 
-  const colors = activeGame && playersAndColors(activeGame.playerIds.map(player => player.id), COLORS.otherPlayers, currentUser.id);
+  const colors = activeGame && !errors && playersAndColors(activeGame.playerIds.map(player => player.id), COLORS.otherPlayers, currentUser.id);
 
   useEffect(() => {
     if(!activeGame && !inProgress) { 
       getActualGame()
-    } else if(!map && isActive(activeGame)) {
+    } else if(!map && !errors && isActive(activeGame)) {
         const mappedTowns = mapTowns(activeGame.province.towns);
         dispatch({ type: GET_MAP, payload: getMap(activeGame.province.name, mappedTowns) })
     }
-    if(gameChanged && isActive(activeGame)) {
+    if(gameChanged && !errors && isActive(activeGame)) {
       setTown(town ? activeGame.province.towns.find(aTown => aTown.id === town.id) : null)
     }
-  }, [dispatch, props.match.params.id, activeGame, currentUser, inProgress, gameChanged, town, map, getActualGame])
+  }, [dispatch, props.match.params.id, activeGame, currentUser, inProgress, gameChanged, town, map, getActualGame, errors])
 
   useEffect(() => {
     if(activeGame && map) {
-      const socket = socketIOClient(`${process.env.REACT_ENV == 'production' ? window.location.origin : 'localhost'}:${process.env.REACT_APP_SOCKET_PORT}`);
+      const socket = socketIOClient(`${process.env.REACT_ENV === 'production' ? window.location.origin : 'localhost'}:${process.env.REACT_APP_SOCKET_PORT}`);
       socket.emit('joinGameRoom', activeGame.id)
       socket.on('update', () => getActualGame());
 
@@ -51,7 +51,8 @@ const Game = (props) => {
 
       return () => socket.disconnect();
     }
-  }, [activeGame, gameChanged, getActualGame, map])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [gameChanged])
 
   const redirect = () => {
     dispatch({ type: REDIRECT_GAME })
