@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useCallback } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import {GET_GAME, GET_MAP, PASS_TURN, REDIRECT_GAME, SURRENDER} from '../../../redux/actionTypes';
 import {getGame, finishTurn, surrender, getMap} from '../../../services/games';
@@ -11,6 +11,7 @@ import socketIOClient from 'socket.io-client';
 import './index.css'
 import TownActions from './components/TownActions';
 import ActionsInfo from './components/ActionsInfo';
+import Players from './components/Players';
 
 const Game = (props) => {
   const dispatch = useDispatch();
@@ -21,9 +22,11 @@ const Game = (props) => {
   const [showSurrenderModal, setSurrenderModal] = useState(false);
   const [showTurnModal, setTurnModal] = useState(false);
 
+  const getActualGame = useCallback(() => dispatch({ type: GET_GAME, payload: getGame(props.match.params.id) }));
+
   useEffect(() => {
     if(!activeGame && !inProgress) { 
-      dispatch({ type: GET_GAME, payload: getGame(props.match.params.id) })
+      getActualGame()
     } else if(!map && isActive(activeGame)) {
         const mappedTowns = mapTowns(activeGame.province.towns);
         dispatch({ type: GET_MAP, payload: getMap(activeGame.province.name, mappedTowns) })
@@ -31,13 +34,13 @@ const Game = (props) => {
     if(gameChanged && isActive(activeGame)) {
       setTown(town ? activeGame.province.towns.find(aTown => aTown.id === town.id) : null)
     }
-  }, [dispatch, props.match.params.id, activeGame, currentUser, inProgress, gameChanged, town, map])
+  }, [dispatch, props.match.params.id, activeGame, currentUser, inProgress, gameChanged, town, map, getActualGame])
 
   useEffect(() => {
     if(activeGame && map) {
       const socket = socketIOClient(`${process.env.REACT_ENV == 'production' ? window.location.origin : 'localhost'}:${process.env.REACT_APP_SOCKET_PORT}`);
       socket.emit('joinGameRoom', activeGame.id)
-      socket.on('update', () => dispatch({ type: GET_GAME, payload: getGame(props.match.params.id) }));
+      socket.on('update', () => getActualGame());
 
       if(gameChanged) {
         socket.emit('notifyGameUpdate');
@@ -45,7 +48,7 @@ const Game = (props) => {
 
       return () => socket.disconnect();
     }
-  }, [activeGame, gameChanged, map])
+  }, [activeGame, gameChanged, getActualGame, map])
 
   const redirect = () => {
     dispatch({ type: REDIRECT_GAME })
@@ -104,36 +107,33 @@ const Game = (props) => {
           currentUser={currentUser}
            />}
 
-           <ActionsInfo style={{  
-            width: '400px',
-            position: 'absolute',
-            backgroundColor: 'rgba(255,255,255,0.8)',
-            top: '60px',
-            left: '5px',
-            zIndex: 2,
-            }}
-            isMyTurn={isMyTurn(activeGame, currentUser.id)}
-            isHoveringTown={town}
-            isMyTown={town && isMyTown(town, currentUser.id)}
-            hasSelectedTown={selectedTowns.town1}
-            isAttack={selectedTowns.town1 && town && !isMyTown(town, currentUser.id)}
-            />
+            <div className='actionsInfo'>
+              <ActionsInfo 
+                isMyTurn={isMyTurn(activeGame, currentUser.id)}
+                isHoveringTown={town}
+                isMyTown={town && isMyTown(town, currentUser.id)}
+                hasSelectedTown={selectedTowns.town1}
+                isAttack={selectedTowns.town1 && town && !isMyTown(town, currentUser.id)}
+                />
+            </div>
 
-          <TownActions style={{  
-            width: '25%',
-            minWidth: '200px',
-            position: 'absolute',
-            backgroundColor: 'rgba(255,255,255,0.8)',
-            bottom: '22px',
-            right: '2px',
-            zIndex: 2,
-            }} 
-            hoveredTown={town && townWithOwner(town, activeGame.playerIds)} 
-            selectedTowns={selectedTowns}
-            currentUser={currentUser.id}
-            currentGame={activeGame}
-            onChange={handleReturn}
-            ></TownActions>
+            <div className='townInfo'>
+              <TownActions
+                hoveredTown={town && townWithOwner(town, activeGame.playerIds)} 
+                selectedTowns={selectedTowns}
+                currentUser={currentUser.id}
+                currentGame={activeGame}
+                onChange={handleReturn}
+                />
+            </div>
+
+            <div className='playersInfo'>
+              <Players
+                players={activeGame.playerIds}
+                currentUser={currentUser.id}
+                turn={activeGame.turnId}
+              />
+            </div>
           
         <div className=' d-flex justify-content-center col-6'>
           <Button color='danger' className='surrender' onClick={showModal}>Surrender</Button>
@@ -168,17 +168,24 @@ const Game = (props) => {
           Wait until they play to attack again
         </SweetAlert>
       </div>
-        </div>
+    </div>
         
-    ) :
-    <SweetAlert
-    info
-    title="The game ended!"
-    onConfirm={() => redirect()}
-    onCancel={() => redirect()}
-    // timeout={2000}
-    show
-          ></SweetAlert>
+    ) : ( !!errors ? <SweetAlert
+      info
+      title="There was an error with your action!"
+      onConfirm={() => getActualGame()}
+      onCancel={() => getActualGame()}
+      // timeout={2000}
+      show
+    >{errors}</SweetAlert> : <SweetAlert
+      info
+      title="The game ended!"
+      onConfirm={() => redirect()}
+      onCancel={() => redirect()}
+      // timeout={2000}
+      show
+            ></SweetAlert> )
+    
   )
 }
 

@@ -1,3 +1,5 @@
+import { COLORS } from '../../constants';
+
 export const townsFrom = (user, towns) => towns.filter(aTown => aTown.ownerId === user);
 
 export const isMyTurn = (game, user) => game.turnId === user
@@ -12,4 +14,6 @@ export const isValidSelection = (aTown, anotherTown) => aTown.id !== anotherTown
 
 export const isActive = (game) => ['FINISHED', 'CANCELED'].every(status => status !== game.status)
 
-export const townWithOwner = (town, players) => ({...town, owner: town.ownerId !== 'null' && players.find(player => player.id === town.ownerId)})
+export const townWithOwner = (town, players) => ({...town, owner: town.ownerId && players.find(player => player.id === town.ownerId)})
+
+export const colorFor = (ownerId) => COLORS.otherPlayers[parseInt(ownerId,10) % 3];

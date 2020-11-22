@@ -1,15 +1,11 @@
-const colors = {
-  unOwned: '#000',
-  current: '#13FF00',
-  otherPlayers: ['#BF0000', '#1700C7', '#D5DE00']
-}
+import { COLORS } from '../../../../constants';
+import { colorFor } from '../../utils';
 
-const colorFor = (ownerId) => colors.otherPlayers[parseInt(ownerId,10) % 3];
 const isTownFrom = (aTown, currentUser) => aTown.ownerId === currentUser
 
 export const paintBy = (town, currentUser) => {
   return ({
-    'fill-color':  isTownFrom(town, currentUser.id) ? colors.current : (town.ownerId == 'null' ? colors.unOwned : colorFor(town.ownerId)),
+    'fill-color': isTownFrom(town, currentUser.id) ? COLORS.current : (!town.ownerId ? COLORS.unOwned : colorFor(town.ownerId)),
     'fill-outline-color': '#000',
     'fill-opacity': 0.5
     })

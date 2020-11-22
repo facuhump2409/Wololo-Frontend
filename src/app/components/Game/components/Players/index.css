@@ -1,0 +1,25 @@
+ul {
+  list-style: none;
+  padding: 0 0 0 7px;
+}
+
+.playerContainer {
+  display: flex;
+  justify-content: left;
+  margin-bottom: 5px;
+}
+
+.itsTurn {
+  font-weight: 700;
+  font-style: italic;
+}
+
+.dot {
+  height: 25px;
+  width: 25px;
+  background-color: #bbb;
+  border-radius: 50%;
+  border: 1px solid black;
+  display: inline-block;
+  margin-right: 5px;
+}
