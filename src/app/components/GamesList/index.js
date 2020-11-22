@@ -36,7 +36,6 @@ function GamesList(props) {
 
   useEffect(() => {
     if(!props.inProgress) setRowValues(mapGames(props.games));
-    console.log('test')
   }, [props])
 
   function handleSearchChange(event) {
