@@ -37,6 +37,11 @@ export const ADMIN_LINKS = [
   },
   {
     id: 3,
+    to: '/scoreboard',
+    name: 'ScoreBoard'
+  },
+  {
+    id: 4,
     to: '/sign_out',
     name: 'Sign Out'
   }]

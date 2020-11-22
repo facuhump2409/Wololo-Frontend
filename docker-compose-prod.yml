@@ -22,7 +22,7 @@ services:
         awslogs-region: us-west-2
         awslogs-stream-prefix: web
   wololo-frontend:
-    image: facuhump2/wololo-frontend
+    image: maxfeldman/wololo_frontend:1.0
     container_name: wololo-frontend
     # volumes:
     #   - '.:/app'
