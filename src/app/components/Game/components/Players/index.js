@@ -14,7 +14,7 @@ function Players({ turn, currentUser, players, colors }) {
               backgroundColor: currentUser === player.id ? COLORS.current : colors[player.id]
             }}
           />
-          <li className={turn === player.id && 'itsTurn'}>{player.username}</li>
+          <li className={`font ${turn === player.id && 'itsTurn'}`}>{player.username}</li>
         </div>
         ))
       }
