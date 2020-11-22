@@ -35,7 +35,7 @@ const Game = (props) => {
 
   useEffect(() => {
     if(activeGame && map) {
-      const socket = socketIOClient(`${window.location.origin}:${process.env.REACT_APP_SOCKET_PORT}`);
+      const socket = socketIOClient(`${process.env.REACT_ENV == 'production' ? window.location.origin : 'localhost'}:${process.env.REACT_APP_SOCKET_PORT}`);
       socket.emit('joinGameRoom', activeGame.id)
       socket.on('update', () => dispatch({ type: GET_GAME, payload: getGame(props.match.params.id) }));
 
