@@ -18,12 +18,26 @@ export const HEADERS = [{
   arrow: 'down'
 }, {
   id: 4,
-  value: 'Status',
-  key: 'status',
+  value: 'Users',
+  key: 'users',
   nextOrder: true,
   arrow: 'down'
 }, {
   id: 5,
+  value: 'Towns',
+  key: 'towns',
+  nextOrder: true,
+  arrow: 'down'
+},
+{
+  id: 6,
+  value: 'Status',
+  key: 'status',
+  nextOrder: true,
+  arrow: 'down'
+},
+{
+  id: 7,
   value: 'Action',
   key: 'action',
   nextOrder: true,

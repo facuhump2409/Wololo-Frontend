@@ -43,11 +43,13 @@ function GamesList(props) {
   }
 
   function onHeaderClick(header) {
-    setRowValues([...rowValues.sort((compareValues(header.key, header.nextOrder)))]);
-    setHeaders(headers.map(aHeader => aHeader.id === header.id ? 
-      {...header, nextOrder: !header.nextOrder, arrow: CHANGE_ARROW[header.arrow]} :
-      {...aHeader, nextOrder: true, arrow: 'down'}
-      ));
+    if(!!header.arrow) {
+      setRowValues([...rowValues.sort((compareValues(header.key, header.nextOrder)))]);
+      setHeaders(headers.map(aHeader => aHeader.id === header.id ? 
+        {...header, nextOrder: !header.nextOrder, arrow: CHANGE_ARROW[header.arrow]} :
+        {...aHeader, nextOrder: true, arrow: 'down'}
+        ));
+    }
   }
 
   function handlePlayClick(event) {
@@ -87,7 +89,7 @@ function GamesList(props) {
                     <Link to={`/game/${rowValue.id}`}>
                       <button className='btn btn-primary' value={rowValue.id} onClick={handlePlayClick}>Play</button>
                     </Link>
-                   : <button className='btn btn-primary'>See Statistics</button>
+                   : <button className='btn btn-primary' disabled>Game ended</button>
                    }
                    </th>
                 </tr>
