@@ -230,7 +230,7 @@ class NewGame extends React.Component {
     }
 
     isLastStep() {
-        return this.state.step === 3
+        return this.state.step === 4
     }
     nextStep() {
         this.setState({step: this.state.step + 1});
