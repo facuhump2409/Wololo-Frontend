@@ -38,15 +38,17 @@
     "redux": "^4.0.5",
     "redux-thunk": "^2.3.0",
     "rsuite": "^4.8.2",
+    "save-dev": "0.0.1-security",
     "socket.io-client": "^2.3.1",
     "victory": "^35.2.0",
     "victory-shared-events": "^35.2.0",
+    "webpack-merge": "^5.4.0",
     "yup": "^0.29.3"
   },
   "scripts": {
-    "start": "webpack-dev-server --env.development --mode development --open --config webpack.config.js",
+    "start": "webpack-dev-server --env.development --mode development --open --config webpack.dev.js",
     "start-prod": "webpack-dev-server --env.production --env.REACT_APP_API_URL=wololo-backend --env.REACT_APP_API_PORT=8080 --host 0.0.0.0 --port 80 --open --config webpack.config.js",
-    "build": "react-scripts build",
+    "build": "webpack --env.production --config webpack.prod.js",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
@@ -66,6 +68,9 @@
     ]
   },
   "devDependencies": {
+    "@babel/core": "^7.12.7",
+    "@babel/preset-env": "^7.12.7",
+    "@babel/preset-react": "^7.12.7",
     "babel-loader": "^7.1.5",
     "babel-preset-env": "^1.7.0",
     "babel-preset-react": "^6.24.1",
