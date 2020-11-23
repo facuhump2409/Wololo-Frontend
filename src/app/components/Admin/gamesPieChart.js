@@ -46,9 +46,9 @@ function GamesPieChart(props) {
                                         labels: {fontSize: 10}
                                     }}
                                     data={[
-                                        {x: "Cancelled: "+ cancelled, y: cancelled}, {x: "Finished: " + finished, y: finished}, {x: "New Games: " + newGames, y: newGames}, {x: "On Going: " + onGoing, y: onGoing}
+                                        {x: "Cancelled", y: cancelled}, {x: "Finished: " + finished, y: finished}, {x: "New Games: " + newGames, y: newGames}, {x: "On Going: " + onGoing, y: onGoing}
                                     ]}
-                                    labels={["Cancelled", "Finished", "New Games", "On Going"]}
+                                    labels={["Cancelled: " + cancelled, "Finished: " + finished, "New Games: " + newGames, "On Going: " + onGoing]}
                                     labelComponent={<VictoryLabel y={290}/>}
                         />
                     </g>

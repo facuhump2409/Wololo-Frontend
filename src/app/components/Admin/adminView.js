@@ -34,8 +34,9 @@ function AdminView(props) {
     return (
         <div>
 
-            <h3 align="center">Games Statistics</h3>
             <div className="box">
+                <h3 align="center">Games Statistics</h3>
+                <h5>Select dates</h5>
                 <DatePicker    selected={startDate}
                                onChange={onChange}
                                startDate={startDate}
