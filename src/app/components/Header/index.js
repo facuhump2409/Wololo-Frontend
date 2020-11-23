@@ -8,13 +8,14 @@ import NavbarItem from "./navbarItem";
 import {getFromLocal} from "../../../services/localStorage";
 import { Collapse, Navbar, NavbarToggler, NavbarBrand, Nav, NavItem, NavLink, NavbarText } from 'reactstrap'
 import userImg from '../../assets/user.png'
+import SportsEsportsIcon from "@material-ui/icons/SportsEsports";
 
 function Header(props) {
   const isAuthorized = useSelector(state => state.auth.isAuthorized);
   const currentUser = getFromLocal('currentUser');
   function createNavbar(items) {
     return items.map(item => (
-        <NavbarItem item={item} key={item.id}/>
+            <NavbarItem item={item} key={item.id}/>
     ))
   }  
   const [isOpen, setIsOpen] = useState(false);

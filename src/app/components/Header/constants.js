@@ -12,16 +12,16 @@ export const LOGGED_LINKS = [
   {
     id: 1,
     to: '/games',
-    name: 'Games List'
+    name: 'Games'
   }, {
     id: 2,
     to: '/newGame',
-    name: 'Create New Game'
+    name: 'New Game'
   },
   {
     id: 3,
     to: '/sign_out',
-    name: 'Sign Out'
+    name: 'Sign Out',
 }]
 
 export const ADMIN_LINKS = [
