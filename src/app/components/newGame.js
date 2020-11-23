@@ -108,10 +108,10 @@ class NewGame extends React.Component {
             case 3:
                 return <form>
                     <div>
+                        {/*TODO agregar que se quede con lo que seleccione y lo mande en la request*/}
                         <Autocomplete
                             id="combo-box-demo"
                             options={["Easy","Normal","Hard"]}
-                            {/*TODO agregar que se quede con lo que seleccione y lo mande en la request*/}
                             style={{ width: 300 }}
                             renderInput={(params) => <TextField {...params} label="Combo box" variant="outlined" />}
                         />
