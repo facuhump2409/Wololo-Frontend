@@ -1,0 +1,30 @@
+ul {
+  list-style: none;
+  padding: 0 0 0 7px;
+}
+
+.playerContainer {
+  display: flex;
+  justify-content: left;
+  margin-bottom: 5px;
+}
+
+.font {
+  font-size: 20px;
+  padding: 7px 0;
+}
+
+.itsTurn {
+  font-weight: 700;
+  font-style: italic;
+}
+
+.dot {
+  height: 45px;
+  width: 45px;
+  background-color: #bbb;
+  border-radius: 50%;
+  border: 1px solid black;
+  display: inline-block;
+  margin-right: 7px;
+}
