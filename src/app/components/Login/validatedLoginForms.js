@@ -70,7 +70,7 @@ class ValidatedLoginForm extends React.Component {
                                     <label>Email address</label>
                                     <input
                                     name="mail"
-                                    // type="email"
+                                    type="email"
                                     className="form-control"
                                     placeholder="Enter email"
                                     value={values.email}

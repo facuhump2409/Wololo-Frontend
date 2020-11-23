@@ -10,7 +10,6 @@ module.exports = (env, options) => {
         prev[`process.env.${next}`] = JSON.stringify(envVariables[next]);
         return prev;
     }, {});
-
     return {
         entry: './src/index.js',
         output: {
@@ -26,7 +25,7 @@ module.exports = (env, options) => {
             historyApiFallback: true,
             proxy: {
                 '/api': {
-                    target: `http://${process.env.REACT_APP_API_URL}:${process.env.REACT_APP_API_PORT}`,
+                    target: process.env.REACT_APP_API_URL ? `http://${process.env.REACT_APP_API_URL}:${process.env.REACT_APP_API_PORT}` : "http://localhost:8080",
                     pathRewrite: {'^/api': ''},
                     changeOrigin: true
                 }
@@ -34,6 +33,13 @@ module.exports = (env, options) => {
         },
         module: {
             rules: [{
+                test: /\.(png|jpe?g|gif)$/i,
+                use: [
+                  {
+                    loader: 'file-loader',
+                  },
+                ],
+              }, {
                 test: /\.jsx?/,
                 include: [
                     path.resolve(__dirname, "./src"),
