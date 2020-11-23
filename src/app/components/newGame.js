@@ -17,6 +17,8 @@ import Card from "@material-ui/core/Card";
 import { makeStyles } from '@material-ui/core/styles';
 import HorizontalLabelPositionBelowStepper from "./stepper";
 import {getFromLocal} from "../../services/localStorage";
+import Autocomplete from "@material-ui/lab/Autocomplete";
+import TextField from "@material-ui/core/TextField";
 
 const BOOTSTRAP_CLASSES = {
     filter: 'form-control',
@@ -104,6 +106,18 @@ class NewGame extends React.Component {
                 const selectedTown = this.getProvinces().find(element => element.name ===  this.state.selectedLocation.toUpperCase())
                 return <DiscreteSlider maxTowns={selectedTown.qty} onChange={(e,val) => setFieldValue("towns",val)}/>;
             case 3:
+                return <form>
+                    <div>
+                        <Autocomplete
+                            id="combo-box-demo"
+                            options={["Easy","Normal","Hard"]}
+                            {/*TODO agregar que se quede con lo que seleccione y lo mande en la request*/}
+                            style={{ width: 300 }}
+                            renderInput={(params) => <TextField {...params} label="Combo box" variant="outlined" />}
+                        />
+                    </div>
+                    </form>
+            case 4:
                 return <form>
                     <div>
                         <FilteredMultiSelect
@@ -213,7 +227,7 @@ class NewGame extends React.Component {
     }
 
     isLastStep() {
-        return this.state.step === 3
+        return this.state.step === 4
     }
     nextStep() {
         this.setState({step: this.state.step + 1});
