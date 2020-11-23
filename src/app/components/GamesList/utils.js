@@ -21,10 +21,10 @@ const formatDate = (date) => {
 export const mapGames = (games) => games.map(game => ({ 
   id: game.id, 
   data: { 
-    province: game.province.name, 
-    date: formatDate(new Date(game.date)), 
-    users: game.playerIds.map(player => player.username).join(', '),
-    towns: game.province.towns.length.toString(),
-    status: game.status 
+    province: { value: game.province.name, showMobile: true }, 
+    date: { value: formatDate(new Date(game.date)) }, 
+    users: { value: game.playerIds.map(player => player.username).join(', '), showMobile: true },
+    towns: { value: game.province.towns.length.toString() },
+    status: { value: game.status }
   } 
 }))
