@@ -3,15 +3,20 @@ import { useDispatch } from 'react-redux';
 import { Card, CardBody, CardText, Button } from 'reactstrap';
 import { getChangeSpecialization, areSelectedAndRivals, areSelectedAndFriendlies, canMoveGauchos } from './utils'
 import { updateSpecialization, attackTown, getTownStats, moveGauchos } from '../../../../../services/games'
-import {CHANGE_SPECIALIZATION, ATTACK_TOWN, MOVE_GAUCHOS } from '../../../../../redux/actionTypes'
+import {CHANGE_SPECIALIZATION, ATTACK_TOWN, MOVE_GAUCHOS, CLEAR_DELTA_ACTION} from '../../../../../redux/actionTypes'
 import TownInfo from './components/TownInfo'
 import Slider from '@material-ui/core/Slider'
 import CloseIcon from '@material-ui/icons/Close';
 import { isMyTown } from '../../utils'
+import ActionResult from "./actionResult";
+import {Alert} from "rsuite";
 
-function TownActions({ hoveredTown, currentGame, style, onChange, onAttack, selectedTowns, currentUser }) {
+function TownActions({ hoveredTown, currentGame, style, onChange, onAttack, selectedTowns, currentUser}) {
   const dispatch = useDispatch()
   const [selectedQuantity, setSelectedQuantity] = useState(1);
+  // const deltaTowns = deltaAction.deltaTowns
+  // const deltaGauchos = deltaTowns[1].deltaGauchos
+  // const deltaSpecialization = deltaTowns[0].deltaSpecialization
 
   const handleChangeSpecialization = (aTown, specialization) => {
     dispatch({ type: CHANGE_SPECIALIZATION, payload: updateSpecialization(currentGame.id, aTown.id, specialization) })
@@ -55,7 +60,7 @@ function TownActions({ hoveredTown, currentGame, style, onChange, onAttack, sele
           valueLabelDisplay="auto"
         />
         <Button color='primary' onClick={handleTownMove} type='submit'>Move Gauchos</Button>
-        </div> 
+        </div>
       }
       <TownInfo town={hoveredTown} currentUser={currentUser} hide={selectedTowns.town1 && selectedTowns.town2}/>
     </CardBody>

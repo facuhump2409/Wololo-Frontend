@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
-import {GET_GAME, GET_MAP, PASS_TURN, REDIRECT_GAME, SURRENDER} from '../../../redux/actionTypes';
+import {CLEAR_DELTA_ACTION, GET_GAME, GET_MAP, PASS_TURN, REDIRECT_GAME, SURRENDER} from '../../../redux/actionTypes';
 import {getGame, finishTurn, surrender, getMap} from '../../../services/games';
 import { getFromLocal } from '../../../services/localStorage'
 import { isMyTurn, isActive, isMyTown, isValidSelection, mapTowns, townWithOwner, playersAndColors } from './utils'
@@ -13,11 +13,12 @@ import TownActions from './components/TownActions';
 import ActionsInfo from './components/ActionsInfo';
 import Players from './components/Players';
 import { COLORS } from '../../constants';
+import ActionResult from "./components/TownActions/actionResult";
 
 const Game = (props) => {
   const dispatch = useDispatch();
   const currentUser = getFromLocal('currentUser');
-  const { activeGame, map, errors, inProgress, gameChanged } = useSelector(state => state.games)
+  const { activeGame, map, errors, inProgress, gameChanged,showActionMessage } = useSelector(state => state.games)
   const [town, setTown] = useState(null);
   const [selectedTowns, setSelectedTowns] = useState({town1: null, town2: null});
   const [showSurrenderModal, setSurrenderModal] = useState(false);
@@ -98,6 +99,9 @@ const Game = (props) => {
     dispatch({ type: PASS_TURN, payload: finishTurn(activeGame.id) })
     setTurnModal(false)
   }
+  const clearDeltaAction = () => {
+      dispatch({ type: CLEAR_DELTA_ACTION})
+  }
 
   return (
     activeGame && isActive(activeGame) && !errors ? (
@@ -146,6 +150,7 @@ const Game = (props) => {
         <div className=' d-flex justify-content-center col-6'>
           <Button color='danger' className='surrender' onClick={showModal}>Surrender</Button>
         </div>
+            {showActionMessage && <ActionResult show={showActionMessage} onClose={clearDeltaAction}/>}
         <SweetAlert
             warning
             // custom

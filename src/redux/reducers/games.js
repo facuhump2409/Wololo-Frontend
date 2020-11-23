@@ -1,7 +1,7 @@
 import {
     ASYNC_START, GAMES_PAGE_LOADED, GAMES_PAGE_UNLOADED,
     GET_GAMES, CREATE_GAME, GET_GAME, MOVE_GAUCHOS, CHANGE_SPECIALIZATION, ATTACK_TOWN,
-    PASS_TURN, SURRENDER, REDIRECT_GAME, TOWN_STATS, GET_MAP
+    PASS_TURN, SURRENDER, REDIRECT_GAME, TOWN_STATS, GET_MAP, CLEAR_DELTA_ACTION
 }
     from '../actionTypes';
 import {initialState} from "./utils";
@@ -70,13 +70,21 @@ export default function(state = initialState, action) {
                 ...state,
                 inProgress: false,
                 errors: action.error ? action.payload.message : null,
-                activeGame: action.payload,
+                // activeGame: action.payload,
+                deltaAction: action.payload,
                 gameChanged: true,
+                showActionMessage: !action.error && true//action.type=== '' ? true : ,
+                // showAttack
             }
         case 'MAP_UPDATED':
             return {
                 ...state,
                 gameChanged: false,
+            }
+        case CLEAR_DELTA_ACTION:
+            return {
+                ...state,
+                showActionMessage: false
             }
         case CREATE_GAME:
             return {
