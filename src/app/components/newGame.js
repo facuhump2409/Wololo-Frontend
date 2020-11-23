@@ -256,6 +256,7 @@ class NewGame extends React.Component {
                                 provinceName: this.state.selectedLocation,
                                 townAmount: parseInt(values.towns),
                                 participantsIds: this.state.selectedUsers.map(user => user.value),
+                                difficulty: 'NORMAL'
                             })
                                 .setSubmitting(false);
                         }}

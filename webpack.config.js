@@ -33,6 +33,13 @@ module.exports = (env, options) => {
         },
         module: {
             rules: [{
+                test: /\.(png|jpe?g|gif)$/i,
+                use: [
+                  {
+                    loader: 'file-loader',
+                  },
+                ],
+              }, {
                 test: /\.jsx?/,
                 include: [
                     path.resolve(__dirname, "./src"),

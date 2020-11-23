@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom'
 import { Table } from 'reactstrap';
-import { HEADERS, INITIAL_VALUES, CHANGE_ARROW } from './constants';
+import { HEADERS, CHANGE_ARROW } from './constants';
 import { compareValues, filterValues, mapGames } from './utils';
 import './Games.css'
 import {trackPromise} from "react-promise-tracker";
@@ -25,16 +25,21 @@ const mapStateToProps = state => ({ ...state.games });
 
 function GamesList(props) {
 
+  const mappedGames = mapGames(props.games)
   const dispatch = useDispatch()
-  const [rowValues, setRowValues] = useState(INITIAL_VALUES);
+  const [rowValues, setRowValues] = useState(mappedGames);
   const [headers, setHeaders] = useState(HEADERS);
 
   useEffect(() => {
     dispatch({ type: GET_GAMES, payload: getGames() });
-  }, [dispatch])
+  }, [dispatch] )
+
+  useEffect(() => {
+    if(!props.inProgress) setRowValues(mapGames(props.games));
+  }, [props])
 
   function handleSearchChange(event) {
-    return event.target.value ? setRowValues(filterValues(rowValues, event.target.value)) : setRowValues(INITIAL_VALUES);
+    return event.target.value ? setRowValues(filterValues(rowValues, event.target.value)) : setRowValues(mappedGames);
   }
 
   function onHeaderClick(header) {
@@ -72,7 +77,7 @@ function GamesList(props) {
             </tr>
           </thead>
           <tbody>
-            {mapGames(props.games).map(
+            {rowValues.map(
             rowValue => 
                 <tr key={rowValue.id}>
                   <th scope='row'>{rowValue.id}</th>

@@ -2,3 +2,30 @@
   display: flex;
   justify-content: space-evenly;
 }
+
+.inner-container {
+  display: flex;
+  justify-content: left;
+  text-align: center;
+  margin-left: 10px;
+}
+
+@media (max-width: 992px) {
+  .inner-container {
+    margin-left: 0px;
+  }
+}
+
+.text {
+  margin: 0;
+}
+
+.nav-user {
+  padding: 1rem;
+  color: red;
+}
+
+.img-user {
+  width: 40px;
+  height: 40px;
+}
