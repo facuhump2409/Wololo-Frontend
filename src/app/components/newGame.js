@@ -106,6 +106,19 @@ class NewGame extends React.Component {
             case 3:
                 return <form>
                     <div>
+                        {/*TODO agregar que se quede con lo que seleccione y lo mande en la request*/}
+                        <Autocomplete
+                            id="combo-box-demo"
+                            label="Game Mode"
+                            options={["Easy","Normal","Hard"]}
+                            style={{ width: 300 }}
+                            renderInput={(params) => <TextField {...params} label="Game Mode" variant="outlined" />}
+                        />
+                    </div>
+                    </form>
+            case 4:
+                return <form>
+                    <div>
                         <FilteredMultiSelect
                             name="users"
                             classNames={BOOTSTRAP_CLASSES}
@@ -247,7 +260,7 @@ class NewGame extends React.Component {
                         validate={validate}
                         // validationSchema = {validator}
                         onSubmit={(values) => {
-                            if (this.state.step < 3) {
+                            if (!this.isLastStep()) {
                                 this.nextStep()
                                 return
                             }

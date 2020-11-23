@@ -20,7 +20,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function getSteps() {
-    return ['Select Province', 'Select Amount of towns', 'Select Rivals'];
+    return ['Select Province', 'Select Amount of towns',"Select game mode", 'Select Rivals'];
 }
 
 function getStepContent(stepIndex) {
@@ -30,6 +30,8 @@ function getStepContent(stepIndex) {
         case 2:
             return 'Select the amount of towns for the game';
         case 3:
+            return 'Select game mode';
+        case 4:
             return 'Select the users you want to play with';
         default:
             return 'Select Province';
