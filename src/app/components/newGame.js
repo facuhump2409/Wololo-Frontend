@@ -17,6 +17,8 @@ import Card from "@material-ui/core/Card";
 import { makeStyles } from '@material-ui/core/styles';
 import HorizontalLabelPositionBelowStepper from "./stepper";
 import {getFromLocal} from "../../services/localStorage";
+import TextField from "@material-ui/core/TextField";
+import Autocomplete from "@material-ui/lab/Autocomplete";
 
 const BOOTSTRAP_CLASSES = {
     filter: 'form-control',
@@ -101,8 +103,8 @@ class NewGame extends React.Component {
             case 1:
                 return firstStep;
             case 2:
-                const selectedTown = this.getProvinces().find(element => element.name ===  this.state.selectedLocation.toUpperCase())
-                return <DiscreteSlider maxTowns={selectedTown.qty} onChange={(e,val) => setFieldValue("towns",val)}/>;
+                const selectedTown = this.state.selectedLocation ? this.getProvinces().find(element => element.name ===  this.state.selectedLocation.toUpperCase()) : undefined
+                return <DiscreteSlider maxTowns={selectedTown ? selectedTown.qty : 20} onChange={(e,val) => setFieldValue("towns",val)}/>;
             case 3:
                 return <form>
                     <div>
