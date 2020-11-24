@@ -63,6 +63,8 @@ services:
     container_name: 'mongo-container'
     environment:
       - MONGO_INITDB_DATABASE=wololo-tacs
+    volumes:
+      - ./init-mongo.js:/docker-entrypoint-initdb.d/init-mongo.js:ro
     ports:
       - '27017-27019:27017-27019'
     networks:
