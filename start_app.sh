@@ -21,13 +21,6 @@ reuising_message="already cloned. Reusing it..."
 frontend_name="wololo-react"
 backend_name="TP-TACS"
 
-if [ -d "$frontend_name" ] 
-then 
-    echo "$frontend_name $reuising_message" 
-else
-    git clone "https://github.com/Maxi-F/$frontend_name.git"
-fi
-
 if [ -d "$backend_name" ] 
 then
     echo "$backend_name $reuising_message"
@@ -35,7 +28,7 @@ else
     git clone "https://github.com/Tp-Tacs/$backend_name.git"
 fi
 
-cd "$frontend_name"
+cd ..
 
 echo "------------------------------------------------------------------"
 echo "\n\nBuilding application...\n"
