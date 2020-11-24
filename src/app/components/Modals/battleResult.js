@@ -18,8 +18,8 @@ class BattleResult extends React.Component {
         const { backdrop } = this.state;
         const towns = this.props.selectedTowns;
         const deltaAction = this.props.deltaAction
-        const [message, emoji] = (deltaAction.deltaTowns[1].deltaOwnerUsername || deltaAction.deltaTowns[0].deltaOwnerUsername) ? ['YOU WON!!!', <Emoji symbol="🦁" />]
-            : ['YOU LOST', <Emoji symbol="😢" />]
+        const [message, emoji] = (deltaAction.deltaTowns[0] && (deltaAction.deltaTowns[1].deltaOwnerUsername || deltaAction.deltaTowns[0].deltaOwnerUsername)) ? ['YOU WON!!!', <Emoji symbol="🦁" />]
+            : deltaAction.deltaTowns[0] ? ['YOU CANT ATTACK WITH NO GAUCHOS', <Emoji symbol="😢" />] : ['YOU LOST', <Emoji symbol="😢" />]
         return (
             <div className="modal-container">
                 <Modal
@@ -36,18 +36,18 @@ class BattleResult extends React.Component {
                         <h4 align="center" > {message} {emoji} </h4>
                         <div className="results">
                             <h5 className="thicker">Your army</h5>
-                            <p> Location: {deltaAction.deltaTowns[0].townName}</p>
-                            <p> Gauchos lost in battle: {Math.abs(deltaAction.deltaTowns[0].deltaGauchos)}</p>
+                            <p> Location: {deltaAction.deltaTowns[0] ? deltaAction.deltaTowns[0].townName : ""}</p>
+                            <p> Gauchos lost in battle: {deltaAction.deltaTowns[0] ? Math.abs(deltaAction.deltaTowns[0].deltaGauchos) : ""}</p>
                             {/*<p> Remaining Gauchos: {towns.town1.gauchos}</p>*/}
                         </div>
                         <div className="results">
                             <h5 className="thicker">Your rival</h5>
-                            <p> Location: {deltaAction.deltaTowns[1].townName}</p>
-                            <p> Gauchos lost in battle: {Math.abs(deltaAction.deltaTowns[1].deltaGauchos)}</p>
+                            <p> Location: {deltaAction.deltaTowns[1] ? deltaAction.deltaTowns[1].townName : ""}</p>
+                            <p> Gauchos lost in battle: {deltaAction.deltaTowns[1] ? Math.abs(deltaAction.deltaTowns[1].deltaGauchos) : ""}</p>
                             {/*<p> Remaining Gauchos: {towns.town2.gauchos}</p>*/}
                         </div>
                     </Modal.Body>
-                    <Modal.Footer>Keep calm and carry on</Modal.Footer>
+                    <Modal.Footer>Keep calm and carry on</Modal.Footer> }
                 </Modal>
             </div>
         );

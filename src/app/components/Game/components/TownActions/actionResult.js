@@ -39,11 +39,9 @@ export default function ActionResult(props) {
         <div className={classes.root}>
             <Snackbar open={open} autoHideDuration={5000} onClose={handleClose} anchorOrigin={{vertical: 'top', horizontal: 'center'}}>
                 <Alert onClose={handleClose} severity="success">
-                    {deltaSpecialization ? "Succesfully changed specialization to: " + deltaSpecialization :
+                    {props.message ? props.message : deltaSpecialization ? "Succesfully changed specialization to: " + deltaSpecialization :
                         Math.abs(deltaTowns[0].deltaGauchos) + ' gauchos have been succesfullly moved from ' + deltaTowns[0].townName + ' to ' + deltaTowns[1].townName}
-                    {/*deltaGauchos + 'have been succesfullly moved from: ' + deltaTowns[0].townName + ' to: ' + deltaTowns[1].townName*/}
                 </Alert>
-                {/*props.show && deltaAction.deltaTowns.length === 2*/}
             </Snackbar>
         </div>
     );

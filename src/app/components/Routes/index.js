@@ -61,6 +61,7 @@ function RoutesContainer(props) {
                     <AdminRoute path='/admin/user_stats' component={UserStats} isAdmin={isAdmin}/>
                     <AdminRoute path='/admin' component={AdminView} isAdmin={isAdmin}/>
                     <AdminRoute path='/scoreboard' component={Scoreboard} isAdmin={isAdmin}/>
+                    <AdminRoute path='/games_variables' component={GamesVariables} isAdmin={isAdmin}/>
                 </Switch>
             </div>
         </Router>

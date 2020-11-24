@@ -13,3 +13,7 @@ export const gamesStats = (from = today,to = monthBefore) => api.get('/games/sta
 export const userStats = (username) => api.get('/users/',username);
 
 export const scoreBoard = () => api.get('/users/scoreboard');
+
+export const gamesConfiguration = () => api.get('/games/configuration');
+
+export const updateConfiguration = (configuration) => api.post('/games/configuration',configuration);

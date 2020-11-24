@@ -42,6 +42,11 @@ export const ADMIN_LINKS = [
   },
   {
     id: 4,
+    to: '/games_variables',
+    name: 'Games Variables'
+  },
+  {
+    id: 5,
     to: '/sign_out',
     name: 'Sign Out'
   }]
