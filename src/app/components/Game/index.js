@@ -14,11 +14,12 @@ import ActionsInfo from './components/ActionsInfo';
 import Players from './components/Players';
 import { COLORS } from '../../constants';
 import ActionResult from "./components/TownActions/actionResult";
+import BattleResult from "../Modals/battleResult";
 
 const Game = (props) => {
   const dispatch = useDispatch();
   const currentUser = getFromLocal('currentUser');
-  const { activeGame, map, errors, inProgress, gameChanged,showActionMessage } = useSelector(state => state.games)
+  const { activeGame, map, errors, inProgress, gameChanged,showActionMessage,showAttackResult } = useSelector(state => state.games)
   const [town, setTown] = useState(null);
   const [selectedTowns, setSelectedTowns] = useState({town1: null, town2: null});
   const [showSurrenderModal, setSurrenderModal] = useState(false);
@@ -150,7 +151,8 @@ const Game = (props) => {
         <div className=' d-flex justify-content-center col-6'>
           <Button color='danger' className='surrender' onClick={showModal}>Surrender</Button>
         </div>
-            {showActionMessage && <ActionResult show={showActionMessage} onClose={clearDeltaAction}/>}
+            {showAttackResult ? <BattleResult display={showActionMessage} onClose={clearDeltaAction} selectedTowns={[selectedTowns.town1, selectedTowns.town2]}/>
+            : showActionMessage && <ActionResult show={showActionMessage} onClose={clearDeltaAction}/>}
         <SweetAlert
             warning
             // custom

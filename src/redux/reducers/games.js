@@ -73,8 +73,8 @@ export default function(state = initialState, action) {
                 // activeGame: action.payload,
                 deltaAction: action.payload,
                 gameChanged: true,
-                showActionMessage: !action.error && true//action.type=== '' ? true : ,
-                // showAttack
+                showActionMessage: !action.error && !action.type !== 'SURRENDER'&& true,
+                showAttackResult: action.type === 'ATTACK_TOWN' && true
             }
         case 'MAP_UPDATED':
             return {
