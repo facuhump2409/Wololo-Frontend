@@ -13,7 +13,7 @@ export default function PieChart(props){
                     colorScale={"qualitative"}
                     style={{ labels: {fontSize: 10, padding: 10}}}
                     data={[
-                        {x: "Won", y: gamesWon}, {x: "Lost", y: gamesLost}
+                        {x: "Won: " + gamesWon, y: gamesWon}, {x: "Lost: " + gamesLost, y: gamesLost}
                     ]}
         />
     )

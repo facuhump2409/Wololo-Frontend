@@ -17,32 +17,23 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-const marks = [
-    {
-        value: 4,
-        label: '4',
-    },
-    {
-        value: 8,
-        label: '8',
-    },
-    {
-        value: 14,
-        label: '14',
-    },
-    {
-        value: 20,
-        label: '20',
-    },
-];
-
 export default function DiscreteSlider(props) {
     const classes = useStyles();
     function valuetext(value) {
         // props.setformValues(value)
         return `${value} towns`;
     }
-
+    function getMarks(maxTowns) {
+        const elements = 4;
+        const spaceBetween = Math.round(maxTowns / elements)
+        const arr = [...Array(elements).keys()].map(x => ++x)
+        return arr.map(function(elem,index) {
+            return {
+                value: (index * spaceBetween),
+                label: (index * spaceBetween).toString()
+            }
+        })
+    }
     return (
         <Box className={classes.root} m="auto">
             <Typography id="discrete-slider-always" m="auto" gutterBottom>
@@ -52,10 +43,10 @@ export default function DiscreteSlider(props) {
                 className={classes.alignItemsAndJustifyContent}
                 defaultValue={2}
                 getAriaValueText={valuetext}
-                max={20}
+                max={props.maxTowns}
                 aria-labelledby="discrete-slider-always"
                 step={2}
-                marks={marks}
+                marks={getMarks(props.maxTowns)}
                 valueLabelDisplay="auto"
                 onChange={props.onChange}
             />

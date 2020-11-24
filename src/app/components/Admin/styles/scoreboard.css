@@ -5,3 +5,9 @@
     color: white;
     background-color: black;
 }
+.box {
+    float: right;
+    width: 250px;
+    height: 100px;
+    margin: 1em;
+}

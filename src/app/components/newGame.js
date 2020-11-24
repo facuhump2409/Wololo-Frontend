@@ -17,6 +17,9 @@ import Card from "@material-ui/core/Card";
 import { makeStyles } from '@material-ui/core/styles';
 import HorizontalLabelPositionBelowStepper from "./stepper";
 import {getFromLocal} from "../../services/localStorage";
+import TextField from "@material-ui/core/TextField";
+import Autocomplete from "@material-ui/lab/Autocomplete";
+import GameModeSelect from "./gameMode";
 
 const BOOTSTRAP_CLASSES = {
     filter: 'form-control',
@@ -47,7 +50,7 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => ({
     getParticipants: () => dispatch({type: GET_USERS, payload: getUsers}),
     createGame: (gameData) => dispatch({type: CREATE_GAME, payload: createGame(gameData)}),
-    getStates: () => dispatch({type: GET_PROVINCES, payload: getProvinces}),
+    getStates: () => dispatch({type: GET_PROVINCES, payload: getProvinces()}),
     redirectGame: () => dispatch({type: REDIRECT_GAME})
 })
 
@@ -69,6 +72,7 @@ class NewGame extends React.Component {
         this.handleLocationBlur = this.handleLocationBlur.bind(this);
         this.handleOnChange = this.handleOnChange.bind(this);
         this.handleSelectionChange = this.handleSelectionChange.bind(this);
+        this.getProvinces = this.getProvinces.bind(this);
         this.handleDeselect = this.handleDeselect.bind(this);
         this.renderStep = this.renderStep.bind(this);
         this.goBackStep = this.goBackStep.bind(this);
@@ -100,8 +104,23 @@ class NewGame extends React.Component {
             case 1:
                 return firstStep;
             case 2:
-                return <DiscreteSlider onChange={(e,val) => setFieldValue("towns",val)}/>;
+                const selectedTown = this.state.selectedLocation ? this.getProvinces().find(element => element.name ===  this.state.selectedLocation.toUpperCase()) : undefined
+                return <DiscreteSlider maxTowns={selectedTown ? selectedTown.qty : 20} onChange={(e,val) => setFieldValue("towns",val)}/>;
             case 3:
+                return <form>
+                    <div>
+                        {/*TODO agregar que se quede con lo que seleccione y lo mande en la request*/}
+                        {/*<Autocomplete*/}
+                        {/*    id="combo-box-demo"*/}
+                        {/*    label="Game Mode"*/}
+                        {/*    options={["Easy","Normal","Hard"]}*/}
+                        {/*    style={{ width: 300 }}*/}
+                        {/*    renderInput={(params) => <TextField {...params} label="Game Mode" variant="outlined" />}*/}
+                        {/*/>*/}
+                        <GameModeSelect/>
+                    </div>
+                    </form>
+            case 4:
                 return <form>
                     <div>
                         <FilteredMultiSelect
@@ -159,9 +178,12 @@ class NewGame extends React.Component {
         this.setState(prevState => {
             return {
                 ...prevState,
-                selectedLocation: selectedNode.attributes.name.value
+                selectedLocation: selectedNode.attributes.name.value,
             };
         });
+    }
+    getProvinces() {
+        return this.props.provinces ? this.props.provinces : this.props.getStates()
     }
 
     componentDidMount() {
@@ -208,7 +230,7 @@ class NewGame extends React.Component {
     }
 
     isLastStep() {
-        return this.state.step === 3
+        return this.state.step === 4
     }
     nextStep() {
         this.setState({step: this.state.step + 1});
@@ -242,7 +264,7 @@ class NewGame extends React.Component {
                         validate={validate}
                         // validationSchema = {validator}
                         onSubmit={(values) => {
-                            if (this.state.step < 3) {
+                            if (!this.isLastStep()) {
                                 this.nextStep()
                                 return
                             }

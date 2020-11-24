@@ -7,6 +7,7 @@ import {connect,useDispatch} from "react-redux";
 import {getUsers} from "../../../services/users";
 import UserModal from "./userModal";
 import PieChart from "./pieChart";
+import SearchBar from "./searchBar";
 
 const mapStateToProps = state => {
     return {
@@ -28,7 +29,8 @@ function UserStats (props){
     // }
     return (
         <div>
-            <h3>Users Stats</h3>
+            <h3 align="center">Users Stats</h3>
+            <SearchBar users={props.users}/>
             <UserModal users={props.users} display={open} onClose={() => setOpen(false)}/>
             <PieChart selectedUser={props.selectedUser}/>
         </div>

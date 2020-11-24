@@ -1,7 +1,7 @@
 import {
     ASYNC_START, GAMES_PAGE_LOADED, GAMES_PAGE_UNLOADED,
     GET_GAMES, CREATE_GAME, GET_GAME, MOVE_GAUCHOS, CHANGE_SPECIALIZATION, ATTACK_TOWN,
-    PASS_TURN, SURRENDER, REDIRECT_GAME, TOWN_STATS, GET_MAP, CLEANUP_GAME
+    PASS_TURN, SURRENDER, REDIRECT_GAME, TOWN_STATS, GET_MAP, CLEANUP_GAME,CLEAR_DELTA_ACTION
 }
     from '../actionTypes';
 import {initialState} from "./utils";
@@ -9,6 +9,7 @@ import {initialState} from "./utils";
 
 export default function(state = initialState, action) {
     const validAsyncSubtypes = [GET_GAMES,ATTACK_TOWN,CREATE_GAME,GAMES_PAGE_LOADED,PASS_TURN]
+    const notShowMessage = ['SURRENDER','PASS_TURN']
     switch(action.type) {
         case ASYNC_START:
             if (validAsyncSubtypes.includes(action.subtype)) { //no olvidar especificar los casos que tiene que hacer sino siempre setea in progress
@@ -70,8 +71,11 @@ export default function(state = initialState, action) {
                 ...state,
                 inProgress: false,
                 errors: action.error ? action.payload.message : null,
-                activeGame: action.payload,
+                // activeGame: action.payload,
+                deltaAction: action.payload,
                 gameChanged: true,
+                showActionMessage: !action.error && !notShowMessage.includes(action.type) && true,
+                showAttackResult: action.type === 'ATTACK_TOWN' && true
             }
         case CLEANUP_GAME:
             return {
@@ -83,6 +87,11 @@ export default function(state = initialState, action) {
             return {
                 ...state,
                 gameChanged: false,
+            }
+        case CLEAR_DELTA_ACTION:
+            return {
+                ...state,
+                showActionMessage: false
             }
         case CREATE_GAME:
             return {
