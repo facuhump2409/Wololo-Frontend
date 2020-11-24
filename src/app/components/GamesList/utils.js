@@ -12,11 +12,19 @@ export const filterValues = (objects, comparingValue) => {
     || Object.keys(aValue.data).some(key => aValue.data[key].toUpperCase().includes(comparingValue.toUpperCase())))
 }
 
+const getFormattedMinutesFrom = date => date.getMinutes() < 10 ? `0${date.getMinutes()}` : date.getMinutes()
+
+const formatDate = (date) => {
+  return `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()} at ${date.getHours()}:${getFormattedMinutesFrom(date)}`
+}
+
 export const mapGames = (games) => games.map(game => ({ 
   id: game.id, 
   data: { 
-    province: game.province.name, 
-    date: new Date(game.date).toDateString(), 
-    status: game.status 
+    province: { value: game.province.name, showMobile: true }, 
+    date: { value: formatDate(new Date(game.date)) }, 
+    users: { value: game.playerIds.map(player => player.username).join(', '), showMobile: true },
+    towns: { value: game.province.towns.length.toString() },
+    status: { value: game.status }
   } 
 }))

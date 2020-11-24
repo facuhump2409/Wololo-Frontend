@@ -5,7 +5,7 @@ import { HEADERS, CHANGE_ARROW } from './constants';
 import { compareValues, filterValues, mapGames } from './utils';
 import './Games.css'
 import {trackPromise} from "react-promise-tracker";
-import {GET_GAME, GET_GAMES, LOGIN, LOGIN_PAGE_LOADED, LOGIN_PAGE_UNLOADED} from "../../../redux/actionTypes";
+import {CLEANUP_GAME, GET_GAME, GET_GAMES, LOGIN, LOGIN_PAGE_LOADED, LOGIN_PAGE_UNLOADED} from "../../../redux/actionTypes";
 import {login} from "../../../services/auth";
 import { getGames } from "../../../services/games";
 import {connect, useDispatch} from "react-redux";
@@ -32,6 +32,7 @@ function GamesList(props) {
 
   useEffect(() => {
     dispatch({ type: GET_GAMES, payload: getGames() });
+    dispatch({ type: CLEANUP_GAME })
   }, [dispatch] )
 
   useEffect(() => {
@@ -43,11 +44,13 @@ function GamesList(props) {
   }
 
   function onHeaderClick(header) {
-    setRowValues([...rowValues.sort((compareValues(header.key, header.nextOrder)))]);
-    setHeaders(headers.map(aHeader => aHeader.id === header.id ? 
-      {...header, nextOrder: !header.nextOrder, arrow: CHANGE_ARROW[header.arrow]} :
-      {...aHeader, nextOrder: true, arrow: 'down'}
-      ));
+    if(!!header.arrow) {
+      setRowValues([...rowValues.sort((compareValues(header.key, header.nextOrder)))]);
+      setHeaders(headers.map(aHeader => aHeader.id === header.id ? 
+        {...header, nextOrder: !header.nextOrder, arrow: CHANGE_ARROW[header.arrow]} :
+        {...aHeader, nextOrder: true, arrow: 'down'}
+        ));
+    }
   }
 
   function handlePlayClick(event) {
@@ -70,7 +73,7 @@ function GamesList(props) {
           <thead>
             <tr>
               {headers.map(
-              header => <th key={header.id} onClick={() => onHeaderClick(header)}>
+              header => <th key={header.id} className={header.showMobile ? '' : 'disableMobile'} onClick={() => onHeaderClick(header)}>
                   <button className='header'>{header.value} <i className={`arrow ${header.arrow}`}></i></button>
                 </th>
               )}
@@ -80,14 +83,13 @@ function GamesList(props) {
             {rowValues.map(
             rowValue => 
                 <tr key={rowValue.id}>
-                  <th scope='row'>{rowValue.id}</th>
-                  {Object.keys(rowValue.data).map(key => <td key={rowValue.data[key]}>{rowValue.data[key]}</td>)}
+                  {Object.keys(rowValue.data).map(key => <td key={rowValue.data[key].value} className={rowValue.data[key].showMobile ? '' : 'disableMobile'}>{rowValue.data[key].value}</td>)}
                   <th>
-                    { ['FINISHED', 'CANCELED'].every(status => status !== rowValue.data.status) ? 
+                    { ['FINISHED', 'CANCELED'].every(status => status !== rowValue.data.status.value) ? 
                     <Link to={`/game/${rowValue.id}`}>
                       <button className='btn btn-primary' value={rowValue.id} onClick={handlePlayClick}>Play</button>
                     </Link>
-                   : <button className='btn btn-primary'>See Statistics</button>
+                   : <button className='btn btn-primary' disabled>Game ended</button>
                    }
                    </th>
                 </tr>
