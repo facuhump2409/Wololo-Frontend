@@ -15,6 +15,7 @@ module.exports = (env, options) => {
     return {
         entry: './src/index.js',
         output: {
+            publicPath: '/',
             path: path.resolve(basePath, distPath),
             filename: '[chunkhash][name].js'
         },
