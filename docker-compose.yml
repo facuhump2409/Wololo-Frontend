@@ -2,7 +2,7 @@ version: '3'
 services:
 
   wololo-backend:
-    build: ../../TP-TACS
+    build: ../TP-TACS
     container_name: wololo-backend
     ports:
       - 8080:8080
@@ -42,10 +42,9 @@ services:
     container_name: wololo-si
     networks:
       - back-end
+      - web-socket
     ports: 
       - 8082:8082
-    networks: 
-      - web-socket
   mongodb:
     image: 'mongo'
     container_name: 'mongo-container'
