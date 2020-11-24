@@ -44,11 +44,13 @@ function GamesList(props) {
   }
 
   function onHeaderClick(header) {
-    setRowValues([...rowValues.sort((compareValues(header.key, header.nextOrder)))]);
-    setHeaders(headers.map(aHeader => aHeader.id === header.id ? 
-      {...header, nextOrder: !header.nextOrder, arrow: CHANGE_ARROW[header.arrow]} :
-      {...aHeader, nextOrder: true, arrow: 'down'}
-      ));
+    if(!!header.arrow) {
+      setRowValues([...rowValues.sort((compareValues(header.key, header.nextOrder)))]);
+      setHeaders(headers.map(aHeader => aHeader.id === header.id ? 
+        {...header, nextOrder: !header.nextOrder, arrow: CHANGE_ARROW[header.arrow]} :
+        {...aHeader, nextOrder: true, arrow: 'down'}
+        ));
+    }
   }
 
   function handlePlayClick(event) {
@@ -71,7 +73,7 @@ function GamesList(props) {
           <thead>
             <tr>
               {headers.map(
-              header => <th key={header.id} onClick={() => onHeaderClick(header)}>
+              header => <th key={header.id} className={header.showMobile ? '' : 'disableMobile'} onClick={() => onHeaderClick(header)}>
                   <button className='header'>{header.value} <i className={`arrow ${header.arrow}`}></i></button>
                 </th>
               )}
@@ -81,14 +83,13 @@ function GamesList(props) {
             {rowValues.map(
             rowValue => 
                 <tr key={rowValue.id}>
-                  <th scope='row'>{rowValue.id}</th>
-                  {Object.keys(rowValue.data).map(key => <td key={rowValue.data[key]}>{rowValue.data[key]}</td>)}
+                  {Object.keys(rowValue.data).map(key => <td key={rowValue.data[key].value} className={rowValue.data[key].showMobile ? '' : 'disableMobile'}>{rowValue.data[key].value}</td>)}
                   <th>
-                    { ['FINISHED', 'CANCELED'].every(status => status !== rowValue.data.status) ? 
+                    { ['FINISHED', 'CANCELED'].every(status => status !== rowValue.data.status.value) ? 
                     <Link to={`/game/${rowValue.id}`}>
                       <button className='btn btn-primary' value={rowValue.id} onClick={handlePlayClick}>Play</button>
                     </Link>
-                   : <button className='btn btn-primary'>See Statistics</button>
+                   : <button className='btn btn-primary' disabled>Game ended</button>
                    }
                    </th>
                 </tr>
