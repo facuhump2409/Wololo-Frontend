@@ -3,11 +3,10 @@ import { useSelector, useDispatch } from 'react-redux'
 import {GET_GAME, GET_MAP, PASS_TURN, REDIRECT_GAME, SURRENDER} from '../../../redux/actionTypes';
 import {getGame, finishTurn, surrender, getMap} from '../../../services/games';
 import { getFromLocal } from '../../../services/localStorage'
-import { isMyTurn, isActive, isMyTown, isValidSelection, mapTowns, townWithOwner, playersAndColors } from './utils'
+import { isMyTurn, isActive, isMyTown, isValidSelection, mapTowns, townWithOwner, playersAndColors, getSocket } from './utils'
 import { Button } from 'reactstrap'
 import Map from './components/Map'
 import SweetAlert from "react-bootstrap-sweetalert";
-import socketIOClient from 'socket.io-client';
 import './index.css'
 import TownActions from './components/TownActions';
 import ActionsInfo from './components/ActionsInfo';
@@ -41,7 +40,7 @@ const Game = (props) => {
 
   useEffect(() => {
     if(activeGame && map) {
-      const socket = socketIOClient(`${process.env.REACT_ENV === 'production' ? window.location.origin : 'localhost'}:${process.env.REACT_APP_SOCKET_PORT}`);
+      const socket = getSocket();
       socket.emit('joinGameRoom', activeGame.id)
       socket.on('update', () => getActualGame());
 
@@ -52,7 +51,7 @@ const Game = (props) => {
       return () => socket.disconnect();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [gameChanged])
+  }, [activeGame, gameChanged, map])
 
   const redirect = () => {
     dispatch({ type: REDIRECT_GAME })

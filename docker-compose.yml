@@ -2,7 +2,7 @@ version: '3'
 services:
 
   wololo-backend:
-    build: ../TP-TACS
+    build: ../../TP-TACS
     container_name: wololo-backend
     ports:
       - 8080:8080
@@ -25,7 +25,7 @@ services:
       - wololo-si
       - wololo-backend
     ports:
-      - 80:80
+      - 3000:3000
     networks:
       - back-end
       - web-socket
@@ -34,7 +34,7 @@ services:
       - REACT_APP_ENV=production
       - REACT_APP_API_URL=wololo-backend
       - REACT_APP_API_PORT=8080
-      - REACT_APP_SOCKET_URL=localhost
+      - REACT_APP_SOCKET_URL=wololo-si
       - REACT_APP_SOCKET_PORT=8082
       - REACT_APP_MAPS_KEY=pk.eyJ1IjoidGVvbm5uIiwiYSI6ImNrZzAwY3RoMjBqbHAydXBpMHFyeXQ2bjYifQ.aZZR74OETObsUi2tCtNbWg
   wololo-si:

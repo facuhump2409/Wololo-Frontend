@@ -1,4 +1,4 @@
-import { COLORS } from '../../constants';
+import socketIOClient from 'socket.io-client';
 
 export const townsFrom = (user, towns) => towns.filter(aTown => aTown.ownerId === user);
 
@@ -17,6 +17,8 @@ export const isValidSelection = (aTown, anotherTown) => isBordered(aTown, anothe
 export const isActive = (game) => ['FINISHED', 'CANCELED'].every(status => status !== game.status)
 
 export const townWithOwner = (town, players) => ({...town, owner: town.ownerId && players.find(player => player.id === town.ownerId)})
+
+export const getSocket = () => socketIOClient(`${process.env.REACT_ENV === 'production' ? window.location.origin : 'localhost'}:${process.env.REACT_APP_SOCKET_PORT}`);
 
 const mapFromArrays = (array, otherArray) => {
   let map = {}
