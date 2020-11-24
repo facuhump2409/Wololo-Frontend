@@ -1,11 +1,15 @@
-FROM node:13.12.0-alpine
+FROM node:13.12.0-alpine as build-stage
 
 WORKDIR /app
 
-COPY . /app
-# COPY package.json /app
-
-RUN npm rebuild node-sass
+COPY package*.json /app/
 RUN npm install
 
-CMD ["npm", "run", "start-prod"]
+COPY . /app/
+
+RUN npm run build
+
+FROM nginx:1.15
+
+COPY --from=build-stage /app/dist/ /usr/share/nginx/html/
+COPY --from=build-stage /app/nginx.conf /etc/nginx/conf.d/default.conf
