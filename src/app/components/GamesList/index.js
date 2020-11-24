@@ -5,7 +5,7 @@ import { HEADERS, CHANGE_ARROW } from './constants';
 import { compareValues, filterValues, mapGames } from './utils';
 import './Games.css'
 import {trackPromise} from "react-promise-tracker";
-import {GET_GAME, GET_GAMES, LOGIN, LOGIN_PAGE_LOADED, LOGIN_PAGE_UNLOADED} from "../../../redux/actionTypes";
+import {CLEANUP_GAME, GET_GAME, GET_GAMES, LOGIN, LOGIN_PAGE_LOADED, LOGIN_PAGE_UNLOADED} from "../../../redux/actionTypes";
 import {login} from "../../../services/auth";
 import { getGames } from "../../../services/games";
 import {connect, useDispatch} from "react-redux";
@@ -32,6 +32,7 @@ function GamesList(props) {
 
   useEffect(() => {
     dispatch({ type: GET_GAMES, payload: getGames() });
+    dispatch({ type: CLEANUP_GAME })
   }, [dispatch] )
 
   useEffect(() => {
