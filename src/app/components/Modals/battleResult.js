@@ -18,12 +18,10 @@ class BattleResult extends React.Component {
         const { backdrop } = this.state;
         const towns = this.props.selectedTowns;
         const deltaAction = this.props.deltaAction
-        const [message, emoji] = (deltaAction.deltaTowns[1].deltaOwnerUsername || deltaAction.deltaTowns[0].deltaOwnerUsername) ? ['YOU WON!!!', <Emoji symbol="😢" />] : ['YOU LOST', <Emoji symbol="😢" />]
-        console.log("TOWNS:",towns)
-        console.log("DELTA ACTION: ",deltaAction)
-        console.log(deltaAction.deltaTowns[1])
+        const [message, emoji] = (deltaAction.deltaTowns[1].deltaOwnerUsername || deltaAction.deltaTowns[0].deltaOwnerUsername) ? ['YOU WON!!!', <Emoji symbol="🦁" />]
+            : ['YOU LOST', <Emoji symbol="😢" />]
         return (
-            <div className="result">
+            <div className="modal-container">
                 <Modal
                     backdrop={backdrop}
                     show={this.props.display}
@@ -35,15 +33,15 @@ class BattleResult extends React.Component {
                         <Modal.Title align="center">{<Emoji symbol="⚔️" />} Battle's Result</Modal.Title>
                     </Modal.Header>
                     <Modal.Body>
-                        <h4 align="center"> {message} {emoji} </h4>
+                        <h4 align="center" > {message} {emoji} </h4>
                         <div className="results">
-                            <h5>Your army</h5>
+                            <h5 className="thicker">Your army</h5>
                             <p> Location: {deltaAction.deltaTowns[0].townName}</p>
                             <p> Gauchos lost in battle: {Math.abs(deltaAction.deltaTowns[0].deltaGauchos)}</p>
                             {/*<p> Remaining Gauchos: {towns.town1.gauchos}</p>*/}
                         </div>
                         <div className="results">
-                            <h5>Your rival</h5>
+                            <h5 className="thicker">Your rival</h5>
                             <p> Location: {deltaAction.deltaTowns[1].townName}</p>
                             <p> Gauchos lost in battle: {Math.abs(deltaAction.deltaTowns[1].deltaGauchos)}</p>
                             {/*<p> Remaining Gauchos: {towns.town2.gauchos}</p>*/}

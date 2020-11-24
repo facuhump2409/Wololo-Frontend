@@ -9,6 +9,7 @@ import {initialState} from "./utils";
 
 export default function(state = initialState, action) {
     const validAsyncSubtypes = [GET_GAMES,ATTACK_TOWN,CREATE_GAME,GAMES_PAGE_LOADED,PASS_TURN]
+    const notShowMessage = ['SURRENDER','PASS_TURN']
     switch(action.type) {
         case ASYNC_START:
             if (validAsyncSubtypes.includes(action.subtype)) { //no olvidar especificar los casos que tiene que hacer sino siempre setea in progress
@@ -73,7 +74,7 @@ export default function(state = initialState, action) {
                 // activeGame: action.payload,
                 deltaAction: action.payload,
                 gameChanged: true,
-                showActionMessage: !action.error && !action.type !== 'SURRENDER'&& true,
+                showActionMessage: !action.error && !notShowMessage.includes(action.type) && true,
                 showAttackResult: action.type === 'ATTACK_TOWN' && true
             }
         case 'MAP_UPDATED':
