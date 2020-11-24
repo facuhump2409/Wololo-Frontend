@@ -18,7 +18,7 @@ export const isActive = (game) => ['FINISHED', 'CANCELED'].every(status => statu
 
 export const townWithOwner = (town, players) => ({...town, owner: town.ownerId && players.find(player => player.id === town.ownerId)})
 
-export const getSocket = () => socketIOClient(`${process.env.REACT_ENV === 'production' ? window.location.origin : 'localhost'}:${process.env.REACT_APP_SOCKET_PORT}`);
+export const getSocket = () => socketIOClient(`${process.env.REACT_APP_ENV === 'production' ? window.location.origin : 'localhost'}:${process.env.REACT_APP_SOCKET_PORT}`);
 
 const mapFromArrays = (array, otherArray) => {
   let map = {}
