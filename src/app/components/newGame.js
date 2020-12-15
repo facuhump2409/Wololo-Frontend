@@ -117,7 +117,7 @@ class NewGame extends React.Component {
                         {/*    style={{ width: 300 }}*/}
                         {/*    renderInput={(params) => <TextField {...params} label="Game Mode" variant="outlined" />}*/}
                         {/*/>*/}
-                        <GameModeSelect/>
+                        <GameModeSelect align="center"/>
                     </div>
                     </form>
             case 4:
@@ -268,7 +268,6 @@ class NewGame extends React.Component {
                                 this.nextStep()
                                 return
                             }
-                            console.log("VALUES:",values)
                             this.props.createGame({
                                 provinceName: this.state.selectedLocation,
                                 townAmount: parseInt(values.towns),

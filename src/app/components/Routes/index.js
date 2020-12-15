@@ -20,6 +20,7 @@ import AdminRoute from "./components/AuthenticatedRoute/adminRoute";
 import {getFromLocal} from "../../../services/localStorage";
 import UserStats from "../Admin/userStats";
 import Scoreboard from "../Admin/scoreboard";
+import GamesVariables from "../Admin/gamesVariables";
 const mapStateToProps = state => {
     return {
         currentUser: state.common.currentUser,

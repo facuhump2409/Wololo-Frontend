@@ -18,14 +18,9 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-export default function GameModeSelect() {
+export default function GameModeSelect(props) {
     const classes = useStyles();
-    const [age, setAge] = React.useState('');
     const [open, setOpen] = React.useState(false);
-
-    const handleChange = (event) => {
-        setAge(event.target.value);
-    };
 
     const handleClose = () => {
         setOpen(false);
@@ -36,7 +31,7 @@ export default function GameModeSelect() {
     };
 
     return (
-        <div align="center">
+        <div align={props.align}>
             <FormControl className={classes.formControl} align="center">
                 <InputLabel id="demo-controlled-open-select-label">Game Mode</InputLabel>
                 <Select
@@ -45,8 +40,7 @@ export default function GameModeSelect() {
                     open={open}
                     onClose={handleClose}
                     onOpen={handleOpen}
-                    value={age}
-                    onChange={handleChange}
+                    onChange={props.onChange}
                     align="center"
                 >
                     <MenuItem value={'Easy'}>{<Emoji symbol="🙈"/>} Easy</MenuItem>
